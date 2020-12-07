@@ -17,8 +17,13 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
+        'nameUser',
+        'firstLastname',
+        'secondLastname',
+        'phone',
         'name',
         'email',
+        'status',
         'password',
     ];
 
@@ -62,6 +67,48 @@ class User extends Authenticatable
     /* Un usuario tiene un solo perfil */
     public function profile()
     {
-        return $this->hasOne('');
+        return $this->hasOne(Profile::class);
+    }
+
+    /* Un usuario tiene una posisición a travez de Profile(perfil) */
+    public function position()
+    {
+        return $this->hasOneThrough(Position::class, Profile::class);
+    }
+
+    /* Un usuario tiene muchos comentarios */
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    /* Un usuario pertence a uno o muchos proyectos */
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class)->withTimestamps();
+    }
+
+    /* Un usuario pertence a uno o muchos departamentos */
+    public function departaments()
+    {
+        return $this->belongsToMany(Departament::class)->withTimestamps();
+    }
+
+    /* Un usuario pertenece a uno o muchos roles */
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class)->withTimestamps();
+    }
+
+    /* Un usuario le pertencen una o muchas vaciones*/
+    public function holidays()
+    {
+        return $this->belongsToMany(Holiday::class)->withTimestamps();
+    }
+
+    /* Un usuario realiza uno o muchos eventos */
+    public function events()
+    {
+        return $this->belongsToMany(Event::class)->withTimestamps();
     }
 }

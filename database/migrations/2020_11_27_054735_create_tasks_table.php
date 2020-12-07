@@ -18,6 +18,7 @@ class CreateTasksTable extends Migration
 
             $table->string('name', 100);
             $table->text('description');
+            $table->string('file')->nullable();
             $table->dateTime('start');
             $table->date('end')->nullable();
             $table->string('informer', 100);
