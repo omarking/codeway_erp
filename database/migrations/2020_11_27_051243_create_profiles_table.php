@@ -16,10 +16,14 @@ class CreateProfilesTable extends Migration
         Schema::create('profiles', function (Blueprint $table) {
             $table->id();
 
-            $table->string('facebook')->nullable();
-            $table->string('instagram')->nullable();
-            $table->string('github')->nullable();
-            $table->string('website')->nullable();
+            $table->string('avatar')->nullable()->default('user.png');
+            $table->text('description')->nullable();
+            $table->date('birthday')->nullable();
+            $table->string('facebook', 100)->nullable();
+            $table->string('instagram', 100)->nullable();
+            $table->string('github', 100)->nullable();
+            $table->string('website', 100)->nullable();
+            $table->string('other', 100)->nullable();
             $table->foreignId('position_id')->references('id')->on('positions')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
 

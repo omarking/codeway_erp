@@ -16,10 +16,12 @@ class CreateProjectsTable extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
 
-            $table->string('key')->unique();
-            $table->string('name')->unique();
+            $table->string('key', 50)->nullable()->unique();
+            $table->string('name', 200)->unique();
             $table->text('description');
             $table->boolean('status');
+            $table->string('responsable', 100);
+            $table->foreignId('clas_id')->references('id')->on('class')->onDelete('cascade')->onUpdate('cascade');
 
             $table->timestamps();
         });

@@ -16,10 +16,11 @@ class CreateGroupsTable extends Migration
         Schema::create('groups', function (Blueprint $table) {
             $table->id();
 
-            $table->string('name')->unique();
-            $table->text('description');
+            $table->string('name', 100)->unique();
+            $table->text('description')->nullable();
             $table->boolean('status');
-            
+            $table->string('responsable', 100);
+
             $table->timestamps();
         });
     }

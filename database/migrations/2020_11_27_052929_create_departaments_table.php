@@ -16,9 +16,10 @@ class CreateDepartamentsTable extends Migration
         Schema::create('departaments', function (Blueprint $table) {
             $table->id();
 
-            $table->string('name')->unique();
+            $table->string('name', 100)->unique();
             $table->text('description')->nullable();
             $table->boolean('status');
+            $table->string('responsable', 100);
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
 
             $table->timestamps();

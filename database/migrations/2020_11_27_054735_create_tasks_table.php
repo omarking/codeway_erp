@@ -16,10 +16,12 @@ class CreateTasksTable extends Migration
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
 
-            $table->string('name');
+            $table->string('name', 100);
             $table->text('description');
-            $table->date('date-start');
-            $table->date('date-end');
+            $table->dateTime('start');
+            $table->date('end')->nullable();
+            $table->string('informer', 100);
+            $table->string('responsable', 100);
             $table->foreignId('statu_id')->references('id')->on('status')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('priority_id')->references('id')->on('priorities')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('type_id')->references('id')->on('types')->onDelete('cascade')->onUpdate('cascade');

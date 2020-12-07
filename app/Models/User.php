@@ -41,18 +41,27 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /* Funcion que obtiene la imagen de perfil de un usuario */
     public function adminlte_image()
     {
         return 'https://picsum.photos/300/300';
     }
 
+    /* Funcion que obtiene el rol de un usuario */
     public function adminlte_desc()
     {
         return 'Administrador';
     }
 
+    /* Función que obtiene la ruta del perfil de un usuario */
     public function adminlte_profile_url()
     {
         return 'profile/username';
+    }
+
+    /* Un usuario tiene un solo perfil */
+    public function profile()
+    {
+        return $this->hasOne('');
     }
 }

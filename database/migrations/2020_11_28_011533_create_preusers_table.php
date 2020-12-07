@@ -16,9 +16,9 @@ class CreatePreusersTable extends Migration
         Schema::create('preusers', function (Blueprint $table) {
             $table->id();
 
-            $table->string('name');
-            $table->string('lastname');
-            $table->string('phone');
+            $table->string('name', 100);
+            $table->string('lastname', 100);
+            $table->string('phone', 15);
             $table->string('email')->unique();
             $table->boolean('status');
 

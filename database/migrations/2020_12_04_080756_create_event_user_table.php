@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateStatusTable extends Migration
+class CreateEventUserTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateStatusTable extends Migration
      */
     public function up()
     {
-        Schema::create('status', function (Blueprint $table) {
+        Schema::create('event_user', function (Blueprint $table) {
             $table->id();
 
-            $table->string('description', 100)->unique();
-            $table->boolean('status');
+            $table->foreignId('event_id')->references('id')->on('events')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
 
             $table->timestamps();
         });
@@ -30,6 +30,6 @@ class CreateStatusTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('status');
+        Schema::dropIfExists('event_user');
     }
 }
