@@ -20,6 +20,7 @@ class CreatePositionsTable extends Migration
             $table->boolean('status')->default('1');
             $table->foreignId('profile_id')->references('id')->on('profiles')->onDelete('cascade')->onUpdate('cascade');
 
+            $table->softDeletes();
             $table->timestamps();
         });
     }

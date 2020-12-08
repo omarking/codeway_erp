@@ -19,6 +19,7 @@ class CreateClassTable extends Migration
             $table->string('description', 100)->unique();
             $table->boolean('status')->default('1');
 
+            $table->softDeletes();
             $table->timestamps();
         });
     }

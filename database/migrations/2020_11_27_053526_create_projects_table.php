@@ -23,6 +23,7 @@ class CreateProjectsTable extends Migration
             $table->string('responsable', 100);
             $table->foreignId('clas_id')->references('id')->on('class')->onDelete('cascade')->onUpdate('cascade');
 
+            $table->softDeletes();
             $table->timestamps();
         });
     }

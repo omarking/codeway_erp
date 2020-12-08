@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Vacant extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     /**
      * The table associated with the model.
@@ -15,6 +17,8 @@ class Vacant extends Model
      * @var string
      */
     protected $table = 'vacants';
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that are mass assignable.

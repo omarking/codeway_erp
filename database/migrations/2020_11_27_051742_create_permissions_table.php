@@ -21,6 +21,7 @@ class CreatePermissionsTable extends Migration
             $table->text('description')->nullable();
             $table->boolean('status')->default('1');
 
+            $table->softDeletes();
             $table->timestamps();
         });
     }

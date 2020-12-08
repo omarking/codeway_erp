@@ -24,6 +24,7 @@ class CreateEventsTable extends Migration
             $table->string('textColor', 100);
             $table->boolean('status')->default('1');
 
+            $table->softDeletes();
             $table->timestamps();
         });
     }

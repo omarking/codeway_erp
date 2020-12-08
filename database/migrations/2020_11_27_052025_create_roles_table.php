@@ -23,6 +23,7 @@ class CreateRolesTable extends Migration
             $table->boolean('status')->default('1');
             $table->string('responsable', 100);
 
+            $table->softDeletes();
             $table->timestamps();
         });
     }

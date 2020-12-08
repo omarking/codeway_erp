@@ -22,6 +22,7 @@ class CreatePreusersTable extends Migration
             $table->string('email')->unique();
             $table->boolean('status')->default('1');
 
+            $table->softDeletes();
             $table->timestamps();
         });
     }

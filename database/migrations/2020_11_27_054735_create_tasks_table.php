@@ -27,6 +27,7 @@ class CreateTasksTable extends Migration
             $table->foreignId('priority_id')->references('id')->on('priorities')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('type_id')->references('id')->on('types')->onDelete('cascade')->onUpdate('cascade');
 
+            $table->softDeletes();
             $table->timestamps();
         });
     }

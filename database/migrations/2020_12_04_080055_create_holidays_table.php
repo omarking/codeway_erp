@@ -26,6 +26,7 @@ class CreateHolidaysTable extends Migration
             $table->foreignId('absence_id')->references('id')->on('absences')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('period_id')->references('id')->on('periods')->onDelete('cascade')->onUpdate('cascade');
 
+            $table->softDeletes();
             $table->timestamps();
         });
     }
