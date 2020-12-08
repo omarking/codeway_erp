@@ -22,11 +22,13 @@ class DatabaseSeeder extends Seeder
 
         $this->call(ClassSeeder::class);
 
+        $this->call(DepartamentSeeder::class);
+
         $this->call(GroupSeeder::class);
 
         $this->call(PeriodSeeder::class);
 
-        $this->call(PermissionSeeder::class);
+        $this->call(PermissionListSeeder::class);
 
         $this->call(PrioritySeeder::class);
 

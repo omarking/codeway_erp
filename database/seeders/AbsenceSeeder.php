@@ -19,7 +19,7 @@ class AbsenceSeeder extends Seeder
         ]);
 
         $absences = Absence::create([
-            'description' => '>Día flexible',
+            'description' => 'Día flexible',
         ]);
 
         $absences = Absence::create([

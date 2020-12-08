@@ -4,8 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Group;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Foundation\Testing\WithFaker;
+
 
 class GroupSeeder extends Seeder
 {
@@ -18,73 +17,73 @@ class GroupSeeder extends Seeder
     {
         $groups = Group::create([
             'name'          => 'Backend',
-            'description'   => $this->faker->sentence,
+            'description'   => 'Grupo donde solo se ven cosas relacionadas con el Backend',
             'responsable'   => 'Administrador',
         ]);
 
         $groups = Group::create([
             'name'          => 'Frontend',
-            'description'   => $this->faker->sentence,
+            'description'   => 'Grupo donde solo se ven cosas relacionadas con el Frontend',
             'responsable'   => 'Administrador',
         ]);
 
         $groups = Group::create([
             'name'          => 'Marketing',
-            'description'   => $this->faker->sentence,
+            'description'   => 'Grupo donde solo se ven cosas relacionadas con el Marketing',
             'responsable'   => 'Administrador',
         ]);
 
         $groups = Group::create([
             'name'          => 'Q&A',
-            'description'   => $this->faker->sentence,
+            'description'   => 'Grupo donde solo se ven cosas relacionadas con el Q&A',
             'responsable'   => 'Administrador',
         ]);
 
         $groups = Group::create([
             'name'          => 'Testing',
-            'description'   => $this->faker->sentence,
+            'description'   => 'Grupo donde solo se ven cosas relacionadas con el Testing',
             'responsable'   => 'Administrador',
         ]);
 
         $groups = Group::create([
             'name'          => 'Administración',
-            'description'   => $this->faker->sentence,
+            'description'   => 'Grupo donde solo se ven cosas relacionadas con la Administración',
             'responsable'   => 'Administrador',
         ]);
 
         $groups = Group::create([
             'name'          => 'Memes',
-            'description'   => $this->faker->sentence,
+            'description'   => 'Grupo donde solo se ven cosas relacionadas con Memes',
             'responsable'   => 'Administrador',
         ]);
 
         $groups = Group::create([
             'name'          => 'Dudas',
-            'description'   => $this->faker->sentence,
+            'description'   => 'Grupo donde solo se ven cosas relacionadas con las Dudas',
             'responsable'   => 'Administrador',
         ]);
 
         $groups = Group::create([
             'name'          => 'General',
-            'description'   => $this->faker->sentence,
+            'description'   => 'Grupo donde solo se ven cosas relacionadas en General',
             'responsable'   => 'Administrador',
         ]);
 
         $groups = Group::create([
             'name'          => 'Juegos',
-            'description'   => $this->faker->sentence,
+            'description'   => 'Grupo donde solo se ven cosas relacionadas con los Juegos',
             'responsable'   => 'Administrador',
         ]);
 
         $groups = Group::create([
             'name'          => 'Planes',
-            'description'   => $this->faker->sentence,
+            'description'   => 'Grupo donde solo se ven cosas relacionadas con los Planes',
             'responsable'   => 'Administrador',
         ]);
 
         $groups = Group::create([
             'name'          => 'Consultoria',
-            'description'   => $this->faker->sentence,
+            'description'   => 'Grupo donde solo se ven cosas relacionadas con la Consultoria',
             'responsable'   => 'Administrador',
         ]);
     }
