@@ -17,7 +17,7 @@ class CreatePositionsTable extends Migration
             $table->id();
 
             $table->string('description', 100)->unique();
-            $table->boolean('status');
+            $table->boolean('status')->default('1');
             $table->foreignId('profile_id')->references('id')->on('profiles')->onDelete('cascade')->onUpdate('cascade');
 
             $table->timestamps();

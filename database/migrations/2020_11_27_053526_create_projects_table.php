@@ -19,7 +19,7 @@ class CreateProjectsTable extends Migration
             $table->string('key', 50)->nullable()->unique();
             $table->string('name', 200)->unique();
             $table->text('description');
-            $table->boolean('status');
+            $table->boolean('status')->default('1');
             $table->string('responsable', 100);
             $table->foreignId('clas_id')->references('id')->on('class')->onDelete('cascade')->onUpdate('cascade');
 

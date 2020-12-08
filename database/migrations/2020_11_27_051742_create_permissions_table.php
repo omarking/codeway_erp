@@ -19,7 +19,7 @@ class CreatePermissionsTable extends Migration
             $table->string('name', 100)->unique();
             $table->string('slug', 50)->unique();
             $table->text('description')->nullable();
-            $table->boolean('status');
+            $table->boolean('status')->default('1');
 
             $table->timestamps();
         });

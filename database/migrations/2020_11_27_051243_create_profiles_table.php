@@ -24,6 +24,7 @@ class CreateProfilesTable extends Migration
             $table->string('github', 100)->nullable();
             $table->string('website', 100)->nullable();
             $table->string('other', 100)->nullable();
+            $table->boolean('status')->default('1');
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
 
             $table->timestamps();

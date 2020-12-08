@@ -19,7 +19,7 @@ class AddFieldsAtUsers extends Migration
             $table->string('firstLastname', 30)->nullable()->after('nameUser');
             $table->string('secondLastname', 30)->nullable()->after('firstLastname');
             $table->string('phone', 20)->nullable()->after('secondLastname');
-            $table->boolean('status')->nullable()->after('password');
+            $table->boolean('status')->nullable()->after('password')->default('1');
 
         });
     }

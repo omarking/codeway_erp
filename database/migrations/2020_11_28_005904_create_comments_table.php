@@ -18,7 +18,7 @@ class CreateCommentsTable extends Migration
 
             $table->text('body');
             $table->morphs('commentable');
-            $table->boolean('status');
+            $table->boolean('status')->default('1');
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
 
             $table->timestamps();

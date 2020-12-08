@@ -19,7 +19,7 @@ class CreateVacantsTable extends Migration
             $table->string('name', 100)->unique();
             $table->text('description');
             $table->integer('quantity');
-            $table->boolean('status');
+            $table->boolean('status')->default('1');
 
             $table->timestamps();
         });

@@ -10,6 +10,13 @@ class Profile extends Model
     use HasFactory;
 
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'profiles';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -31,7 +38,7 @@ class Profile extends Model
     {
         return $this->belongsTo(User::class);
     }
-    
+
     /* Un perfil tiene una posición */
     public function position()
     {

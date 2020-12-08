@@ -10,6 +10,13 @@ class Group extends Model
     use HasFactory;
 
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'groups';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array

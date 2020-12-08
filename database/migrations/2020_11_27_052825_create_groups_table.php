@@ -18,7 +18,7 @@ class CreateGroupsTable extends Migration
 
             $table->string('name', 100)->unique();
             $table->text('description')->nullable();
-            $table->boolean('status');
+            $table->boolean('status')->default('1');
             $table->string('responsable', 100);
 
             $table->timestamps();

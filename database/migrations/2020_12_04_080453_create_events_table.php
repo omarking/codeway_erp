@@ -22,7 +22,7 @@ class CreateEventsTable extends Migration
             $table->date('end');
             $table->string('color', 100);
             $table->string('textColor', 100);
-            $table->boolean('status');
+            $table->boolean('status')->default('1');
 
             $table->timestamps();
         });
