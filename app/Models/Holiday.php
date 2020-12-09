@@ -19,7 +19,7 @@ class Holiday extends Model
     protected $table = 'holidays';
 
     protected $dates = ['deleted_at'];
-    
+
     /**
      * The attributes that are mass assignable.
      *
@@ -32,12 +32,13 @@ class Holiday extends Model
         'inProcess',
         'taken',
         'available',
+        'responsable',
         'commentable',
         'absence_id',
         'period_id',
     ];
 
-    /* Una vación pertence a una ausencia */
+    /* Una vacación pertence a una ausencia */
     public function absence()
     {
         return $this->belongsTo(Absence::class);

@@ -19,7 +19,7 @@ class Profile extends Model
     protected $table = 'profiles';
 
     protected $dates = ['deleted_at'];
-    
+
     /**
      * The attributes that are mass assignable.
      *
@@ -34,6 +34,7 @@ class Profile extends Model
         'github',
         'website',
         'other',
+        'status',
         'user_id',
     ];
 
