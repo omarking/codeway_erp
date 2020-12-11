@@ -30,17 +30,17 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $users = User::with('roles')->orderBy('id')->paginate(10);
+        $users = User::with('roles')->orderBy('id')->simplePaginate(10);
 
-        $projects = Project::with('clas', 'category')->orderBy('id')->paginate(10);
+        $projects = Project::with('clas', 'category')->orderBy('id')->simplePaginate(10);
 
-        $tasks = Task::with('type', 'statu', 'priority')->orderBy('id')->paginate(10);
+        $tasks = Task::with('type', 'statu', 'priority')->orderBy('id')->simplePaginate(10);
 
-        $holidays = Holiday::with('absence', 'period')->orderBy('id')->paginate(10);
+        $holidays = Holiday::with('absence', 'period')->orderBy('id')->simplePaginate(10);
 
-        $groups = Group::orderBy('id')->paginate(10);
+        $groups = Group::orderBy('id')->simplePaginate(10);
 
-        $departaments = Departament::orderBy('id')->paginate(10);
+        $departaments = Departament::orderBy('id')->simplePaginate(10);
 
         return view('home', compact('users', 'projects', 'tasks', 'holidays', 'groups', 'departaments'));
     }

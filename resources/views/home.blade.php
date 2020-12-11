@@ -55,6 +55,7 @@
                         @endforeach
                     </tbody>
                 </table>
+                {{ $users->links() }}
             </div>
             {{-- <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-end">
@@ -104,6 +105,7 @@
                         @endforeach
                     </tbody>
                 </table>
+                {{ $projects->links() }}
             </div>
             {{-- {{ $projects->links() }} --}}
         </div>
@@ -304,12 +306,12 @@
 @stop
 {{-- Aqui va un script JS que queramos agregar como un script de un plugin --}}
 @section('js')
-    <script>
-        /* Swal.fire(
+    {{-- <script>
+        Swal.fire(
             'Good job!',
             'You clicked the button!',
             'success'
-        ) */
+        )
 
         const swalWithBootstrapButtons = Swal.mixin({
         customClass: {
@@ -345,7 +347,7 @@
             )
         }
         })
-    </script>
+    </script> --}}
 @stop
 
 {{-- Es la imagen que mostrara cuando aún no termine de cargar completamente la pagina --}}
