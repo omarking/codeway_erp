@@ -16,7 +16,7 @@ class CreateStatusTable extends Migration
         Schema::create('status', function (Blueprint $table) {
             $table->id();
 
-            $table->string('description', 100)->unique();
+            $table->string('description', 200)->unique();
             $table->boolean('status')->default('1');
 
             $table->softDeletes();

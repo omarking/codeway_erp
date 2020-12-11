@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Position extends Model
+class Category extends Model
 {
     use HasFactory;
     use SoftDeletes;
@@ -16,7 +16,7 @@ class Position extends Model
      *
      * @var string
      */
-    protected $table = 'positions';
+    protected $table = 'categories';
 
     protected $dates = ['deleted_at'];
 
@@ -30,9 +30,9 @@ class Position extends Model
         'status',
     ];
 
-    /* Una posición tiene muchos perfiles */
-    public function profiles()
+    /* Una categoria tiene muchos proyectos */
+    public function projects()
     {
-        return $this->hasMany(Profile::class);
+        return $this->hasMany(Project::class);
     }
 }

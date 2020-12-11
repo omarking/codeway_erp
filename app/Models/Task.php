@@ -19,7 +19,7 @@ class Task extends Model
     protected $table = 'tasks';
 
     protected $dates = ['deleted_at'];
-    
+
     /**
      * The attributes that are mass assignable.
      *
@@ -51,7 +51,7 @@ class Task extends Model
     }
 
     /* Una tarea(task) pertenece a una prioridad */
-    public function prority()
+    public function priority()
     {
         return $this->belongsTo(Priority::class);
     }

@@ -19,25 +19,33 @@ class Project extends Model
     protected $table = 'projects';
 
     protected $dates = ['deleted_at'];
-    
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
+        'avatar',
         'key',
         'name',
         'description',
         'status',
         'responsable',
         'clas_id',
+        'category_id',
     ];
 
     /* Un proyecto pertence a una clase */
     public function clas()
     {
         return $this->belongsTo(Clas::class);
+    }
+
+    /* Un proyecto pertence a una categoria */
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 
     /* Un proyecto pertenece a una o muchas tareas */

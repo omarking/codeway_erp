@@ -22,6 +22,8 @@ class DatabaseSeeder extends Seeder
 
         $this->call(ClassSeeder::class);
 
+        $this->call(CategorySeeder::class);
+
         $this->call(DepartamentSeeder::class);
 
         $this->call(GroupSeeder::class);
@@ -38,7 +40,6 @@ class DatabaseSeeder extends Seeder
 
         $this->call(TypeSeeder::class);
 
-
         /*
             Mando llamar a los faker que he creado
 
@@ -46,5 +47,23 @@ class DatabaseSeeder extends Seeder
         */
 
         \App\Models\User::factory(49)->create();
+
+        \App\Models\Position::factory(10)->create();
+
+        \App\Models\Profile::factory(50)->create();
+        
+        \App\Models\Holiday::factory(50)->create();
+
+        \App\Models\Task::factory(100)->create();
+
+        \App\Models\Project::factory(50)->create();
+
+        \App\Models\Event::factory(50)->create();
+
+        \App\Models\Preuser::factory(50)->create();
+
+        \App\Models\Vacant::factory(10)->create();
+
+        \App\Models\Comment::factory(150)->create();
     }
 }

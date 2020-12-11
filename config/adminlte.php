@@ -363,7 +363,7 @@ return [
     'menu' => [
         [
             /* Caja de busqueda en el navbar */
-            'text' => 'search',
+            'text' => 'Buscar',
             'search' => true,
             'topnav' => true,
         ],
@@ -378,7 +378,7 @@ return [
         [
             /* Links en el navbar del lado izquierdo */
             'text' => 'Home',
-            'url'  => 'home',
+            'url'  => '#',
             'can'  => '',
             'topnav' => true,
         ],

@@ -16,8 +16,8 @@ class CreateRolesTable extends Migration
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
 
-            $table->string('name', 100)->unique();
-            $table->string('slug', 50)->unique();
+            $table->string('name', 200)->unique();
+            $table->string('slug', 100)->unique();
             $table->text('description')->nullable();
             $table->enum('full-access', ['yes', 'no'])->nullable();
             $table->boolean('status')->default('1');

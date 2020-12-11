@@ -10,20 +10,9 @@
 @stop
 {{-- Aquí va todo el contenido que queramos mostrar --}}
 @section('content')
-    <p>Aqui debo mostrar el contenido</p>
-    <div class="card">
-        <div class="card-header">
-            <h1 class="card-title">Titulo de algo</h1>
-        </div>
-        <div class="card-body">
-            <br>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem sunt architecto, suscipit magni consequuntur tenetur est vero accusantium eius tempore explicabo nobis minus molestiae minima asperiores eos quia? Quisquam, excepturi.
-            <br>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque omnis, enim assumenda beatae id ullam aliquam facere officia ad commodi tempora velit aperiam voluptas dolorem nam repellendus. Sed, modi aliquam.
-        </div>
-    </div>
+    <p>Welcome</p>
 
-     <div class="card">
+    <div class="card">
         <div class="card-header">
             <h1 class="card-title">Livewire</h1>
         </div>
@@ -32,49 +21,279 @@
 
     <div class="card">
         <div class="card-header">
-            <h1 class="card-title">Titulo de algo</h1>
+            <h1 class="card-title">Users</h1>
         </div>
         <div class="card-body">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque omnis, enim assumenda beatae id ullam aliquam facere officia ad commodi tempora velit aperiam voluptas dolorem nam repellendus. Sed, modi aliquam.
+            <div class="table-responsive">
+                <table class="table table-success table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Phone</th>
+                            <th scope="col">User</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Rol</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($users as $user)
+                            <tr>
+                                <th scope="row">{{ $user->id }}</th>
+                                <td>{{ $user->nameUser }}</td>
+                                <td>{{ $user->phone }}</td>
+                                <td>{{ $user->name }}</td>
+                                <td>{{ $user->email }}</td>
+                                <td>
+                                    @isset($user->roles[0]->name)
+                                        {{ $user->roles[0]->name }}
+                                    @else
+                                        - - - -
+                                    @endisset
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            {{-- <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-end">
+                    {{ $users->links() }}
+                </ul>
+            </nav> --}}
         </div>
     </div>
 
     <div class="card">
         <div class="card-header">
-            <h1 class="card-title">Titulo de algo</h1>
+            <h1 class="card-title">Projects</h1>
         </div>
         <div class="card-body">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur maxime voluptatum illo, libero eligendi eveniet rerum, fuga voluptatibus hic doloribus in sed est praesentium odit suscipit exercitationem magni quaerat rem.
-            <br>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem sunt architecto, suscipit magni consequuntur tenetur est vero accusantium eius tempore explicabo nobis minus molestiae minima asperiores eos quia? Quisquam, excepturi.
-            <br>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque omnis, enim assumenda beatae id ullam aliquam facere officia ad commodi tempora velit aperiam voluptas dolorem nam repellendus. Sed, modi aliquam.
+            <div class="table-responsive">
+                <table class="table table-success table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Key</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Responsable</th>
+                            <th scope="col">Class</th>
+                            <th scope="col">Category</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($projects as $project)
+                            <tr>
+                                <th scope="row">{{ $project->id }}</th>
+                                <td>{{ $project->key }}</td>
+                                <td>{{ $project->name }}</td>
+                                <td>{{ $project->description }}</td>
+                                <td>{{ $project->responsable }}</td>
+                                <td>
+                                    @isset($project->clas->description)
+                                        {{ $project->clas->description }}
+                                    @endisset
+                                </td>
+                                <td>
+                                    @isset($project->category->description)
+                                        {{ $project->category->description }}
+                                    @endisset
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            {{-- {{ $projects->links() }} --}}
         </div>
     </div>
 
     <div class="card">
         <div class="card-header">
-            <h1 class="card-title">Titulo de algo</h1>
+            <h1 class="card-title">Task</h1>
         </div>
         <div class="card-body">
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eius animi, eveniet, iure, earum odio deserunt pariatur nisi voluptas iste perspiciatis reiciendis doloribus. Corporis cupiditate, officiis illo vel ut est voluptates.
-            <br>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem sunt architecto, suscipit magni consequuntur tenetur est vero accusantium eius tempore explicabo nobis minus molestiae minima asperiores eos quia? Quisquam, excepturi.
-            <br>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque omnis, enim assumenda beatae id ullam aliquam facere officia ad commodi tempora velit aperiam voluptas dolorem nam repellendus. Sed, modi aliquam.
+            <div class="table-responsive">
+                <table class="table table-success table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">file</th>
+                            <th scope="col">Start</th>
+                            <th scope="col">End</th>
+                            <th scope="col">Informer</th>
+                            <th scope="col">Responsable</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Priority</th>
+                            <th scope="col">Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($tasks as $task)
+                            <tr>
+                                <th scope="row">{{ $task->id }}</th>
+                                <td>{{ $task->name }}</td>
+                                <td>{{ $task->file }}</td>
+                                <td>{{ $task->start }}</td>
+                                <td>{{ $task->end }}</td>
+                                <td>{{ $task->informer }}</td>
+                                <td>{{ $task->resposable }}</td>
+                                <td>
+                                    @isset($task->status->description)
+                                        {{ $task->status->description }}
+                                    @endisset
+                                </td>
+                                <td>
+                                    @isset($task->priority->description)
+                                        {{ $task->priority->description }}
+                                    @endisset
+                                </td>
+                                <td>
+                                    @isset($task->type->description)
+                                        {{ $task->type->description }}
+                                    @endisset
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            {{-- <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-end">
+                    {{ $tasks->links() }}
+                </ul>
+            </nav> --}}
         </div>
     </div>
 
     <div class="card">
         <div class="card-header">
-            <h1 class="card-title">Titulo de algo</h1>
+            <h1 class="card-title">Holidays</h1>
         </div>
         <div class="card-body">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque omnis, enim assumenda beatae id ullam aliquam facere officia ad commodi tempora velit aperiam voluptas dolorem nam repellendus. Sed, modi aliquam.
-            <br>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem sunt architecto, suscipit magni consequuntur tenetur est vero accusantium eius tempore explicabo nobis minus molestiae minima asperiores eos quia? Quisquam, excepturi.
-            <br>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem sunt architecto, suscipit magni consequuntur tenetur est vero accusantium eius tempore explicabo nobis minus molestiae minima asperiores eos quia? Quisquam, excepturi.
+            <div class="table-responsive">
+                <table class="table table-success table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Days</th>
+                            <th scope="col">begin</th>
+                            <th scope="col">End</th>
+                            <th scope="col">InProcess</th>
+                            <th scope="col">Taken</th>
+                            <th scope="col">Availables</th>
+                            <th scope="col">Responsable</th>
+                            <th scope="col">Absence</th>
+                            <th scope="col">Period</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($holidays as $holiday)
+                            <tr>
+                                <th scope="row">{{ $holiday->id }}</th>
+                                <td>{{ $holiday->days }}</td>
+                                <td>{{ $holiday->beginDate }}</td>
+                                <td>{{ $holiday->endDate }}</td>
+                                <td>{{ $holiday->inProcess }}</td>
+                                <td>{{ $holiday->taken }}</td>
+                                <td>{{ $holiday->available }}</td>
+                                <td>{{ $holiday->responsable }}</td>
+                                <td>
+                                    @isset($holiday->absence->description)
+                                        {{ $holiday->absence->description }}
+                                    @endisset
+                                </td>
+                                <td>
+                                    @isset($holiday->period->description)
+                                        {{ $holiday->period->description }}
+                                    @endisset
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            {{-- <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-end">
+                    {{ $holidays->links() }}
+                </ul>
+            </nav> --}}
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h1 class="card-title">Departaments</h1>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-success table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Responsable</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($departaments as $departament)
+                            <tr>
+                                <th scope="row">{{ $departament->id }}</th>
+                                <td>{{ $departament->name }}</td>
+                                <td>{{ $departament->description }}</td>
+                                <td>{{ $departament->status }}</td>
+                                <td>{{ $departament->responsable }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            {{-- <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-end">
+                    {{ $departaments->links() }}
+                </ul>
+            </nav> --}}
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h1 class="card-title">Groups</h1>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-success table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Responsable</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($groups as $group)
+                            <tr>
+                                <th scope="row">{{ $group->id }}</th>
+                                <td>{{ $group->name }}</td>
+                                <td>{{ $group->description }}</td>
+                                <td>{{ $group->status }}</td>
+                                <td>{{ $group->responsable }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            {{-- <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-end">
+                    {{ $groups->links() }}
+                </ul>
+            </nav> --}}
         </div>
     </div>
 @stop

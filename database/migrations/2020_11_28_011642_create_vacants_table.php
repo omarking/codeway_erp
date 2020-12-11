@@ -16,7 +16,7 @@ class CreateVacantsTable extends Migration
         Schema::create('vacants', function (Blueprint $table) {
             $table->id();
 
-            $table->string('name', 100)->unique();
+            $table->string('name', 200)->unique();
             $table->text('description');
             $table->integer('quantity');
             $table->boolean('status')->default('1');

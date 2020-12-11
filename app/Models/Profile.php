@@ -35,6 +35,7 @@ class Profile extends Model
         'website',
         'other',
         'status',
+        'position_id',
         'user_id',
     ];
 

@@ -18,7 +18,7 @@ class CreatePreusersTable extends Migration
 
             $table->string('name', 100);
             $table->string('lastname', 100);
-            $table->string('phone', 15);
+            $table->string('phone', 20);
             $table->string('email')->unique();
             $table->boolean('status')->default('1');
 

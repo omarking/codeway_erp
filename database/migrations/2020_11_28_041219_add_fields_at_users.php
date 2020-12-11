@@ -15,9 +15,9 @@ class AddFieldsAtUsers extends Migration
     {
         Schema::table('users',  function (Blueprint $table) {
 
-            $table->string('nameUser', 30)->nullable()->after('id');
-            $table->string('firstLastname', 30)->nullable()->after('nameUser');
-            $table->string('secondLastname', 30)->nullable()->after('firstLastname');
+            $table->string('nameUser', 100)->nullable()->after('id');
+            $table->string('firstLastname', 100)->nullable()->after('nameUser');
+            $table->string('secondLastname', 100)->nullable()->after('firstLastname');
             $table->string('phone', 20)->nullable()->after('secondLastname');
             $table->boolean('status')->nullable()->after('password')->default('1');
             $table->softDeletes()->after('status');

@@ -16,12 +16,14 @@ class CreateProjectsTable extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
 
-            $table->string('key', 50)->nullable()->unique();
+            $table->string('avatar')->nullable()->default('project.png');
+            $table->string('key', 100)->unique();
             $table->string('name', 200)->unique();
             $table->text('description');
             $table->boolean('status')->default('1');
             $table->string('responsable', 100);
             $table->foreignId('clas_id')->references('id')->on('class')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('category_id')->references('id')->on('categories')->onDelete('cascade')->onUpdate('cascade');
 
             $table->softDeletes();
             $table->timestamps();
