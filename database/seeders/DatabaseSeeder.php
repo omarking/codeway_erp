@@ -2,6 +2,16 @@
 
 namespace Database\Seeders;
 
+use App\Models\Comment;
+use App\Models\Event;
+use App\Models\Holiday;
+use App\Models\Position;
+use App\Models\Preuser;
+use App\Models\Profile;
+use App\Models\Project;
+use App\Models\Task;
+use App\Models\User;
+use App\Models\Vacant;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -46,24 +56,24 @@ class DatabaseSeeder extends Seeder
             Estos se encargaran de poblar mi base de datos
         */
 
-        \App\Models\User::factory(49)->create();
+        User::factory(49)->create();
 
-        \App\Models\Position::factory(10)->create();
+        Position::factory(10)->create();
 
-        \App\Models\Profile::factory(50)->create();
-        
-        \App\Models\Holiday::factory(50)->create();
+        Profile::factory(50)->create();
 
-        \App\Models\Task::factory(100)->create();
+        Holiday::factory(50)->create();
 
-        \App\Models\Project::factory(50)->create();
+        Task::factory(100)->create();
 
-        \App\Models\Event::factory(50)->create();
+        Project::factory(50)->create();
 
-        \App\Models\Preuser::factory(50)->create();
+        Event::factory(50)->create();
 
-        \App\Models\Vacant::factory(10)->create();
+        Preuser::factory(50)->create();
 
-        \App\Models\Comment::factory(150)->create();
+        Vacant::factory(10)->create();
+
+        Comment::factory(150)->create();
     }
 }
