@@ -1,6 +1,12 @@
 <?php
 
+use App\Http\Controllers\DatatableController;
+use App\Http\Controllers\PriorityController;
+use App\Http\Controllers\TypeController;
+use App\Http\Controllers\StatusController;
+use App\Http\Livewire\TypeComponent;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -37,3 +43,19 @@ Route::get('email/verify/{id}/{hash}', [App\Http\Controllers\Auth\VerificationCo
 Route::post('email/resend', [App\Http\Controllers\Auth\VerificationController::class, 'resend'])->name('verification.resend');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+/* Rutas mias */
+
+/* Route::get('/type', TypeComponent::class); */
+
+Route::resource('/type', TypeController::class)->names('type');
+
+Route::resource('/status', StatusController::class)->names('status');
+
+Route::resource('/priority', PriorityController::class)->names('priority');
+
+Route::get('datatable/priority', [DatatableController::class, 'priority'])->name('datatable.priority');
+
+Route::get('datatable/status', [DatatableController::class, 'status'])->name('datatable.status');
+
+Route::get('datatable/type', [DatatableController::class, 'type'])->name('datatable.types');

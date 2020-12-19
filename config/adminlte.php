@@ -1,5 +1,7 @@
 <?php
 
+use phpDocumentor\Reflection\PseudoTypes\True_;
+
 return [
 
     /*
@@ -377,32 +379,28 @@ return [
         ],
         [
             /* Links en el navbar del lado izquierdo */
-            'text' => 'Home',
+            /* 'text' => 'Home',
             'url'  => '#',
             'can'  => '',
-            'topnav' => true,
-        ],
+            'topnav' => false, */],
         [
             /* Links en el navbar del lado izquierdo */
-            'text' => 'Explore',
+            /*  'text' => 'Explore',
             'url'  => '#',
             'can'  => '',
-            'topnav' => true,
-        ],
+            'topnav' => false, */],
         [
             /* Links en el navbar del lado derecho */
-            'text' => 'Contact',
+            /* 'text' => 'Contact',
             'url'  => '#',
             'can'  => '',
-            'topnav_right' => true,
-        ],
+            'topnav_right' => false, */],
         [
             /* Links en el navbar del lado derecho */
-            'text' => 'Info',
+            /* 'text' => 'Info',
             'url'  => '#',
             'can'  => '',
-            'topnav_right' => true,
-        ],
+            'topnav_right' => false, */],
         [
             /* Links en el menu del usuario */
             'text' => 'Acount',
@@ -495,7 +493,7 @@ return [
                 ],
             ],
         ],
-        ['header' => 'USER'],
+        /*  ['header' => 'USER'],
         [
             'text' => 'Permission',
             'url'  => '#',
@@ -505,6 +503,22 @@ return [
             'text' => 'Roles',
             'url'  => '#',
             'icon' => 'fas fa-fw fa-lock',
+        ], */
+        ['header' => 'TASK'],
+        [
+            'text'  =>  'Tipos',
+            'url'   =>  'type',
+            'icon'  =>  'fas fa-fw fa-tasks',
+        ],
+        [
+            'text'  =>  'Prioridad',
+            'url'   =>  'priority',
+            'icon'  =>  'fas fa-fw fa-columns',
+        ],
+        [
+            'text'  =>  'Estado',
+            'url'   =>  'status',
+            'icon'  =>  'fas fa-fw fa-spinner',
         ],
         ['header' => 'labels'],
         [

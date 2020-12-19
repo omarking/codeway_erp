@@ -7,6 +7,7 @@ use App\Models\Event;
 use App\Models\Holiday;
 use App\Models\Position;
 use App\Models\Preuser;
+use App\Models\Priority;
 use App\Models\Profile;
 use App\Models\Project;
 use App\Models\Task;
@@ -63,6 +64,8 @@ class DatabaseSeeder extends Seeder
         Profile::factory(50)->create();
 
         Holiday::factory(50)->create();
+
+        /* Priority::factory(2000)->create(); */
 
         Task::factory(100)->create();
 
