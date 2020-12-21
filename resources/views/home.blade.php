@@ -141,10 +141,10 @@
                                 <td>{{ $task->start }}</td>
                                 <td>{{ $task->end }}</td>
                                 <td>{{ $task->informer }}</td>
-                                <td>{{ $task->resposable }}</td>
+                                <td>{{ $task->responsable }}</td>
                                 <td>
-                                    @isset($task->status->description)
-                                        {{ $task->status->description }}
+                                    @isset($task->statu->description)
+                                        {{ $task->statu->description }}
                                     @endisset
                                 </td>
                                 <td>
