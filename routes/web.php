@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ClassController;
 use App\Http\Controllers\DatatableController;
 use App\Http\Controllers\PriorityController;
 use App\Http\Controllers\TypeController;
@@ -53,6 +55,14 @@ Route::resource('/type', TypeController::class)->names('type');
 Route::resource('/status', StatusController::class)->names('status');
 
 Route::resource('/priority', PriorityController::class)->names('priority');
+
+Route::resource('/category', CategoryController::class)->names('category');
+
+Route::resource('/class', ClassController::class)->names('class');
+
+
+
+/* Datatables */
 
 Route::get('datatable/priority', [DatatableController::class, 'priority'])->name('datatable.priority');
 

@@ -424,26 +424,23 @@ return [
         ],
         [
             /* Links en el sidebar */
-            'text' => 'Config',
+            /* 'text' => 'Config',
             'url'  => '#',
             'can'  => '',
             'label'       => 10,
-            'label_color' => 'info',
-        ],
+            'label_color' => 'info', */],
         [
-            'text' => 'Files',
+            /* 'text' => 'Files',
             'url'  => '#',
             'can'  => '',
             'label'       => 2,
-            'label_color' => 'danger',
-        ],
+            'label_color' => 'danger', */],
         [
-            'text'        => 'pages',
+            /* 'text'        => 'pages',
             'url'         => '#',
             'icon'        => 'far fa-fw fa-file',
             'label'       => 4,
-            'label_color' => 'success',
-        ],
+            'label_color' => 'success', */],
         ['header' => 'account_settings'],
         [
             'text' => 'profile',
@@ -519,6 +516,16 @@ return [
             'text'  =>  'Estado',
             'url'   =>  'status',
             'icon'  =>  'fas fa-fw fa-spinner',
+        ],
+        [
+            'text'  =>  'Categorias',
+            'url'   =>  'category',
+            'icon'  =>  'fas fa-fw fa-boxes',
+        ],
+        [
+            'text'  =>  'Clases',
+            'url'   =>  'class',
+            'icon'  =>  'fas fa-fw fa-kaaba',
         ],
         ['header' => 'labels'],
         [
