@@ -6,6 +6,7 @@ use App\Http\Controllers\DatatableController;
 use App\Http\Controllers\PriorityController;
 use App\Http\Controllers\TypeController;
 use App\Http\Controllers\StatusController;
+use App\Http\Controllers\TaskController;
 use App\Http\Livewire\TypeComponent;
 use Illuminate\Support\Facades\Route;
 
@@ -59,6 +60,8 @@ Route::resource('/priority', PriorityController::class)->names('priority');
 Route::resource('/category', CategoryController::class)->names('category');
 
 Route::resource('/class', ClassController::class)->names('class');
+
+Route::resource('/task', TaskController::class)->names('task');
 
 
 
