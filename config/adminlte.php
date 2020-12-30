@@ -503,6 +503,11 @@ return [
         ], */
         ['header' => 'TASK'],
         [
+            'text'  =>  'Tareas',
+            'url'   =>  'task',
+            'icon'  =>  'fas fa-fw fa-map',
+        ],
+        [
             'text'  =>  'Tipos',
             'url'   =>  'type',
             'icon'  =>  'fas fa-fw fa-tasks',
