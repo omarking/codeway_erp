@@ -1,5 +1,5 @@
 <div wire:ignore.self class="modal fade" id="updatePriority" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="updatePriorityModal" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <div class="modal-header bg-success">
                 <h5 class="modal-title" id="updatePriorityModal">MODIFICAR PRIORIDAD</h5>
@@ -20,6 +20,7 @@
                         @enderror
                     </div>
                     <div class="form-group">
+                        <label class="text-muted" for="color">Estado:</label><br>
                         <div class="custom-control custom-radio custom-control-inline">
                             <input type="radio" id="statusType1" wire:model="status" name="status" class="custom-control-input" value="1"
                                 @if ( $status == "1" )

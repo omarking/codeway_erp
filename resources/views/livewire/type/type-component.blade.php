@@ -92,7 +92,6 @@
                     </ul>
                 </nav>
             @endif
-
         </div>
     </div>
     @include('livewire.type.create')

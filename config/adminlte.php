@@ -532,6 +532,52 @@ return [
             'url'   =>  'class',
             'icon'  =>  'fas fa-fw fa-kaaba',
         ],
+        ['header' => 'NEWS'],
+        [
+            'text'  => 'Ausencias',
+            'url'   => 'absence',
+            'icon'  => 'fas fa-fw fa-bone',
+        ],
+        [
+            'text'  => 'Eventos',
+            'url'   => 'event',
+            'icon'  => 'fas fa-fw fa-burn',
+        ],
+        [
+            'text'  => 'Grupos',
+            'url'   => 'group',
+            'icon'  => 'fas fa-fw fa-bookmark',
+        ],
+        [
+            'text'  => 'Periodos',
+            'url'   => 'period',
+            'icon'  => 'fas fa-fw fa-edit',
+        ],
+        [
+            'text'  => 'Permisos',
+            'url'   => 'permission',
+            'icon'  => 'fas fa-fw fa-book',
+        ],
+        [
+            'text'  => 'Posiciones',
+            'url'   => 'position',
+            'icon'  => 'fas fa-fw fa-paperclip',
+        ],
+        [
+            'text'  => 'Preusuarios',
+            'url'   => 'preuser',
+            'icon'  => 'fas fa-fw fa-user',
+        ],
+        [
+            'text'  => 'Roles',
+            'url'   => 'role',
+            'icon'  => 'fas fa-fw fa-thumbtack',
+        ],
+        [
+            'text'  => 'Vacantes',
+            'url'   => 'vacant',
+            'icon'  => 'fas fa-fw fa-sticky-note',
+        ],
         ['header' => 'labels'],
         [
             'text'       => 'important',

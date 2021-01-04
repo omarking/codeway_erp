@@ -1,5 +1,5 @@
 <div wire:ignore.self class="modal fade" id="showCategory" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="showCategoryModal" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <div class="modal-header bg-info">
                 <h5 class="modal-title" id="showCategoryModal">MOSTRAR CATEGORIA</h5>
