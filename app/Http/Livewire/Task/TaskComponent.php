@@ -158,13 +158,13 @@ class TaskComponent extends Component
         $this->start         = $task->start;
         $this->end           = $task->end;
         $this->informer      = $task->informer;
-        $this->responsable   = $task->responsable;
+        /* $this->responsable   = $task->responsable; */
         $this->statu_id      = $task->statu_id;
         $this->priority_id   = $task->priority_id;
         $this->type_id       = $task->type_id;
         $this->created_at    = $task->created_at;
         $this->updated_at    = $task->updated_at;
-        $this->accion       = "update";
+        $this->accion        = "update";
     }
 
     public function update()
@@ -237,6 +237,7 @@ class TaskComponent extends Component
             'tipo',
             'prioridad',
         ]);
+        $this->responsable = Auth::user()->name;
     }
 
     public function clear()

@@ -100,6 +100,12 @@
                         </div>
                     </div>
                 </div>
+                <div class="card">
+                    <a href="{{ route('login') }}" class="text-sm text-gray-700 underline"><h1>Acceder</h1></a>
+                    @if (Route::has('register'))
+                        <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 underline"><h1>Registrarme</h1></a>
+                    @endif
+                </div>
 
                 <div class="flex justify-center mt-4 sm:items-center sm:justify-between">
                     <div class="text-center text-sm text-gray-500 sm:text-left">

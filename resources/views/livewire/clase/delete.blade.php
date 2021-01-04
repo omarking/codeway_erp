@@ -1,5 +1,5 @@
 <div wire:ignore.self class="modal fade" id="deleteClass" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="deleteClassModal" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <div class="modal-header bg-danger">
                 <h5 class="modal-title" id="deleteClassModal">BORRAR CLASE</h5>

@@ -14,8 +14,7 @@ class PriorityController extends Controller
      */
     public function index()
     {
-        $prioridades = Priority::all();
-        return view('priority.index', compact('prioridades'));
+        return view('priority.index');
     }
 
     /**
