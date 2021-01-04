@@ -44,7 +44,7 @@ class RolSeeder extends Seeder
             'name'          => 'Administrador',
             'slug'          => 'administrador',
             'description'   => 'Es el rol que solo desempeña el usuario administrador',
-            'full-access'   => 'yes',
+            'fullAccess'    => 'yes',
             'responsable'   => 'Administrador',
         ]);
 
@@ -53,7 +53,7 @@ class RolSeeder extends Seeder
             'name'          => 'Personal',
             'slug'          => 'personal',
             'description'   => 'Rol que se le asigna a un usuario, tiene los permisos basicos',
-            'full-access'   => 'no',
+            'fullAccess'    => 'no',
             'responsable'   => 'Administrador',
         ]);
 

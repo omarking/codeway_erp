@@ -19,7 +19,7 @@ class CreateRolesTable extends Migration
             $table->string('name', 200)->unique();
             $table->string('slug', 100)->unique();
             $table->text('description')->nullable();
-            $table->enum('full-access', ['yes', 'no'])->nullable();
+            $table->enum('fullAccess', ['yes', 'no'])->nullable();
             $table->boolean('status')->default('1');
             $table->string('responsable', 100);
 

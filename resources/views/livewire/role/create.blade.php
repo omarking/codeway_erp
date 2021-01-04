@@ -41,19 +41,19 @@
                     <div class="form-group">
                         <label class="text-muted" for="description">Acceso total:</label><br>
                         <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="fullaccessyes" name="full-access" class="custom-control-input" value="yes"
-                                @if ( old('full-access')=="yes" )
+                            <input type="radio" id="fullaccessyes" name="fullAccess" class="custom-control-input" value="yes"
+                                @if ( old('fullAccess')=="yes" )
                                     checked
                                 @endif
                             >
                             <label class="custom-control-label" for="fullaccessyes">Yes</label>
                         </div>
                         <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="fullaccessno" name="full-access" class="custom-control-input" value="no"
-                                @if ( old('full-access')=="no" )
+                            <input type="radio" id="fullaccessno" name="fullAccess" class="custom-control-input" value="no"
+                                @if ( old('fullAccess')=="no" )
                                     checked
                                 @endif
-                                @if ( old('full-access')===null )
+                                @if ( old('fullAccess')===null )
                                     checked
                                 @endif
                             >

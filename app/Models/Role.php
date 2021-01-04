@@ -19,7 +19,7 @@ class Role extends Model
     protected $table = 'roles';
 
     protected $dates = ['deleted_at'];
-    
+
     /**
      * The attributes that are mass assignable.
      *
@@ -29,7 +29,7 @@ class Role extends Model
         'name',
         'slug',
         'description',
-        'full-access',
+        'fullAccess',
         'status',
         'responsable',
     ];

@@ -16,7 +16,7 @@ class RoleComponent extends Component
 
     protected $paginationTheme = 'bootstrap';
 
-    public $role_id, $name, $slug, $description, $full_access, $responsable, $status, $created_at, $updated_at, $accion = "store";
+    public $role_id, $name, $slug, $description, $fullAccess, $responsable, $status, $created_at, $updated_at, $accion = "store";
 
     public $search = '', $perPage = '10', $total;
 
@@ -27,7 +27,7 @@ class RoleComponent extends Component
         'slug'         => 'required|string|max:100|unique:roles,slug',
         'description'  => 'required|string',
         'resposanble'  => 'required|string',
-        'full-access'  => 'required|in:yes,no',
+        'fullAccess'  => 'required|in:yes,no',
     ];
 
     /* protected $messages = [
@@ -45,14 +45,14 @@ class RoleComponent extends Component
         'slug'          => 'slug',
         'description'   => 'descripción',
         'resposanble'   => 'responsable',
-        'full-access'    => 'acceso total',
+        'fullAccess'    => 'acceso total',
     ];
 
     public function mount()
     {
         $this->total = count(Role::all());
         $this->responsable = Auth::user()->name;
-        $this->full_access = null;
+        $this->fullAccess = null;
     }
 
     public function updated($propertyName)
@@ -63,7 +63,7 @@ class RoleComponent extends Component
                 'slug'         => 'required|string|max:100|unique:roles,slug',
                 'description'  => 'required|string',
                 'responsable'  => 'required|string',
-                'full-access'  => 'required|in:yes,no',
+                'fullAccess'  => 'required|in:yes,no',
             ]);
         } else {
             $this->validateOnly($propertyName, [
@@ -71,7 +71,7 @@ class RoleComponent extends Component
                 'slug'         => 'required|string|max:100|unique:roles,slug,' . $this->role_id,
                 'description'  => 'required|string',
                 'responsable'  => 'required|string',
-                'full-access'  => 'required|in:yes,no',
+                'fullAccess'  => 'required|in:yes,no',
             ]);
         }
     }
@@ -83,7 +83,7 @@ class RoleComponent extends Component
             'slug'         => 'required|string|max:100|unique:roles,slug',
             'description'  => 'required|string',
             'responsable'  => 'required|string',
-            'full-access'  => 'required|in:yes,no',
+            'fullAccess'  => 'required|in:yes,no',
         ]);
 
         $this->role = Role::create($validateData);
@@ -105,7 +105,7 @@ class RoleComponent extends Component
         $this->slug         = $role->slug;
         $this->description  = $role->description;
         $this->responsable  = $role->responsable;
-        $this->full_access  = $role->full_access;
+        $this->fullAccess  = $role->fullAccess;
         $this->status       = $role->status;
         $this->created_at   = $role->created_at;
         $this->updated_at   = $role->updated_at;
@@ -124,7 +124,7 @@ class RoleComponent extends Component
         $this->slug         = $role->slug;
         $this->description  = $role->description;
         $this->responsable  = $role->responsable;
-        $this->full_access  = $role->full_access;
+        $this->fullAccess  = $role->fullAccess;
         $this->status       = $role->status;
         $this->accion       = "update";
     }
@@ -136,7 +136,7 @@ class RoleComponent extends Component
             'slug'         => 'required|string|max:100|unique:roles,slug,' . $this->role_id,
             'description'  => 'required|string',
             'responsable'  => 'required|string',
-            'full-access'  => 'required|in:yes,no',
+            'fullAccess'  => 'required|in:yes,no',
         ]);
         if ($this->role_id) {
             $permissions = Role::find($this->role_id);
@@ -145,7 +145,7 @@ class RoleComponent extends Component
                 'slug'          => $this->slug,
                 'description'   => $this->description,
                 'responsable'   => $this->responsable,
-                'full-access'   => $this->full_access,
+                'fullAccess'   => $this->fullAccess,
                 'status'        => $this->status,
             ]);
             session()->flash('message', 'Rol actualizado correctamente.');
@@ -176,7 +176,7 @@ class RoleComponent extends Component
             'slug',
             'description',
             'responsable',
-            'full_access',
+            'fullAccess',
             'status',
             'accion',
             'created_at',

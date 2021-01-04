@@ -56,7 +56,7 @@
                                 <td>{{ $rol->name }}</td>
                                 <td>{{ $rol->slug }}</td>
                                 <td>{{ $rol->description }}</td>
-                                <td>{{ $rol['full_access'] }}</td>
+                                <td>{{ $rol['fullAccess'] }}</td>
                                 <td>
                                     @if ($rol->status == "1")
                                         Activa
