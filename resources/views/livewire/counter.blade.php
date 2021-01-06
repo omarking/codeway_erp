@@ -9,7 +9,7 @@
     <div class="card">
         <div class="card-header">
             {{-- De forma predeterminada, Livewire aplica un rebote de 150 ms a las entradas de texto. Esto evita que se envíen demasiadas solicitudes de red a medida que un usuario escribe en un campo de texto. --}}
-            <input type="text" wire:model.debounce.500ms="message">
+            {{-- <input type="text" wire:model.debounce.500ms="message"> --}}
         </div>
     </div>
 </div>

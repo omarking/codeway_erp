@@ -14,7 +14,7 @@ class PeriodComponent extends Component
 
     protected $paginationTheme = 'bootstrap';
 
-    public $description, $status, $period_id, $created_at, $updated_at, $accion = "store";
+    public $period_id, $description, $status, $created_at, $updated_at, $accion = "store";
 
     public $search = '', $perPage = '10', $total;
 
@@ -109,7 +109,6 @@ class PeriodComponent extends Component
     {
         $this->period_id    = $period->id;
         $this->description  = $period->description;
-        $this->status       = $period->status;
     }
 
     public function destroy()
@@ -122,7 +121,15 @@ class PeriodComponent extends Component
 
     public function clean()
     {
-        $this->reset(['description', 'status', 'period_id', 'accion', 'created_at', 'updated_at',]);
+        $this->reset([
+            'period_id',
+            'description',
+            'status',
+            'accion',
+            'created_at',
+            'updated_at',
+        ]);
+        $this->mount();
     }
 
     public function clear()
@@ -134,9 +141,11 @@ class PeriodComponent extends Component
     {
         return view(
             'livewire.period.period-component',
-            ['periods' => Period::where('description', 'LIKE', "%{$this->search}%")
-                ->orWhere('id', 'LIKE', "%{$this->search}%")
-                ->paginate($this->perPage)]
+            ['periods' => Period::latest('id')
+                ->where('id', 'LIKE', "%{$this->search}%")
+                ->orWhere('description', 'LIKE', "%{$this->search}%")
+                ->paginate($this->perPage)
+            ]
         );
     }
 }

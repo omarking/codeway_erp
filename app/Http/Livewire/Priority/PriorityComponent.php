@@ -14,12 +14,12 @@ class PriorityComponent extends Component
 
     protected $paginationTheme = 'bootstrap';
 
-    public $description, $status, $priority_id, $created_at, $updated_at, $accion = "store";
+    public $priority_id, $description, $status, $created_at, $updated_at, $accion = "store";
 
     public $search = '', $perPage = '10', $total;
 
     public $rules = [
-        'description'  => 'required|string|min:4|max:100|unique:priorities,description',
+        'description'  => 'required|string|max:200|unique:priorities,description',
     ];
 
     /* protected $messages = [
@@ -45,11 +45,11 @@ class PriorityComponent extends Component
     {
         if ($this->accion == "store") {
             $this->validateOnly($propertyName, [
-                'description' => 'required|min:4|max:100|unique:priorities,description',
+                'description' => 'required|max:200|unique:priorities,description',
             ]);
         } else {
             $this->validateOnly($propertyName, [
-                'description' => 'required|min:4|max:100|unique:priorities,description,' . $this->priority_id,
+                'description' => 'required|max:200|unique:priorities,description,' . $this->priority_id,
             ]);
         }
     }
@@ -57,7 +57,7 @@ class PriorityComponent extends Component
     public function store()
     {
         $validateData = $this->validate([
-            'description' => 'required|min:4|max:100|unique:priorities,description',
+            'description' => 'required|max:200|unique:priorities,description',
         ]);
         Priority::create($validateData);
         session()->flash('message', 'Prioridad creada correctamente.');
@@ -91,7 +91,7 @@ class PriorityComponent extends Component
     public function update()
     {
         $this->validate([
-            'description' => 'required|min:4|max:100|unique:priorities,description,' . $this->priority_id,
+            'description' => 'required|max:200|unique:priorities,description,' . $this->priority_id,
         ]);
         if ($this->priority_id) {
             $priority = Priority::find($this->priority_id);
@@ -109,7 +109,6 @@ class PriorityComponent extends Component
     {
         $this->priority_id  = $priority->id;
         $this->description  = $priority->description;
-        $this->status       = $priority->status;
     }
 
     public function destroy()
@@ -122,7 +121,15 @@ class PriorityComponent extends Component
 
     public function clean()
     {
-        $this->reset(['description', 'status', 'priority_id', 'accion', 'created_at', 'updated_at',]);
+        $this->reset([
+            'priority_id',
+            'description',
+            'status',
+            'accion',
+            'created_at',
+            'updated_at',
+        ]);
+        $this->mount();
     }
 
     public function clear()
@@ -134,9 +141,11 @@ class PriorityComponent extends Component
     {
         return view(
             'livewire.priority.priority-component',
-            ['priorities' => Priority::where('description', 'LIKE', "%{$this->search}%")
-            ->orWhere('id', 'LIKE', "%{$this->search}%")
-            ->paginate($this->perPage)]
+            ['priorities' => Priority::latest('id')
+                ->where('id', 'LIKE', "%{$this->search}%")
+                ->orWhere('description', 'LIKE', "%{$this->search}%")
+                ->paginate($this->perPage)
+            ]
         );
     }
 }

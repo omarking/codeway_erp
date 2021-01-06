@@ -14,12 +14,12 @@ class StatusComponent extends Component
 
     protected $paginationTheme = 'bootstrap';
 
-    public $description, $status, $status_id, $created_at, $updated_at, $accion = "store";
+    public $status_id, $description, $status, $created_at, $updated_at, $accion = "store";
 
     public $search = '', $perPage = '10', $total;
 
     public $rules = [
-        'description'  => 'required|string|min:4|max:100|unique:status,description',
+        'description'  => 'required|string|max:200|unique:status,description',
     ];
 
     /* protected $messages = [
@@ -45,11 +45,11 @@ class StatusComponent extends Component
     {
         if ($this->accion == "store") {
             $this->validateOnly($propertyName, [
-                'description' => 'required|min:4|max:100|unique:status,description',
+                'description' => 'required|max:200|unique:status,description',
             ]);
         } else {
             $this->validateOnly($propertyName, [
-                'description' => 'required|min:4|max:100|unique:status,description,' . $this->status_id,
+                'description' => 'required|max:200|unique:status,description,' . $this->status_id,
             ]);
         }
     }
@@ -57,7 +57,7 @@ class StatusComponent extends Component
     public function store()
     {
         $validateData = $this->validate([
-            'description' => 'required|min:4|max:100|unique:status,description',
+            'description' => 'required|max:200|unique:status,description',
         ]);
         Statu::create($validateData);
         session()->flash('message', 'Estado creado correctamente.');
@@ -91,7 +91,7 @@ class StatusComponent extends Component
     public function update()
     {
         $this->validate([
-            'description' => 'required|min:4|max:100|unique:status,description,' . $this->status_id,
+            'description' => 'required|max:200|unique:status,description,' . $this->status_id,
         ]);
         if ($this->status_id) {
             $clase = Statu::find($this->status_id);
@@ -109,7 +109,6 @@ class StatusComponent extends Component
     {
         $this->status_id    = $status->id;
         $this->description  = $status->description;
-        $this->status       = $status->status;
     }
 
     public function destroy()
@@ -122,7 +121,15 @@ class StatusComponent extends Component
 
     public function clean()
     {
-        $this->reset(['description', 'status', 'status_id', 'accion', 'created_at', 'updated_at',]);
+        $this->reset([
+            'description',
+            'status',
+            'status_id',
+            'accion',
+            'created_at',
+            'updated_at',
+        ]);
+        $this->mount();
     }
 
     public function clear()
@@ -134,9 +141,11 @@ class StatusComponent extends Component
     {
         return view(
             'livewire.status.status-component',
-            ['estados' => Statu::where('description', 'LIKE', "%{$this->search}%")
-                ->orWhere('id', 'LIKE', "%{$this->search}%")
-                ->paginate($this->perPage)]
+            ['estados' => Statu::latest('id')
+                ->where('id', 'LIKE', "%{$this->search}%")
+                ->orWhere('description', 'LIKE', "%{$this->search}%")
+                ->paginate($this->perPage)
+            ]
         );
     }
 }

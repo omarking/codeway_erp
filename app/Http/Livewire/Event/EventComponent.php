@@ -19,12 +19,12 @@ class EventComponent extends Component
     public $search = '', $perPage = '10', $total;
 
     public $rules = [
-        'title'         => 'required|string|min:4|max:100|unique:events,title',
-        'description'   => 'required|string|min:4',
+        'title'         => 'required|string|max:200|unique:events,title',
+        'description'   => 'required|string',
         'start'         => 'required|date',
         'end'           => 'required|date',
-        'color'         => 'required|string|min:4|max:100',
-        'textColor'     => 'required|string|min:4|max:100',
+        'color'         => 'required|string|max:100',
+        'textColor'     => 'required|string|max:100',
     ];
 
     /* protected $messages = [
@@ -55,21 +55,21 @@ class EventComponent extends Component
     {
         if ($this->accion == "store") {
             $this->validateOnly($propertyName, [
-                'title'         => 'required|string|min:4|max:100|unique:events,title',
-                'description'   => 'required|string|min:4',
+                'title'         => 'required|string|max:200|unique:events,title',
+                'description'   => 'required|string',
                 'start'         => 'required|date',
                 'end'           => 'required|date',
-                'color'         => 'required|string|min:4|max:100',
-                'textColor'     => 'required|string|min:4|max:100',
+                'color'         => 'required|string|max:100',
+                'textColor'     => 'required|string|max:100',
             ]);
         } else {
             $this->validateOnly($propertyName, [
-                'title'         => 'required|string|min:4|max:100|unique:events,title,' . $this->event_id,
-                'description'   => 'required|string|min:4',
+                'title'         => 'required|string|max:200|unique:events,title,' . $this->event_id,
+                'description'   => 'required|string',
                 'start'         => 'required|date',
                 'end'           => 'required|date',
-                'color'         => 'required|string|min:4|max:100',
-                'textColor'     => 'required|string|min:4|max:100',
+                'color'         => 'required|string|max:100',
+                'textColor'     => 'required|string|max:100',
             ]);
         }
     }
@@ -77,12 +77,12 @@ class EventComponent extends Component
     public function store()
     {
         $validateData = $this->validate([
-            'title'         => 'required|string|min:4|max:100|unique:events,title',
-            'description'   => 'required|string|min:4',
+            'title'         => 'required|string|max:200|unique:events,title',
+            'description'   => 'required|string',
             'start'         => 'required|date',
             'end'           => 'required|date',
-            'color'         => 'required|string|min:4|max:100',
-            'textColor'     => 'required|string|min:4|max:100',
+            'color'         => 'required|string|max:100',
+            'textColor'     => 'required|string|max:100',
         ]);
         Event::create($validateData);
         session()->flash('message', 'Evento creado correctamente.');
@@ -126,12 +126,12 @@ class EventComponent extends Component
     public function update()
     {
         $this->validate([
-            'title'         => 'required|string|min:4|max:100|unique:events,title,' . $this->event_id,
-            'description'   => 'required|string|min:4',
+            'title'         => 'required|string|max:200|unique:events,title,' . $this->event_id,
+            'description'   => 'required|string',
             'start'         => 'required|date',
             'end'           => 'required|date',
-            'color'         => 'required|string|min:4|max:100',
-            'textColor'     => 'required|string|min:4|max:100',
+            'color'         => 'required|string|max:100',
+            'textColor'     => 'required|string|max:100',
         ]);
         if ($this->event_id) {
             $positions = Event::find($this->event_id);
@@ -154,7 +154,6 @@ class EventComponent extends Component
     {
         $this->event_id     = $position->id;
         $this->title        = $position->title;
-        $this->status       = $position->status;
     }
 
     public function destroy()
@@ -180,6 +179,7 @@ class EventComponent extends Component
             'created_at',
             'updated_at',
         ]);
+        $this->mount();
     }
 
     public function clear()
@@ -191,14 +191,16 @@ class EventComponent extends Component
     {
         return view(
             'livewire.event.event-component',
-            ['events' => Event::where('id', 'LIKE', "%{$this->search}%")
+            ['events' => Event::latest('id')
+                ->where('id', 'LIKE', "%{$this->search}%")
                 ->orWhere('title', 'LIKE', "%{$this->search}%")
                 ->orWhere('description', 'LIKE', "%{$this->search}%")
                 ->orWhere('start', 'LIKE', "%{$this->search}%")
                 ->orWhere('end', 'LIKE', "%{$this->search}%")
                 ->orWhere('color', 'LIKE', "%{$this->search}%")
                 ->orWhere('textColor', 'LIKE', "%{$this->search}%")
-                ->paginate($this->perPage)]
+                ->paginate($this->perPage)
+            ]
         );
     }
 }

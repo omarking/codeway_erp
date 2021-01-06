@@ -14,12 +14,12 @@ class TypeComponent extends Component
 
     protected $paginationTheme = 'bootstrap';
 
-    public $description, $status, $type_id, $created_at, $updated_at, $accion = "store";
+    public $type_id, $description, $status, $created_at, $updated_at, $accion = "store";
 
     public $search = '', $perPage = '10', $total;
 
     public $rules = [
-        'description'  => 'required|string|min:4|max:100|unique:types,description',
+        'description'  => 'required|string|max:100|unique:types,description',
     ];
 
     /* protected $messages = [
@@ -45,11 +45,11 @@ class TypeComponent extends Component
     {
         if ($this->accion == "store") {
             $this->validateOnly($propertyName, [
-                'description' => 'required|min:4|max:100|unique:types,description',
+                'description' => 'required|max:100|unique:types,description',
             ]);
         } else {
             $this->validateOnly($propertyName, [
-                'description' => 'required|min:4|max:100|unique:types,description,' . $this->type_id,
+                'description' => 'required|max:100|unique:types,description,' . $this->type_id,
             ]);
         }
     }
@@ -57,7 +57,7 @@ class TypeComponent extends Component
     public function store()
     {
         $validateData = $this->validate([
-            'description' => 'required|min:4|max:100|unique:types,description',
+            'description' => 'required|max:100|unique:types,description',
         ]);
         Type::create($validateData);
         session()->flash('message', 'Tipo creado correctamente.');
@@ -91,7 +91,7 @@ class TypeComponent extends Component
     public function update()
     {
         $this->validate([
-            'description' => 'required|min:4|max:100|unique:types,description,' . $this->type_id,
+            'description' => 'required|max:100|unique:types,description,' . $this->type_id,
         ]);
         if ($this->type_id) {
             $clase = Type::find($this->type_id);
@@ -122,7 +122,15 @@ class TypeComponent extends Component
 
     public function clean()
     {
-        $this->reset(['description', 'status', 'type_id', 'accion', 'created_at', 'updated_at',]);
+        $this->reset([
+            'type_id',
+            'description',
+            'status',
+            'accion',
+            'created_at',
+            'updated_at',
+        ]);
+        $this->mount();
     }
 
     public function clear()
@@ -134,10 +142,12 @@ class TypeComponent extends Component
     {
         return view(
             'livewire.type.type-component',
-            ['types' => Type::where('description', 'LIKE', "%{$this->search}%")
-                ->orWhere('id', 'LIKE', "%{$this->search}%")
+            ['types' => Type::latest('id')
+                ->where('id', 'LIKE', "%{$this->search}%")
+                ->orWhere('description', 'LIKE', "%{$this->search}%")
                 ->orWhere('status', 'LIKE', "%{$this->search}%")
-                ->paginate($this->perPage)]
+                ->paginate($this->perPage)
+            ]
         );
     }
 }

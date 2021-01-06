@@ -20,7 +20,7 @@ class GroupComponent extends Component
     public $search = '', $perPage = '10', $total;
 
     public $rules = [
-        'name'         => 'required|string|min:4|max:100|unique:groups,name',
+        'name'         => 'required|string|max:200|unique:groups,name',
         'description'  => 'required|string',
         'responsable'  => 'required|string',
     ];
@@ -51,13 +51,13 @@ class GroupComponent extends Component
     {
         if ($this->accion == "store") {
             $this->validateOnly($propertyName, [
-                'name'         => 'required|string|min:4|max:100|unique:groups,name',
+                'name'         => 'required|string|max:200|unique:groups,name',
                 'description'  => 'required|string',
                 'responsable'  => 'required|string',
             ]);
         } else {
             $this->validateOnly($propertyName, [
-                'name'         => 'required|string|min:4|max:100|unique:groups,name,' . $this->group_id,
+                'name'         => 'required|string|max:200|unique:groups,name,' . $this->group_id,
                 'description'  => 'required|string',
                 'responsable'  => 'required|string',
             ]);
@@ -67,7 +67,7 @@ class GroupComponent extends Component
     public function store()
     {
         $validateData = $this->validate([
-            'name'         => 'required|string|min:4|max:100|unique:groups,name',
+            'name'         => 'required|string|max:200|unique:groups,name',
             'description'  => 'required|string',
             'responsable'  => 'required|string',
         ]);
@@ -99,7 +99,6 @@ class GroupComponent extends Component
         $this->group_id     = $group->id;
         $this->name         = $group->name;
         $this->description  = $group->description;
-        /* $this->responsable  = $group->responsable; */
         $this->status       = $group->status;
         $this->accion       = "update";
     }
@@ -107,7 +106,7 @@ class GroupComponent extends Component
     public function update()
     {
         $this->validate([
-            'name'         => 'required|string|min:4|max:100|unique:groups,name,' . $this->group_id,
+            'name'         => 'required|string|max:200|unique:groups,name,' . $this->group_id,
             'description'  => 'required|string',
             'responsable'  => 'required|string',
         ]);
@@ -116,7 +115,7 @@ class GroupComponent extends Component
             $groups->update([
                 'name'          => $this->name,
                 'description'   => $this->description,
-                'responsable'   => $this->responsable,
+                'responsable'   => Auth::user()->name,
                 'status'        => $this->status,
             ]);
             session()->flash('message', 'Grupo actualizado correctamente.');
@@ -151,7 +150,7 @@ class GroupComponent extends Component
             'created_at',
             'updated_at',
         ]);
-        $this->responsable = Auth::user()->name;
+        $this->mount();
     }
 
     public function clear()
@@ -163,7 +162,8 @@ class GroupComponent extends Component
     {
         return view(
             'livewire.group.group-component',
-            ['groups' => Group::where('id', 'LIKE', "%{$this->search}%")
+            ['groups' => Group::latest('id')
+                ->where('id', 'LIKE', "%{$this->search}%")
                 ->orWhere('name', 'LIKE', "%{$this->search}%")
                 ->orWhere('description', 'LIKE', "%{$this->search}%")
                 ->orWhere('responsable', 'LIKE', "%{$this->search}%")

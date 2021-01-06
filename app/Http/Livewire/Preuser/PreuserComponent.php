@@ -21,7 +21,7 @@ class PreuserComponent extends Component
     public $rules = [
         'name'         => 'required|string|max:100',
         'lastname'     => 'required|string|max:100',
-        'phone'        => 'required|numeric',
+        'phone'        => 'required|numeric|unique:preusers,phone',
         'email'        => 'required|email|max:100|unique:preusers,email',
     ];
 
@@ -53,14 +53,14 @@ class PreuserComponent extends Component
             $this->validateOnly($propertyName, [
                 'name'         => 'required|string|max:100',
                 'lastname'     => 'required|string|max:100',
-                'phone'        => 'required|numeric',
+                'phone'        => 'required|numeric|unique:preusers,phone',
                 'email'        => 'required|email|max:100|unique:preusers,email',
             ]);
         } else {
             $this->validateOnly($propertyName, [
                 'name'         => 'required|string|max:100',
                 'lastname'     => 'required|string|max:100',
-                'phone'        => 'required|numeric',
+                'phone'        => 'required|numeric|unique:preusers,phone,' . $this->preuser_id,
                 'email'        => 'required|email|max:100|unique:preusers,email,' . $this->preuser_id,
             ]);
         }
@@ -71,7 +71,7 @@ class PreuserComponent extends Component
         $validateData = $this->validate([
             'name'         => 'required|string|max:100',
             'lastname'     => 'required|string|max:100',
-            'phone'        => 'required|numeric',
+            'phone'        => 'required|numeric|unique:preusers,phone',
             'email'        => 'required|email|max:100|unique:preusers,email',
         ]);
         Preuser::create($validateData);
@@ -114,7 +114,7 @@ class PreuserComponent extends Component
         $this->validate([
             'name'         => 'required|string|max:100',
             'lastname'     => 'required|string|max:100',
-            'phone'        => 'required|numeric',
+            'phone'        => 'required|numeric|unique:preusers,phone,' . $this->preuser_id,
             'email'        => 'required|email|max:100|unique:preusers,email,' . $this->preuser_id,
         ]);
         if ($this->preuser_id) {
@@ -160,6 +160,7 @@ class PreuserComponent extends Component
             'created_at',
             'updated_at',
         ]);
+        $this->mount();
     }
 
     public function clear()
@@ -171,7 +172,8 @@ class PreuserComponent extends Component
     {
         return view(
             'livewire.preuser.preuser-component',
-            ['preusers' => Preuser::where('id', 'LIKE', "%{$this->search}%")
+            ['preusers' => Preuser::latest('id')
+                ->where('id', 'LIKE', "%{$this->search}%")
                 ->orWhere('name', 'LIKE', "%{$this->search}%")
                 ->orWhere('lastname', 'LIKE', "%{$this->search}%")
                 ->orWhere('phone', 'LIKE', "%{$this->search}%")

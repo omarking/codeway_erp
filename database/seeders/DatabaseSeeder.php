@@ -65,7 +65,7 @@ class DatabaseSeeder extends Seeder
 
         Holiday::factory(50)->create();
 
-        /* Priority::factory(2000)->create(); */
+        /* Priority::factory(200)->create(); */
 
         Task::factory(100)->create();
 

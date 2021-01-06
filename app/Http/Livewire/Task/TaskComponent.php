@@ -18,18 +18,18 @@ class TaskComponent extends Component
 
     protected $paginationTheme = 'bootstrap';
 
-    public $task_id, $name, $description, $file, $start, $end, $informer, $responsable, $statu_id, $priority_id, $type_id, $created_at, $updated_at, $accion = "store";
+    public $task_id, $name, $description, $file, $start, $end, $informer, $responsable, $created_at, $updated_at, $accion = "store";
 
-    public $estado, $tipo, $prioridad;
+    public $estado, $tipo, $prioridad, $statu_id, $priority_id, $type_id;
 
     public $search = '', $perPage = '10', $total;
 
     public $rules = [
-        'name'          => 'required|string|min:4|max:200|unique:tasks,name',
-        'description'   => 'required|string|min:4|',
-        /* 'file'          => 'required|string', */
+        'name'          => 'required|string|max:200|unique:tasks,name',
+        'description'   => 'required|string',
+        'file'          => 'string',
         'start'         => 'required|date',
-        'end'           => 'required',
+        'end'           => 'required|date',
         'informer'      => 'required|string|',
         'responsable'   => 'required|string|',
         'statu_id'      => 'required',
@@ -51,8 +51,8 @@ class TaskComponent extends Component
         'name'          => 'nombre',
         'description'   => 'descripción',
         'file'          => 'archivo',
-        'start'         => 'incio',
-        'end'           => 'fin',
+        'start'         => 'fecha de inicio',
+        'end'           => 'fecha termino',
         'informer'      => 'informador',
         'responsable'   => 'responsable',
         'statu_id'      => 'estado',
@@ -70,11 +70,11 @@ class TaskComponent extends Component
     {
         if ($this->accion == "store") {
             $this->validateOnly($propertyName, [
-                'name'          => 'required|string|min:4|max:200|unique:tasks,name',
-                'description'   => 'required|string|min:4',
-                /* 'file'          => 'required|string', */
+                'name'          => 'required|string|max:200|unique:tasks,name',
+                'description'   => 'required|string',
+                'file'          => 'string',
                 'start'         => 'required|date',
-                'end'           => 'required',
+                'end'           => 'required|date',
                 'informer'      => 'required|string',
                 'responsable'   => 'required|string',
                 'statu_id'      => 'required',
@@ -83,11 +83,11 @@ class TaskComponent extends Component
             ]);
         } else {
             $this->validateOnly($propertyName, [
-                'name'          => 'required|string|min:4|max:200|unique:tasks,name,' . $this->task_id,
-                'description'   => 'required|string|min:4',
-                /* 'file'          => 'required|string', */
+                'name'          => 'required|string|max:200|unique:tasks,name,' . $this->task_id,
+                'description'   => 'required|string',
+                'file'          => 'string',
                 'start'         => 'required|date',
-                'end'           => 'required',
+                'end'           => 'required|date',
                 'informer'      => 'required|string',
                 'responsable'   => 'required|string',
                 'statu_id'      => 'required',
@@ -100,11 +100,11 @@ class TaskComponent extends Component
     public function store()
     {
         $validateData = $this->validate([
-            'name'          => 'required|string|min:4|max:200|unique:tasks,name',
-            'description'   => 'required|string|min:4',
-            /* 'file'          => 'required|string', */
+            'name'          => 'required|string|max:200|unique:tasks,name',
+            'description'   => 'required|string|',
+            'file'          => 'string',
             'start'         => 'required|date',
-            'end'           => 'required',
+            'end'           => 'required|date',
             'informer'      => 'required|string',
             'responsable'   => 'required|string',
             'statu_id'      => 'required',
@@ -158,7 +158,6 @@ class TaskComponent extends Component
         $this->start         = $task->start;
         $this->end           = $task->end;
         $this->informer      = $task->informer;
-        /* $this->responsable   = $task->responsable; */
         $this->statu_id      = $task->statu_id;
         $this->priority_id   = $task->priority_id;
         $this->type_id       = $task->type_id;
@@ -170,11 +169,11 @@ class TaskComponent extends Component
     public function update()
     {
         $this->validate([
-            'name'          => 'required|string|min:4|max:200|unique:tasks,name,' . $this->task_id,
-            'description'   => 'required|string|min:4',
-            /* 'file'          => 'required|string', */
+            'name'          => 'required|string|max:200|unique:tasks,name,' . $this->task_id,
+            'description'   => 'required|string',
+            'file'          => 'string',
             'start'         => 'required|date',
-            'end'           => 'required',
+            'end'           => 'required|date',
             'informer'      => 'required|string',
             'responsable'   => 'required|string',
             'statu_id'      => 'required',
@@ -187,10 +186,9 @@ class TaskComponent extends Component
                 'name'          => $this->name,
                 'description'   => $this->description,
                 'file'          => $this->file,
-                'start'         => $this->start,
                 'end'           => $this->end,
                 'informer'      => $this->informer,
-                'responsable'   => $this->responsable,
+                'responsable'   => Auth::user()->name,
                 'statu_id'      => $this->statu_id,
                 'priority_id'   => $this->priority_id,
                 'type_id'       => $this->type_id,
@@ -237,7 +235,7 @@ class TaskComponent extends Component
             'tipo',
             'prioridad',
         ]);
-        $this->responsable = Auth::user()->name;
+        $this->mount();
     }
 
     public function clear()
@@ -247,17 +245,21 @@ class TaskComponent extends Component
 
     public function render()
     {
-        $estados    = Statu::orderBy('description')->get();
-        $types      = Type::orderBy('description')->get();
-        $priorities = Priority::orderBy('description')->get();
+        $estados    = Statu::orderBy('description')->where('status', '1')->get();
+        $types      = Type::orderBy('description')->where('status', '1')->get();
+        $priorities = Priority::orderBy('description')->where('status', '1')->get();
         return view(
             'livewire.task.task-component',
-            ['tasks' => Task::with('type', 'statu', 'priority')->where('id', 'LIKE', "%{$this->search}%")
-                ->orWhere('name', 'LIKE', "%{$this->search}%")
-                ->orWhere('description', 'LIKE', "%{$this->search}%")
-                ->orWhere('informer', 'LIKE', "%{$this->search}%")
-                ->orWhere('responsable', 'LIKE', "%{$this->search}%")
-                ->paginate($this->perPage)],
+            [
+                'tasks' => Task::latest('id')
+                    ->with('type', 'statu', 'priority')
+                    ->where('id', 'LIKE', "%{$this->search}%")
+                    ->orWhere('name', 'LIKE', "%{$this->search}%")
+                    ->orWhere('description', 'LIKE', "%{$this->search}%")
+                    ->orWhere('informer', 'LIKE', "%{$this->search}%")
+                    ->orWhere('responsable', 'LIKE', "%{$this->search}%")
+                    ->paginate($this->perPage)
+            ],
             compact('estados', 'types', 'priorities')
         );
     }

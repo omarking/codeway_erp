@@ -14,12 +14,12 @@ class AbsenceComponent extends Component
 
     protected $paginationTheme = 'bootstrap';
 
-    public $description, $status, $absence_id, $created_at, $updated_at, $accion = "store";
+    public $absence_id, $description, $status, $created_at, $updated_at, $accion = "store";
 
     public $search = '', $perPage = '10', $total;
 
     public $rules = [
-        'description'  => 'required|string|min:4|max:100|unique:absences,description',
+        'description'  => 'required|string|max:200|unique:absences,description',
     ];
 
     /* protected $messages = [
@@ -45,11 +45,11 @@ class AbsenceComponent extends Component
     {
         if ($this->accion == "store") {
             $this->validateOnly($propertyName, [
-                'description' => 'required|min:4|max:100|unique:absences,description',
+                'description' => 'required|max:200|unique:absences,description',
             ]);
         } else {
             $this->validateOnly($propertyName, [
-                'description' => 'required|min:4|max:100|unique:absences,description,' . $this->absence_id,
+                'description' => 'required|max:200|unique:absences,description,' . $this->absence_id,
             ]);
         }
     }
@@ -57,7 +57,7 @@ class AbsenceComponent extends Component
     public function store()
     {
         $validateData = $this->validate([
-            'description' => 'required|min:4|max:100|unique:absences,description',
+            'description' => 'required|max:200|unique:absences,description',
         ]);
         Absence::create($validateData);
         session()->flash('message', 'Ausencia creada correctamente.');
@@ -91,7 +91,7 @@ class AbsenceComponent extends Component
     public function update()
     {
         $this->validate([
-            'description' => 'required|min:4|max:100|unique:absences,description,' . $this->absence_id,
+            'description' => 'required|max:200|unique:absences,description,' . $this->absence_id,
         ]);
         if ($this->absence_id) {
             $absence = Absence::find($this->absence_id);
@@ -109,7 +109,6 @@ class AbsenceComponent extends Component
     {
         $this->absence_id   = $absence->id;
         $this->description  = $absence->description;
-        $this->status       = $absence->status;
     }
 
     public function destroy()
@@ -122,7 +121,15 @@ class AbsenceComponent extends Component
 
     public function clean()
     {
-        $this->reset(['description', 'status', 'absence_id', 'accion', 'created_at', 'updated_at',]);
+        $this->reset([
+            'absence_id',
+            'description',
+            'status',
+            'accion',
+            'created_at',
+            'updated_at',
+        ]);
+        $this->mount();
     }
 
     public function clear()
@@ -134,9 +141,12 @@ class AbsenceComponent extends Component
     {
         return view(
             'livewire.absence.absence-component',
-            ['absences' => Absence::where('description', 'LIKE', "%{$this->search}%")
-            ->orWhere('id', 'LIKE', "%{$this->search}%")
-            ->paginate($this->perPage)]
+            [
+                'absences' => Absence::latest('id')
+                    ->where('id', 'LIKE', "%{$this->search}%")
+                    ->orWhere('description', 'LIKE', "%{$this->search}%")
+                    ->paginate($this->perPage)
+            ]
         );
     }
 }

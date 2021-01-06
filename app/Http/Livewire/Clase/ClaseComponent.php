@@ -14,12 +14,12 @@ class ClaseComponent extends Component
 
     protected $paginationTheme = 'bootstrap';
 
-    public $description, $status, $class_id, $created_at, $updated_at, $accion = "store";
+    public $class_id, $description, $status, $created_at, $updated_at, $accion = "store";
 
     public $search = '', $perPage = '10', $total;
 
     public $rules = [
-        'description'  => 'required|string|min:4|max:100|unique:class,description',
+        'description'  => 'required|string|max:200|unique:class,description',
     ];
 
     /* protected $messages = [
@@ -45,11 +45,11 @@ class ClaseComponent extends Component
     {
         if ($this->accion == "store") {
             $this->validateOnly($propertyName, [
-                'description' => 'required|min:4|max:100|unique:class,description',
+                'description' => 'required|max:200|unique:class,description',
             ]);
         } else {
             $this->validateOnly($propertyName, [
-                'description' => 'required|min:4|max:100|unique:class,description,' . $this->class_id,
+                'description' => 'required|max:200|unique:class,description,' . $this->class_id,
             ]);
         }
     }
@@ -57,7 +57,7 @@ class ClaseComponent extends Component
     public function store()
     {
         $validateData = $this->validate([
-            'description' => 'required|min:4|max:100|unique:class,description',
+            'description' => 'required|max:200|unique:class,description',
         ]);
         Clas::create($validateData);
         session()->flash('message', 'Clase creada correctamente.');
@@ -91,7 +91,7 @@ class ClaseComponent extends Component
     public function update()
     {
         $this->validate([
-            'description' => 'required|min:4|max:100|unique:class,description,' . $this->class_id,
+            'description' => 'required|max:200|unique:class,description,' . $this->class_id,
         ]);
         if ($this->class_id) {
             $clase = Clas::find($this->class_id);
@@ -109,7 +109,6 @@ class ClaseComponent extends Component
     {
         $this->class_id     = $clase->id;
         $this->description  = $clase->description;
-        $this->status       = $clase->status;
     }
 
     public function destroy()
@@ -122,7 +121,15 @@ class ClaseComponent extends Component
 
     public function clean()
     {
-        $this->reset(['description', 'status', 'class_id', 'accion', 'created_at', 'updated_at',]);
+        $this->reset([
+            'class_id',
+            'description',
+            'status',
+            'accion',
+            'created_at',
+            'updated_at',
+        ]);
+        $this->mount();
     }
 
     public function clear()
@@ -134,9 +141,11 @@ class ClaseComponent extends Component
     {
         return view(
             'livewire.clase.clase-component',
-            ['clases' => Clas::where('description', 'LIKE', "%{$this->search}%")
-            ->orWhere('id', 'LIKE', "%{$this->search}%")
-            ->paginate($this->perPage)]
+            ['clases' => Clas::latest('id')
+                ->where('id', 'LIKE', "%{$this->search}%")
+                ->orWhere('description', 'LIKE', "%{$this->search}%")
+                ->paginate($this->perPage)
+            ]
         );
     }
 }

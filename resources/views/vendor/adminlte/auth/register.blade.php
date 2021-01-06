@@ -19,8 +19,8 @@
 
         {{-- Name field --}}
         <div class="input-group mb-3">
-            <input type="text" name="name" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}"
-                   value="{{ old('name') }}" placeholder="{{ __('adminlte::adminlte.full_name') }}" autofocus>
+            <input type="text" name="name" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" required autofocus
+                   value="{{ old('name') }}" placeholder="{{ __('adminlte::adminlte.full_name') }}" minlength="5" maxlength="100">
             <div class="input-group-append">
                 <div class="input-group-text">
                     <span class="fas fa-user {{ config('adminlte.classes_auth_icon', '') }}"></span>
@@ -35,8 +35,8 @@
 
         {{-- Email field --}}
         <div class="input-group mb-3">
-            <input type="email" name="email" class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}"
-                   value="{{ old('email') }}" placeholder="{{ __('adminlte::adminlte.email') }}">
+            <input type="email" name="email" class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}" required
+                   value="{{ old('email') }}" placeholder="{{ __('adminlte::adminlte.email') }}"  minlength="10" maxlength="100">
             <div class="input-group-append">
                 <div class="input-group-text">
                     <span class="fas fa-envelope {{ config('adminlte.classes_auth_icon', '') }}"></span>
@@ -52,8 +52,8 @@
         {{-- Password field --}}
         <div class="input-group mb-3">
             <input type="password" name="password"
-                   class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}"
-                   placeholder="{{ __('adminlte::adminlte.password') }}">
+                   class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}" required
+                   placeholder="{{ __('adminlte::adminlte.password') }}" minlength="8" maxlength="100">
             <div class="input-group-append">
                 <div class="input-group-text">
                     <span class="fas fa-lock {{ config('adminlte.classes_auth_icon', '') }}"></span>
@@ -69,8 +69,8 @@
         {{-- Confirm password field --}}
         <div class="input-group mb-3">
             <input type="password" name="password_confirmation"
-                   class="form-control {{ $errors->has('password_confirmation') ? 'is-invalid' : '' }}"
-                   placeholder="{{ __('adminlte::adminlte.retype_password') }}">
+                   class="form-control {{ $errors->has('password_confirmation') ? 'is-invalid' : '' }}" required
+                   placeholder="{{ __('adminlte::adminlte.retype_password') }}" minlength="8" maxlength="100">
             <div class="input-group-append">
                 <div class="input-group-text">
                     <span class="fas fa-lock {{ config('adminlte.classes_auth_icon', '') }}"></span>

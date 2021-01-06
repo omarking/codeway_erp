@@ -14,12 +14,12 @@ class CategoryComponent extends Component
 
     protected $paginationTheme = 'bootstrap';
 
-    public $description, $status, $category_id, $created_at, $updated_at, $accion = "store";
+    public $category_id, $description, $status, $created_at, $updated_at, $accion = "store";
 
     public $search = '', $perPage = '10', $total;
 
     public $rules = [
-        'description'  => 'required|string|min:4|max:100|unique:categories,description',
+        'description'  => 'required|string|max:200|unique:categories,description',
     ];
 
     /* protected $messages = [
@@ -45,11 +45,11 @@ class CategoryComponent extends Component
     {
         if ($this->accion == "store") {
             $this->validateOnly($propertyName, [
-                'description' => 'required|min:4|max:100|unique:categories,description',
+                'description' => 'required|max:200|unique:categories,description',
             ]);
         } else {
             $this->validateOnly($propertyName, [
-                'description' => 'required|min:4|max:100|unique:categories,description,' . $this->category_id,
+                'description' => 'required|max:200|unique:categories,description,' . $this->category_id,
             ]);
         }
     }
@@ -57,7 +57,7 @@ class CategoryComponent extends Component
     public function store()
     {
         $validateData = $this->validate([
-            'description' => 'required|min:4|max:100|unique:categories,description',
+            'description' => 'required|max:200|unique:categories,description',
         ]);
         Category::create($validateData);
         session()->flash('message', 'Categoria creada correctamente.');
@@ -91,7 +91,7 @@ class CategoryComponent extends Component
     public function update()
     {
         $this->validate([
-            'description' => 'required|min:4|max:100|unique:categories,description,' . $this->category_id,
+            'description' => 'required|max:200|unique:categories,description,' . $this->category_id,
         ]);
         if ($this->category_id) {
             $clase = Category::find($this->category_id);
@@ -109,7 +109,6 @@ class CategoryComponent extends Component
     {
         $this->category_id  = $categories->id;
         $this->description  = $categories->description;
-        $this->status       = $categories->status;
     }
 
     public function destroy()
@@ -122,7 +121,15 @@ class CategoryComponent extends Component
 
     public function clean()
     {
-        $this->reset(['description', 'status', 'category_id', 'accion', 'created_at', 'updated_at',]);
+        $this->reset([
+            'category_id',
+            'description',
+            'status',
+            'accion',
+            'created_at',
+            'updated_at',
+        ]);
+        $this->mount();
     }
 
     public function clear()
@@ -134,9 +141,11 @@ class CategoryComponent extends Component
     {
         return view(
             'livewire.category.category-component',
-            ['categories' => Category::where('description', 'LIKE', "%{$this->search}%")
-            ->orWhere('id', 'LIKE', "%{$this->search}%")
-            ->paginate($this->perPage)]
+            ['categories' => Category::latest('id')
+                ->where('id', 'LIKE', "%{$this->search}%")
+                ->orWhere('description', 'LIKE', "%{$this->search}%")
+                ->paginate($this->perPage)
+            ]
         );
     }
 
@@ -145,7 +154,7 @@ class CategoryComponent extends Component
     /* public $contentIsVisible = false;
 
     public $rules = [
-        'description'  => 'required|string|min:4|max:100|unique:categories,description',
+        'description'  => 'required|string|max:200|unique:categories,description',
     ];
 
     protected $messages = [
