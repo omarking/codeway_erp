@@ -20,14 +20,14 @@ class RoleComponent extends Component
 
     public $search = '', $perPage = '10', $total;
 
-    public $role, $permission = [];
+    public $permission = [], $permission_role = [];
 
     public $rules = [
         'name'         => 'required|string|max:100|unique:roles,name',
         'slug'         => 'required|string|max:100|unique:roles,slug',
         'description'  => 'required|string',
         'resposanble'  => 'required|string',
-        'fullAccess'  => 'required|in:yes,no',
+        'fullAccess'   => 'required|in:yes,no',
     ];
 
     /* protected $messages = [
@@ -52,7 +52,7 @@ class RoleComponent extends Component
     {
         $this->total = count(Role::all());
         $this->responsable = Auth::user()->name;
-        $this->fullAccess = null;
+        $this->fullAccess = 'no';
     }
 
     public function updated($propertyName)
@@ -63,7 +63,7 @@ class RoleComponent extends Component
                 'slug'         => 'required|string|max:100|unique:roles,slug',
                 'description'  => 'required|string',
                 'responsable'  => 'required|string',
-                'fullAccess'  => 'required|in:yes,no',
+                'fullAccess'   => 'required|in:yes,no',
             ]);
         } else {
             $this->validateOnly($propertyName, [
@@ -71,7 +71,7 @@ class RoleComponent extends Component
                 'slug'         => 'required|string|max:100|unique:roles,slug,' . $this->role_id,
                 'description'  => 'required|string',
                 'responsable'  => 'required|string',
-                'fullAccess'  => 'required|in:yes,no',
+                'fullAccess'   => 'required|in:yes,no',
             ]);
         }
     }
@@ -83,16 +83,10 @@ class RoleComponent extends Component
             'slug'         => 'required|string|max:100|unique:roles,slug',
             'description'  => 'required|string',
             'responsable'  => 'required|string',
-            'fullAccess'  => 'required|in:yes,no',
+            'fullAccess'   => 'required|in:yes,no',
         ]);
-
-        $this->role = Role::create($validateData);
-
-        return $this->role;
-        /* $role->get('permissions'); */
-
-        /* $role->permissions()->sync($request->get('permission')); */
-
+        $role = Role::create($validateData);
+        $role->permissions()->sync($this->permission);
         session()->flash('message', 'Rol creado correctamente.');
         $this->clean();
         $this->emit('roleCreatedEvent');
@@ -105,10 +99,14 @@ class RoleComponent extends Component
         $this->slug         = $role->slug;
         $this->description  = $role->description;
         $this->responsable  = $role->responsable;
-        $this->fullAccess  = $role->fullAccess;
+        $this->fullAccess   = $role->fullAccess;
         $this->status       = $role->status;
         $this->created_at   = $role->created_at;
         $this->updated_at   = $role->updated_at;
+
+        foreach ($role->permissions as $permission) {
+            $this->permission_role[] = $permission->id;
+        }
     }
 
     public function close()
@@ -124,9 +122,13 @@ class RoleComponent extends Component
         $this->slug         = $role->slug;
         $this->description  = $role->description;
         $this->responsable  = $role->responsable;
-        $this->fullAccess  = $role->fullAccess;
+        $this->fullAccess   = $role->fullAccess;
         $this->status       = $role->status;
         $this->accion       = "update";
+
+        foreach ($role->permissions as $permission) {
+            $this->permission[] = $permission->id;
+        }
     }
 
     public function update()
@@ -136,22 +138,28 @@ class RoleComponent extends Component
             'slug'         => 'required|string|max:100|unique:roles,slug,' . $this->role_id,
             'description'  => 'required|string',
             'responsable'  => 'required|string',
-            'fullAccess'  => 'required|in:yes,no',
+            'fullAccess'   => 'required|in:yes,no',
         ]);
         if ($this->role_id) {
-            $permissions = Role::find($this->role_id);
-            $permissions->update([
+            $role = Role::find($this->role_id);
+            $role->update([
                 'name'          => $this->name,
                 'slug'          => $this->slug,
                 'description'   => $this->description,
                 'responsable'   => $this->responsable,
-                'fullAccess'   => $this->fullAccess,
+                'fullAccess'    => $this->fullAccess,
                 'status'        => $this->status,
             ]);
+            $role->permissions()->sync($this->permission);
             session()->flash('message', 'Rol actualizado correctamente.');
             $this->clean();
             $this->emit('roleUpdatedEvent');
         }
+    }
+
+    public function limpia()
+    {
+        $this->reset(['permission']);
     }
 
     public function delete(Role $role)
@@ -179,10 +187,12 @@ class RoleComponent extends Component
             'fullAccess',
             'status',
             'accion',
+            'permission',
+            'permission_role',
             'created_at',
             'updated_at',
         ]);
-        $this->responsable = Auth::user()->name;
+        $this->mount();
     }
 
     public function clear()
@@ -195,13 +205,13 @@ class RoleComponent extends Component
         $permissions = Permission::get();
         return view(
             'livewire.role.role-component',
-            [
-                'roles' => Role::where('id', 'LIKE', "%{$this->search}%")
-                    ->orWhere('name', 'LIKE', "%{$this->search}%")
-                    ->orWhere('slug', 'LIKE', "%{$this->search}%")
-                    ->orWhere('description', 'LIKE', "%{$this->search}%")
-                    ->orWhere('responsable', 'LIKE', "%{$this->search}%")
-                    ->paginate($this->perPage)
+            ['roles' => Role::latest('id')
+                ->where('id', 'LIKE', "%{$this->search}%")
+                ->orWhere('name', 'LIKE', "%{$this->search}%")
+                ->orWhere('slug', 'LIKE', "%{$this->search}%")
+                ->orWhere('description', 'LIKE', "%{$this->search}%")
+                ->orWhere('responsable', 'LIKE', "%{$this->search}%")
+                ->paginate($this->perPage)
             ],
             compact('permissions')
         );

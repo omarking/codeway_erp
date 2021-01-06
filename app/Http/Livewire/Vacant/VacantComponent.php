@@ -149,6 +149,7 @@ class VacantComponent extends Component
             'created_at',
             'updated_at',
         ]);
+        $this->mount();
     }
 
     public function clear()
@@ -160,7 +161,8 @@ class VacantComponent extends Component
     {
         return view(
             'livewire.vacant.vacant-component',
-            ['vacants' => Vacant::where('id', 'LIKE', "%{$this->search}%")
+            ['vacants' => Vacant::latest('id')
+                ->where('id', 'LIKE', "%{$this->search}%")
                 ->orWhere('name', 'LIKE', "%{$this->search}%")
                 ->orWhere('description', 'LIKE', "%{$this->search}%")
                 ->paginate($this->perPage)

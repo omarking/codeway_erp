@@ -25,7 +25,7 @@
                         <select class="form-control" wire:model="perPage">
                             <option value="10">10 por página</option>
                             <option value="25">25 por página</option>
-                            {{-- <option value="50">50 por página</option> --}}
+                            <option value="50">50 por página</option>
                             {{-- <option value="100">100 por página</option> --}}
                         </select>
                     </div>
@@ -56,7 +56,7 @@
                                 <td>{{ $rol->name }}</td>
                                 <td>{{ $rol->slug }}</td>
                                 <td>{{ $rol->description }}</td>
-                                <td>{{ $rol['fullAccess'] }}</td>
+                                <td>{{ $rol["fullAccess"] }}</td>
                                 <td>
                                     @if ($rol->status == "1")
                                         Activa

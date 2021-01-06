@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <div class="modal-header bg-success">
-                <h5 class="modal-title" id="updateTaskModal">MODIFICAR TAREA{{ $task_id }}</h5>
+                <h5 class="modal-title" id="updateTaskModal">MODIFICAR TAREA</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -10,7 +10,7 @@
             <div class="modal-body">
                 <form>
                     <div class="form-group">
-                        <label class="text-muted" for="name">Nombre:{{ $name }}</label>
+                        <label class="text-muted" for="name">Nombre:</label>
                         <input type="text" name="name" wire:dirty.class="bg-success"
                             class="form-control @error('name') is-invalid @enderror" wire:model="name">
                         @error('name')
@@ -20,7 +20,7 @@
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label class="text-muted" for="description">Descripción:{{ $description }}</label>
+                        <label class="text-muted" for="description">Descripción:</label>
                         <textarea class="form-control @error('description') is-invalid @enderror" name="description" wire:model="description" wire:dirty.class="bg-success" rows="3"></textarea>
                         @error('description')
                             <span class="invalid-feedback" role="alert">
@@ -29,7 +29,7 @@
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label class="text-muted" for="file">Archivo:{{ $file }}</label>
+                        <label class="text-muted" for="file">Archivo:</label>
                         <input type="text" name="file" wire:dirty.class="bg-success"
                             class="form-control @error('file') is-invalid @enderror" wire:model="file">
                         @error('file')
@@ -40,7 +40,7 @@
                     </div>
                     <div class="d-flex justify-content-between mb-auto ">
                         <div class="form-group justify-content-start">
-                            <label class="text-muted" for="start">Inicio:{{ $start }}</label>
+                            <label class="text-muted" for="start">Inicio:</label>
                             <h5>{{ $start }}</h5>
                             {{-- <input type="date" name="start" wire:dirty.class="bg-success"
                                 class="form-control @error('start') is-invalid @enderror" wire:model="start">
@@ -51,7 +51,7 @@
                             @enderror --}}
                         </div>
                         <div class="form-group justify-content-end">
-                            <label class="text-muted" for="end">Termino:{{ $end }}</label>
+                            <label class="text-muted" for="end">Termino:</label>
                             <input type="date" name="end" wire:dirty.class="bg-success"
                                 class="form-control @error('end') is-invalid @enderror" wire:model="end">
                             @error('end')
@@ -62,7 +62,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="text-muted" for="informer">Informador:{{ $informer }}</label>
+                        <label class="text-muted" for="informer">Informador:</label>
                         <input type="text" name="informer" wire:dirty.class="bg-success"
                             class="form-control @error('informer') is-invalid @enderror" wire:model="informer">
                         @error('informer')
@@ -72,7 +72,7 @@
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label class="text-muted" for="responsable">Responsable:{{ $responsable }}</label>
+                        <label class="text-muted" for="responsable">Responsable:</label>
                         <input type="text" name="responsable" wire:dirty.class="bg-success"
                             class="form-control @error('responsable') is-invalid @enderror" wire:model="responsable" disabled>
                         @error('responsable')
@@ -82,7 +82,7 @@
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label class="text-muted" for="statu_id">Estado:{{ $statu_id }}</label>
+                        <label class="text-muted" for="statu_id">Estado:</label>
                         <select wire:model="statu_id" class="form-control @error('statu_id') is-invalid @enderror" name="statu_id" wire:dirty.class="bg-success" id="statu_id">
                             <option value="">--Seleccione el estado--</option>
                             @foreach($estados as $estado)
@@ -104,7 +104,7 @@
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label class="text-muted" for="type_id">Tipo:{{ $type_id }}</label>
+                        <label class="text-muted" for="type_id">Tipo:</label>
                         <select wire:model="type_id" class="form-control @error('type_id') is-invalid @enderror"  name="type_id" wire:dirty.class="bg-success" id="type_id">
                             <option value="">--Seleccione el tipo--</option>
                             @foreach($types as $type)
@@ -126,7 +126,7 @@
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label class="text-muted" for="priority_id">Prioridad:{{ $priority_id }}</label>
+                        <label class="text-muted" for="priority_id">Prioridad:</label>
                         <select wire:model="priority_id" class="form-control @error('priority_id') is-invalid @enderror"  name="priority_id" wire:dirty.class="bg-success" id="priority_id">
                             <option value="">--Seleccione la prioridad--</option>
                             @foreach($priorities as $priority)

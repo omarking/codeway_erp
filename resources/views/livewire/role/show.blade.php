@@ -8,49 +8,83 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form>
-                    <div class="form-group">
-                        <label class="text-muted" for="name">Nombre:</label>
-                        <h5>{{ $name }}</h5>
+                <div class="row">
+                    @if ($fullAccess != "yes")
+                        <div class="col-lg-5 mb-4">
+                    @else
+                        <div class="col-lg-12 mb-4">
+                    @endif
+                        <form>
+                            <div class="form-group">
+                                <label class="text-muted" for="name">Nombre:</label>
+                                <h5>{{ $name }}</h5>
+                            </div>
+                            <div class="form-group">
+                                <label class="text-muted" for="slug">Slug:</label>
+                                <h5>{{ $slug }}</h5>
+                            </div>
+                            <div class="form-group">
+                                <label class="text-muted" for="description">Descripción:</label>
+                                <h5>{{ $description }}</h5>
+                            </div>
+                            <div class="form-group">
+                                <label class="text-muted" for="description">Responsable:</label>
+                                <h5>{{ $responsable }}</h5>
+                            </div>
+                            <div class="form-group">
+                                <label class="text-muted" for="description">Full acceso:</label>
+                                @if ($fullAccess == "yes")
+                                    <h5>Sí</h5>
+                                @else
+                                    <h5>No</h5>
+                                @endif
+                            </div>
+                            <div class="form-group">
+                                <label class="text-muted" for="estado">Estado:</label>
+                                @if ($status == "1")
+                                    <h5>Activo</h5>
+                                @else
+                                    <h5>Inactivo</h5>
+                                @endif
+                            </div>
+                            <div class="form-group">
+                                <label class="text-muted" for="created_at">Creado:</label>
+                                <h5>{{ $created_at }}</h5>
+                            </div>
+                            <div class="form-group">
+                                <label class="text-muted" for="updated_at">Actualizado:</label>
+                                <h5>{{ $updated_at }}</h5>
+                            </div>
+                        </form>
                     </div>
-                    <div class="form-group">
-                        <label class="text-muted" for="slug">Slug:</label>
-                        <h5>{{ $slug }}</h5>
-                    </div>
-                    <div class="form-group">
-                        <label class="text-muted" for="description">Descripción:</label>
-                        <h5>{{ $description }}</h5>
-                    </div>
-                    <div class="form-group">
-                        <label class="text-muted" for="description">Responsable:</label>
-                        <h5>{{ $responsable }}</h5>
-                    </div>
-                    <div class="form-group">
-                        <label class="text-muted" for="description">Full acceso:</label>
-                        @if ($full_access == "yes")
-                            <h5>Sí</h5>
-                        @else
-                            <h5>No</h5>
-                        @endif
-                        <h5>{{ $full_access }}</h5>
-                    </div>
-                    <div class="form-group">
-                        <label class="text-muted" for="estado">Estado:</label>
-                        @if ($status == "1")
-                            <h5>Activo</h5>
-                        @else
-                            <h5>Inactivo</h5>
-                        @endif
-                    </div>
-                    <div class="form-group">
-                        <label class="text-muted" for="created_at">Creado:</label>
-                        <h5>{{ $created_at }}</h5>
-                    </div>
-                    <div class="form-group">
-                        <label class="text-muted" for="updated_at">Actualizado:</label>
-                        <h5>{{ $updated_at }}</h5>
-                    </div>
-                </form>
+                    @if ($fullAccess != "yes")
+                        <div class="col-lg-6 mb-4">
+                            <div class="form-group">
+                                <label class="text-muted text-uppercase" for="permisos">Permisos</label>
+                                <div>
+                                    @foreach ($permissions as $permission)
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" disabled class="custom-control-input"
+                                                id="permission_{{ $permission->id }}" wire:model="permission_role"
+                                                value="{{ $permission->id }}"
+                                                @if(is_array($permission_role) && in_array("$permission->id", $permission_role))
+                                                    checked
+                                                @endif
+                                            >
+                                            <label class="custom-control-label"
+                                                for="permission_{{ $permission->id }}">
+                                                {{ $permission->id }}
+                                                -
+                                                {{ $permission->name }}
+                                                <em>( {{ $permission->description }} )</em>
+                                            </label>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                </div>
             </div>
             <div class="modal-footer">
                 <div class="form-group justify-content-start">

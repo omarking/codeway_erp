@@ -8,94 +8,95 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form>
-                    <div class="form-group">
-                        <label class="text-muted" for="name">Nombre:</label>
-                        <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
-                                wire:model="name" wire:dirty.class="bg-primary">
-                        @error('name')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label class="text-muted" for="slug">Slug:</label>
-                        <input type="text" name="slug" class="form-control @error('slug') is-invalid @enderror"
-                                wire:model="slug" wire:dirty.class="bg-primary">
-                        @error('slug')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label class="text-muted" for="description">Descripción:</label>
-                        <textarea class="form-control @error('description') is-invalid @enderror" name="description" wire:model="description" wire:dirty.class="bg-primary" rows="3"></textarea>
-                        @error('description')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label class="text-muted" for="description">Acceso total:</label><br>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="fullaccessyes" name="fullAccess" class="custom-control-input" value="yes"
-                                @if ( old('fullAccess')=="yes" )
-                                    checked
-                                @endif
-                            >
-                            <label class="custom-control-label" for="fullaccessyes">Yes</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="fullaccessno" name="fullAccess" class="custom-control-input" value="no"
-                                @if ( old('fullAccess')=="no" )
-                                    checked
-                                @endif
-                                @if ( old('fullAccess')===null )
-                                    checked
-                                @endif
-                            >
-                            <label class="custom-control-label" for="fullaccessno">No</label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="text-muted" for="responsable">Responsable:</label>
-                        <input type="text" name="responsable" class="form-control @error('responsable') is-invalid @enderror"
-                                wire:model="responsable" wire:dirty.class="bg-primary" disabled>
-                        @error('responsable')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label class="text-muted text-uppercase" for="description">Permisos</label>
-                        <div>
-                            @forelse ( $permissions as $permisos )
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input"
-                                        id="permission_{{ $permisos->id }}" wire:model="permission"
-                                        value="{{$permisos->id}}"
-                                        @if( is_array(old('permission')) && in_array("$permisos->id", old('permission')) )
-                                            checked
-                                        @endif
-                                    >
-                                    <label class="custom-control-label"
-                                        for="permission_{{ $permisos->id }}">
-                                        {{ $permisos->id }}
-                                        -
-                                        {{ $permisos->name }}
-                                        <em>( {{ $permisos->description }} )</em>
-                                    </label>
+                <div class="row">
+                    @if ($fullAccess != "yes")
+                        <div class="col-lg-5 mb-4">
+                    @else
+                        <div class="col-lg-12 mb-4">
+                    @endif
+                        <form>
+                            <div class="form-group">
+                                <label class="text-muted" for="name">Nombre:</label>
+                                <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
+                                        wire:model="name" wire:dirty.class="bg-primary">
+                                @error('name')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label class="text-muted" for="slug">Slug:</label>
+                                <input type="text" name="slug" class="form-control @error('slug') is-invalid @enderror"
+                                        wire:model="slug" wire:dirty.class="bg-primary">
+                                @error('slug')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label class="text-muted" for="description">Descripción:</label>
+                                <textarea class="form-control @error('description') is-invalid @enderror" name="description" wire:model="description" wire:dirty.class="bg-primary" rows="3"></textarea>
+                                @error('description')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label class="text-muted" for="description">Acceso total:</label><br>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="fullaccessyes" name="fullAccess" wire:model="fullAccess" class="custom-control-input" value="yes">
+                                    <label class="custom-control-label" for="fullaccessyes">Yes</label>
                                 </div>
-                            @empty
-                                <li>No hay permisos registrados</li>
-                            @endforelse
-                        </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="fullaccessno" wire:model="fullAccess" name="fullAccess" class="custom-control-input" value="no" checked>
+                                    <label class="custom-control-label" for="fullaccessno">No</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="text-muted" for="responsable">Responsable:</label>
+                                <input type="text" name="responsable" class="form-control @error('responsable') is-invalid @enderror"
+                                        wire:model="responsable" wire:dirty.class="bg-primary" disabled>
+                                @error('responsable')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </form>
                     </div>
-                </form>
+                    @if ($fullAccess != "yes")
+                        <div class="col-lg-6 mb-4">
+                            <div class="form-group">
+                                <label class="text-muted text-uppercase" for="permisos">Permisos</label>
+                                <div>
+                                    @forelse ($permissions as $permisos )
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input"
+                                                id="permission_{{ $permisos->id }}" wire:model="permission"
+                                                value="{{ $permisos->id }}"
+                                                @if(is_array(old('permission')) && in_array("$permisos->id", old('permission')))
+                                                    checked
+                                                @endif
+                                            >
+                                            <label class="custom-control-label"
+                                                for="permission_{{ $permisos->id }}">
+                                                {{ $permisos->id }}
+                                                -
+                                                {{ $permisos->name }}
+                                                <em>( {{ $permisos->description }} )</em>
+                                            </label>
+                                        </div>
+                                    @empty
+                                        <li>No hay permisos registrados</li>
+                                    @endforelse
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                </div>
             </div>
             <div class="modal-footer">
                 <div class="form-group justify-content-start">

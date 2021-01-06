@@ -19,7 +19,7 @@ class PermissionComponent extends Component
     public $search = '', $perPage = '10', $total;
 
     public $rules = [
-        'name'         => 'required|string|min:4|max:100|unique:permissions,name',
+        'name'         => 'required|string|max:100|unique:permissions,name',
         'slug'         => 'required|string|max:100|unique:permissions,slug',
         'description'  => 'required|string',
     ];
@@ -49,13 +49,13 @@ class PermissionComponent extends Component
     {
         if ($this->accion == "store") {
             $this->validateOnly($propertyName, [
-                'name'         => 'required|string|min:4|max:100|unique:permissions,name',
+                'name'         => 'required|string|max:100|unique:permissions,name',
                 'slug'         => 'required|string|max:100|unique:permissions,slug',
                 'description'  => 'required|string',
             ]);
         } else {
             $this->validateOnly($propertyName, [
-                'name'         => 'required|string|min:4|max:100|unique:permissions,name,' . $this->permission_id,
+                'name'         => 'required|string|max:100|unique:permissions,name,' . $this->permission_id,
                 'slug'         => 'required|string|max:100|unique:permissions,slug,' . $this->permission_id,
                 'description'  => 'required|string',
             ]);
@@ -65,7 +65,7 @@ class PermissionComponent extends Component
     public function store()
     {
         $validateData = $this->validate([
-            'name'         => 'required|string|min:4|max:100|unique:permissions,name',
+            'name'         => 'required|string|max:100|unique:permissions,name',
             'slug'         => 'required|string|max:100|unique:permissions,slug',
             'description'  => 'required|string',
         ]);
@@ -105,7 +105,7 @@ class PermissionComponent extends Component
     public function update()
     {
         $this->validate([
-            'name'         => 'required|string|min:4|max:100|unique:permissions,name,' . $this->permission_id,
+            'name'         => 'required|string|max:100|unique:permissions,name,' . $this->permission_id,
             'slug'         => 'required|string|max:100|unique:permissions,slug,' . $this->permission_id,
             'description'  => 'required|string',
         ]);
@@ -149,6 +149,7 @@ class PermissionComponent extends Component
             'created_at',
             'updated_at',
         ]);
+        $this->mount();
     }
 
     public function clear()
@@ -160,7 +161,8 @@ class PermissionComponent extends Component
     {
         return view(
             'livewire.permission.permission-component',
-            ['permissions' => Permission::where('id', 'LIKE', "%{$this->search}%")
+            ['permissions' => Permission::latest('id')
+                ->where('id', 'LIKE', "%{$this->search}%")
                 ->orWhere('name', 'LIKE', "%{$this->search}%")
                 ->orWhere('slug', 'LIKE', "%{$this->search}%")
                 ->orWhere('description', 'LIKE', "%{$this->search}%")

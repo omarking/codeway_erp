@@ -14,12 +14,12 @@ class PositionComponent extends Component
 
     protected $paginationTheme = 'bootstrap';
 
-    public $description, $status, $position_id, $created_at, $updated_at, $accion = "store";
+    public $position_id, $description, $status, $created_at, $updated_at, $accion = "store";
 
     public $search = '', $perPage = '10', $total;
 
     public $rules = [
-        'description'  => 'required|string|min:4|max:100|unique:positions,description',
+        'description'  => 'required|string|max:200|unique:positions,description',
     ];
 
     /* protected $messages = [
@@ -45,11 +45,11 @@ class PositionComponent extends Component
     {
         if ($this->accion == "store") {
             $this->validateOnly($propertyName, [
-                'description' => 'required|min:4|max:100|unique:positions,description',
+                'description' => 'required|max:200|unique:positions,description',
             ]);
         } else {
             $this->validateOnly($propertyName, [
-                'description' => 'required|min:4|max:100|unique:positions,description,' . $this->position_id,
+                'description' => 'required|max:200|unique:positions,description,' . $this->position_id,
             ]);
         }
     }
@@ -57,7 +57,7 @@ class PositionComponent extends Component
     public function store()
     {
         $validateData = $this->validate([
-            'description' => 'required|min:4|max:100|unique:positions,description',
+            'description' => 'required|max:200|unique:positions,description',
         ]);
         Position::create($validateData);
         session()->flash('message', 'Posición creada correctamente.');
@@ -91,7 +91,7 @@ class PositionComponent extends Component
     public function update()
     {
         $this->validate([
-            'description' => 'required|min:4|max:100|unique:positions,description,' . $this->position_id,
+            'description' => 'required|max:200|unique:positions,description,' . $this->position_id,
         ]);
         if ($this->position_id) {
             $positions = Position::find($this->position_id);
@@ -122,7 +122,15 @@ class PositionComponent extends Component
 
     public function clean()
     {
-        $this->reset(['description', 'status', 'position_id', 'accion', 'created_at', 'updated_at',]);
+        $this->reset([
+            'position_id',
+            'description',
+            'status',
+            'accion',
+            'created_at',
+            'updated_at',
+        ]);
+        $this->mount();
     }
 
     public function clear()
@@ -134,9 +142,11 @@ class PositionComponent extends Component
     {
         return view(
             'livewire.position.position-component',
-            ['positions' => Position::where('description', 'LIKE', "%{$this->search}%")
-            ->orWhere('id', 'LIKE', "%{$this->search}%")
-            ->paginate($this->perPage)]
+            ['positions' => Position::latest('id')
+                ->where('id', 'LIKE', "%{$this->search}%")
+                ->orWhere('description', 'LIKE', "%{$this->search}%")
+                ->paginate($this->perPage)
+            ]
         );
     }
 }
