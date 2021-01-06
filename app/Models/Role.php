@@ -35,7 +35,7 @@ class Role extends Model
     ];
 
     /* Un rol pertence a uno o muchos usuarios */
-    public function roles()
+    public function users()
     {
         return $this->belongsToMany(User::class)->withTimestamps();
     }
