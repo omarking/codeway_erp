@@ -4,45 +4,46 @@
 use App\Models\Permission;
 
 
-/* Permission permiso del modelo Permission*/
-/* Listar todos los permisos */
-
+/*
+Categoria permiso del modelo Category
+Listar todos los categorys
+*/
 $permission = Permission::create([
-    'name'          => 'List permission',
-    'slug'          => 'permission.index',
-    'description'   => 'A user can list permission',
+    'name'          => 'List category',
+    'slug'          => 'category.index',
+    'description'   => 'A user can list category',
 ]);
 /* Agregamos a la variable permission el id del permiso creado */
 $permission_all[] = $permission->id;
-/* Ver en detalle a un permiso */
+/* Ver en detalle a un categoria */
 $permission = Permission::create([
-    'name'          => 'Show permission',
-    'slug'          => 'permission.show',
-    'description'   => 'A user can see permission',
+    'name'          => 'Show category',
+    'slug'          => 'category.show',
+    'description'   => 'A user can see category',
 ]);
 /* Agregamos a la variable permission el id del permiso creado */
 $permission_all[] = $permission->id;
-/* Permite crear un nuevo permiso */
+/* Permite crear un nuevo categoria */
 $permission = Permission::create([
-    'name'          => 'Create permission',
-    'slug'          => 'permission.create',
-    'description'   => 'A user can create permission',
+    'name'          => 'Create category',
+    'slug'          => 'category.create',
+    'description'   => 'A user can create category',
 ]);
 /* Agregamos a la variable permission el id del permiso creado */
 $permission_all[] = $permission->id;
-/* Permite editar un permiso */
+/* Permite editar un categoria */
 $permission = Permission::create([
-    'name'          => 'Edit permission',
-    'slug'          => 'permission.edit',
-    'description'   => 'A user can edit permission',
+    'name'          => 'Edit category',
+    'slug'          => 'category.edit',
+    'description'   => 'A user can edit category',
 ]);
 /* Agregamos a la variable permission el id del permiso creado */
 $permission_all[] = $permission->id;
-/* Permite eliminar un permiso */
+/* Permite eliminar un categoria */
 $permission = Permission::create([
-    'name'          => 'Destroy permission',
-    'slug'          => 'permission.destroy',
-    'description'   => 'A user can destroy permission',
+    'name'          => 'Destroy category',
+    'slug'          => 'category.destroy',
+    'description'   => 'A user can destroy category',
 ]);
 /* Agregamos a la variable permission el id del permiso creado */
 $permission_all[] = $permission->id;

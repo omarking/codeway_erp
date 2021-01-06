@@ -27,7 +27,7 @@ class TaskComponent extends Component
     public $rules = [
         'name'          => 'required|string|max:200|unique:tasks,name',
         'description'   => 'required|string',
-        'file'          => 'string',
+        'file'          => '',
         'start'         => 'required|date',
         'end'           => 'required|date',
         'informer'      => 'required|string|',
@@ -72,7 +72,7 @@ class TaskComponent extends Component
             $this->validateOnly($propertyName, [
                 'name'          => 'required|string|max:200|unique:tasks,name',
                 'description'   => 'required|string',
-                'file'          => 'string',
+                'file'          => '',
                 'start'         => 'required|date',
                 'end'           => 'required|date',
                 'informer'      => 'required|string',
@@ -85,7 +85,7 @@ class TaskComponent extends Component
             $this->validateOnly($propertyName, [
                 'name'          => 'required|string|max:200|unique:tasks,name,' . $this->task_id,
                 'description'   => 'required|string',
-                'file'          => 'string',
+                'file'          => '',
                 'start'         => 'required|date',
                 'end'           => 'required|date',
                 'informer'      => 'required|string',
@@ -102,7 +102,7 @@ class TaskComponent extends Component
         $validateData = $this->validate([
             'name'          => 'required|string|max:200|unique:tasks,name',
             'description'   => 'required|string|',
-            'file'          => 'string',
+            'file'          => '',
             'start'         => 'required|date',
             'end'           => 'required|date',
             'informer'      => 'required|string',
@@ -132,14 +132,20 @@ class TaskComponent extends Component
         $this->type_id       = $task->type_id;
         $this->created_at    = $task->created_at;
         $this->updated_at    = $task->updated_at;
-        if ($task->statu->description) {
-            $this->estado    = $task->statu->description;
+        if (isset($task->statu->description)) {
+            $this->estado   = $task->statu->description;
+        }else{
+            $this->estado   = "Sin estado";
         }
-        if ($task->type->description) {
-            $this->tipo      = $task->type->description;
+        if (isset($task->type->description)) {
+            $this->tipo     = $task->type->description;
+        }else{
+            $this->tipo     = "Sin tipo";
         }
-        if ($task->priority->description) {
+        if (isset($task->priority->description)) {
             $this->prioridad = $task->priority->description;
+        }else{
+            $this->prioridad = "Sin prioridad";
         }
     }
 
@@ -171,7 +177,7 @@ class TaskComponent extends Component
         $this->validate([
             'name'          => 'required|string|max:200|unique:tasks,name,' . $this->task_id,
             'description'   => 'required|string',
-            'file'          => 'string',
+            'file'          => '',
             'start'         => 'required|date',
             'end'           => 'required|date',
             'informer'      => 'required|string',
