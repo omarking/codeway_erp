@@ -26,6 +26,10 @@
                         <h5>{{ $email }}</h5>
                     </div>
                     <div class="form-group">
+                        <label class="text-muted" for="email">Email Corporativo:</label>
+                        <h5>{{ $corporative }}</h5>
+                    </div>
+                    <div class="form-group">
                         <label class="text-muted" for="estado">Estado:</label>
                         @if ($status == "1")
                             <h5>Activo</h5>

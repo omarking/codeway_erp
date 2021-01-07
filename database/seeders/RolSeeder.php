@@ -36,6 +36,7 @@ class RolSeeder extends Seeder
             'phone'             => '',
             'name'              => 'Canserbero',
             'email'             => 'admin@admin.com',
+            'corporative'       => 'admin@codewaymx.com',
             'password'          => Hash::make('maquiabelico'),
         ]);
 

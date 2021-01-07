@@ -70,6 +70,16 @@
                         @enderror
                     </div>
                     <div class="form-group">
+                        <label class="text-muted" for="corporative">Email Corporativo:</label>
+                        <input type="email" name="corporative" class="form-control @error('corporative') is-invalid @enderror"
+                                wire:model="corporative" wire:dirty.class="bg-primary">
+                        @error('corporative')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                    <div class="form-group">
                         <label class="text-muted" for="password">Contraseña:</label>
                         <input type="password" name="password" class="form-control @error('password') is-invalid @enderror"
                                 wire:model="password" wire:dirty.class="bg-primary">

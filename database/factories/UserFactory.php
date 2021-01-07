@@ -30,6 +30,7 @@ class UserFactory extends Factory
             'phone'             => $this->faker->tollFreePhoneNumber,
             'name'              => $this->faker->userName,
             'email'             => $this->faker->unique()->email,
+            'corporative'             => $this->faker->unique()->email,
             'email_verified_at' => now(),
             'password'          => Hash::make('password'),
             'remember_token'    => Str::random(10),

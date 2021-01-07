@@ -17,9 +17,9 @@ class UserComponent extends Component
 
     protected $paginationTheme = 'bootstrap';
 
-    public $user_id, $nameUser, $firstLastname, $secondLastname, $phone, $name, $email, $password, $status, $created_at, $updated_at, $accion = "store";
+    public $user_id, $nameUser, $firstLastname, $secondLastname, $phone, $name, $email, $corporative, $password, $status, $created_at, $updated_at, $accion = "store";
 
-    public $search = '', $perPage = '10', $total, $role, $now, $user, $rool;
+    public $search = '', $perPage = '10', $total, $role, $now, $user, $rool, $pag, $per, $busca;
 
     public $rules = [
         'nameUser'       => 'required|string|max:100',
@@ -28,6 +28,7 @@ class UserComponent extends Component
         'phone'          => 'required|numeric',
         'name'           => 'required|string|max:100|unique:users,name',
         'email'          => 'required|email|max:100|unique:users,email',
+        'corporative'    => 'required|email|max:100|unique:users,corporative',
         'password'       => 'required|string|min:8|max:100',
         'role'           => 'required',
     ];
@@ -49,6 +50,7 @@ class UserComponent extends Component
         'phone'          => 'telefono',
         'name'           => 'nombre de usuario',
         'email'          => 'email',
+        'corporative'    => 'email corporativo',
         'password'       => 'contraseña',
         'role'           => 'rol',
     ];
@@ -69,6 +71,7 @@ class UserComponent extends Component
                 'phone'          => 'required|numeric',
                 'name'           => 'required|string|max:100|unique:users,name',
                 'email'          => 'required|email|max:100|unique:users,email',
+                'corporative'    => 'required|email|max:100|unique:users,corporative',
                 'password'       => 'required|string|min:8|max:100',
                 'role'           => 'required',
             ]);
@@ -80,6 +83,7 @@ class UserComponent extends Component
                 'phone'          => 'required|numeric',
                 'name'           => 'required|string|max:100|unique:users,name,' . $this->user_id,
                 'email'          => 'required|email|max:100|unique:users,email,' . $this->user_id,
+                'corporative'    => 'required|email|max:100|unique:users,corporative,' . $this->user_id,
                 'password'       => 'required|string|min:8|max:100',
                 'role'           => 'required',
             ]);
@@ -95,6 +99,7 @@ class UserComponent extends Component
             'phone'          => 'required|numeric',
             'name'           => 'required|string|max:100|unique:users,name',
             'email'          => 'required|email|max:100|unique:users,email',
+            'corporative'    => 'required|email|max:100|unique:users,corporative',
             'password'       => 'required|string|min:8|max:100',
             'role'           => 'required',
         ]);
@@ -105,6 +110,7 @@ class UserComponent extends Component
             'phone'             => $this->phone,
             'name'              => $this->name,
             'email'             => $this->email,
+            'corporative'       => $this->corporative,
             'password'          => Hash::make($this->password),
             'email_verified_at' => $this->now,
         ]);
@@ -125,6 +131,7 @@ class UserComponent extends Component
         $this->phone          = $user->phone;
         $this->name           = $user->name;
         $this->email          = $user->email;
+        $this->corporative    = $user->corporative;
         $this->status         = $user->status;
         $this->created_at     = $user->created_at;
         $this->updated_at     = $user->updated_at;
@@ -151,6 +158,7 @@ class UserComponent extends Component
         $this->phone          = $user->phone;
         $this->name           = $user->name;
         $this->email          = $user->email;
+        $this->corporative    = $user->corporative;
         /* $this->password       = $user->password; */
         $this->status         = $user->status;
         $this->accion         = "update";
@@ -170,6 +178,7 @@ class UserComponent extends Component
             'phone'          => 'required|numeric',
             'name'           => 'required|string|max:100|unique:users,name,' . $this->user_id,
             'email'          => 'required|email|max:100|unique:users,email,' . $this->user_id,
+            'corporative'    => 'required|email|max:100|unique:users,corporative,' . $this->user_id,
             /* 'password'       => 'required|string|min:8|max:100', */
             'role'           => 'required',
         ]);
@@ -182,6 +191,7 @@ class UserComponent extends Component
                 'phone'           => $this->phone,
                 'name'            => $this->name,
                 'email'           => $this->email,
+                'corporative'     => $this->corporative,
                 /* 'password'        => Hash::make($this->password), */
                 'status'          => $this->status,
             ]);
@@ -220,11 +230,13 @@ class UserComponent extends Component
             'phone',
             'name',
             'email',
+            'corporative',
             'password',
             'status',
             'accion',
             'role',
             'rool',
+            'pag',
             'created_at',
             'updated_at',
         ]);
@@ -233,12 +245,21 @@ class UserComponent extends Component
 
     public function clear()
     {
-        $this->reset(['search', 'perPage', 'page']);
+        $this->reset(['search', 'perPage', 'page', 'pag']);
     }
 
     public function render()
     {
         $roless = Role::orderBy('name')->get();
+
+        if ($this->search != '') {
+            $this->pag = $this->page;
+            $this->page = 1;
+        }
+        if ($this->page != 1) {
+            $this->pag = $this->perPage;
+        }
+
         return view(
             'livewire.user.user-component',
             [
@@ -251,6 +272,7 @@ class UserComponent extends Component
                     ->orWhere('phone', 'LIKE', "%{$this->search}%")
                     ->orWhere('name', 'LIKE', "%{$this->search}%")
                     ->orWhere('email', 'LIKE', "%{$this->search}%")
+                    ->orWhere('corporative', 'LIKE', "%{$this->search}%")
                     ->paginate($this->perPage)
             ],
             compact('roless')

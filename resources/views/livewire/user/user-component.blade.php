@@ -43,6 +43,7 @@
                             <th scope="col">Telefono</th>
                             <th scope="col">Usuario</th>
                             <th scope="col">Email</th>
+                            <th scope="col">Corporativo</th>
                             <th scope="col">Roles</th>
                             <th scope="col">Estado</th>
                             <th scope="col">Creado</th>
@@ -58,6 +59,7 @@
                                 <td>{{ $user->phone }}</td>
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->email }}</td>
+                                <td>{{ $user->corporative }}</td>
                                 <td>
                                     @isset( $user->roles[0]->name )
                                         {{ $user->roles[0]->name }}
@@ -91,6 +93,11 @@
                     <ul class="pagination justify-content">
                         <h6>Mostrando {{ $perPage }} registros de {{ $total }} registros totales en la pagina {{ $page }}</h6>
                     </ul>
+                    <ul>
+                        <small>Paginas: {{ $page }}</small>
+                        <small>Buscar: {{ $search }}</small>
+                        <small>PerPage: {{ $perPage }}</small>
+                    </ul>
                 </nav>
                 <nav class="col col-lg-6 justify-content-end" aria-label="Page navigation example">
                     <ul class="pagination justify-content-end">
@@ -100,7 +107,12 @@
             @else
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content">
-                        <h6>No hay resultados para la búsqueda "{{ $search}}" en la página {{ $page }} al mostrar {{ $perPage }} por página</h6>
+                        <h6>No hay resultados para la búsqueda "{{ $search }}" en la página {{ $page }} al mostrar {{ $perPage }} por página</h6>
+                    </ul>
+                    <ul>
+                        <small>Paginas: {{ $page }}</small>
+                        <small>Buscar: {{ $search }}</small>
+                        <small>PerPage: {{ $perPage }}</small>
                     </ul>
                 </nav>
             @endif

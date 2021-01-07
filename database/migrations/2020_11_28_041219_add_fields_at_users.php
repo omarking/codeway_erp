@@ -16,6 +16,7 @@ class AddFieldsAtUsers extends Migration
         Schema::table('users',  function (Blueprint $table) {
 
             $table->string('nameUser', 100)->nullable()->after('id');
+            $table->string('corporative', 100)->unique()->nullable()->after('email');
             $table->string('firstLastname', 100)->nullable()->after('nameUser');
             $table->string('secondLastname', 100)->nullable()->after('firstLastname');
             $table->string('phone', 20)->nullable()->after('secondLastname');
