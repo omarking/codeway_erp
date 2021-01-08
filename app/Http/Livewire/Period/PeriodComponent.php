@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Period;
 
+use App\Models\Holiday;
 use App\Models\Period;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -16,7 +17,7 @@ class PeriodComponent extends Component
 
     public $period_id, $description, $status, $created_at, $updated_at, $accion = "store";
 
-    public $search = '', $perPage = '10', $total;
+    public $search = '', $perPage = '10', $total, $period;
 
     public $rules = [
         'description'  => 'required|numeric|unique:periods,description',
@@ -72,6 +73,7 @@ class PeriodComponent extends Component
         $this->status       = $period->status;
         $this->created_at   = $period->created_at;
         $this->updated_at   = $period->updated_at;
+        $this->period       = $period;
     }
 
     public function close()
@@ -126,6 +128,7 @@ class PeriodComponent extends Component
             'description',
             'status',
             'accion',
+            'period',
             'created_at',
             'updated_at',
         ]);
@@ -139,6 +142,7 @@ class PeriodComponent extends Component
 
     public function render()
     {
+        $vacaciones = Holiday::latest('id')->get();
         if ($this->search != '') {
             $this->page = 1;
         }
@@ -153,7 +157,8 @@ class PeriodComponent extends Component
                     ->where('id', 'LIKE', "%{$this->search}%")
                     ->orWhere('description', 'LIKE', "%{$this->search}%")
                     ->paginate($this->perPage)
-            ]
+            ],
+            compact('vacaciones')
         );
     }
 }

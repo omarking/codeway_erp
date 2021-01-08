@@ -29,6 +29,31 @@
                         <label class="text-muted" for="updated_at">Actualizado:</label>
                         <h5>{{ $updated_at }}</h5>
                     </div>
+                    <div class="form-group ">
+                        <label class="text-muted text-uppercase" for="updated_at">Proyectos relacionadas con esta categoria</label>
+                        <div class="table-responsive">
+                            <table class="table table-white table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Clave</th>
+                                        <th scope="col">Proyecto</th>
+                                        <th scope="col">Descripción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($proyectos as $proyecto)
+                                        @if ($category_id == $proyecto->category_id)
+                                            <tr>
+                                                <td>{{ $proyecto->key }}</td>
+                                                <td>{{ $proyecto->name }}</td>
+                                                <td>{{ $proyecto->description }}</td>
+                                            </tr>
+                                        @endif
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">

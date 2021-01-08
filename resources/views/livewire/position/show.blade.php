@@ -29,6 +29,33 @@
                         <label class="text-muted" for="updated_at">Actualizado:</label>
                         <h5>{{ $updated_at }}</h5>
                     </div>
+                    <div class="form-group ">
+                        <label class="text-muted text-uppercase" for="updated_at">Perfiles relacionadas con esta posición</label>
+                        <div class="table-responsive">
+                            <table class="table table-white table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Descripción</th>
+                                        <th scope="col">Facebook</th>
+                                        <th scope="col">Instagram</th>
+                                        <th scope="col">GitHub</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($perfiles as $perfil)
+                                        @if ($position_id == $perfil->position_id)
+                                            <tr>
+                                                <td>{{ $perfil->description }}</td>
+                                                <td>{{ $perfil->facebook }}</td>
+                                                <td>{{ $perfil->instagram }}</td>
+                                                <td>{{ $perfil->github }}</td>
+                                            </tr>
+                                        @endif
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">

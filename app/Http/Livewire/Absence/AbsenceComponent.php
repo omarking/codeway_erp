@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Absence;
 
 use App\Models\Absence;
+use App\Models\Holiday;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -16,7 +17,7 @@ class AbsenceComponent extends Component
 
     public $absence_id, $description, $status, $created_at, $updated_at, $accion = "store";
 
-    public $search = '', $perPage = '10', $total;
+    public $search = '', $perPage = '10', $total, $absence;
 
     public $rules = [
         'description'  => 'required|string|max:200|unique:absences,description',
@@ -72,6 +73,7 @@ class AbsenceComponent extends Component
         $this->status       = $absence->status;
         $this->created_at   = $absence->created_at;
         $this->updated_at   = $absence->updated_at;
+        $this->absence      = $absence;
     }
 
     public function close()
@@ -126,6 +128,7 @@ class AbsenceComponent extends Component
             'description',
             'status',
             'accion',
+            'absence',
             'created_at',
             'updated_at',
         ]);
@@ -139,13 +142,15 @@ class AbsenceComponent extends Component
 
     public function render()
     {
+        $vacaciones = Holiday::latest('id')->get();
+
         if ($this->search != '') {
             $this->page = 1;
         }
         if (isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)) {
             $this->reset(['perPage']);
         }
-        
+
         return view(
             'livewire.absence.absence-component',
             [
@@ -153,7 +158,8 @@ class AbsenceComponent extends Component
                     ->where('id', 'LIKE', "%{$this->search}%")
                     ->orWhere('description', 'LIKE', "%{$this->search}%")
                     ->paginate($this->perPage)
-            ]
+            ],
+            compact('vacaciones')
         );
     }
 }

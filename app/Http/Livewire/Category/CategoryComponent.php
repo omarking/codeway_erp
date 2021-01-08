@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Category;
 
 use App\Models\Category;
+use App\Models\Project;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -16,7 +17,7 @@ class CategoryComponent extends Component
 
     public $category_id, $description, $status, $created_at, $updated_at, $accion = "store";
 
-    public $search = '', $perPage = '10', $total;
+    public $search = '', $perPage = '10', $total, $category;
 
     public $rules = [
         'description'  => 'required|string|max:200|unique:categories,description',
@@ -72,6 +73,7 @@ class CategoryComponent extends Component
         $this->status       = $categories->status;
         $this->created_at   = $categories->created_at;
         $this->updated_at   = $categories->updated_at;
+        $this->category     = $categories;
     }
 
     public function close()
@@ -126,6 +128,7 @@ class CategoryComponent extends Component
             'description',
             'status',
             'accion',
+            'category',
             'created_at',
             'updated_at',
         ]);
@@ -139,20 +142,23 @@ class CategoryComponent extends Component
 
     public function render()
     {
+        $proyectos = Project::orderBy('name')->get();
+
         if ($this->search != '') {
             $this->page = 1;
         }
         if (isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)) {
             $this->reset(['perPage']);
         }
-        
+
         return view(
             'livewire.category.category-component',
             ['categories' => Category::latest('id')
                 ->where('id', 'LIKE', "%{$this->search}%")
                 ->orWhere('description', 'LIKE', "%{$this->search}%")
                 ->paginate($this->perPage)
-            ]
+            ],
+            compact('proyectos')
         );
     }
 

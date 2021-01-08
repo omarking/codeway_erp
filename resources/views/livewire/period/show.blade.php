@@ -29,6 +29,37 @@
                         <label class="text-muted" for="updated_at">Actualizado:</label>
                         <h5>{{ $updated_at }}</h5>
                     </div>
+                    <div class="form-group ">
+                        <label class="text-muted text-uppercase" for="updated_at">Vacaciones relacionadas con este periodo</label>
+                        <div class="table-responsive">
+                            <table class="table table-white table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Dias</th>
+                                        <th scope="col">Inicio</th>
+                                        <th scope="col">Termino</th>
+                                        <th scope="col">En proceso</th>
+                                        <th scope="col">Tomadas</th>
+                                        <th scope="col">Disponibles</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($vacaciones as $vacacion)
+                                        @if ($period_id == $vacacion->period_id)
+                                            <tr>
+                                                <td>{{ $vacacion->days }}</td>
+                                                <td>{{ $vacacion->beginDate }}</td>
+                                                <td>{{ $vacacion->endDate }}</td>
+                                                <td>{{ $vacacion->inProcess }}</td>
+                                                <td>{{ $vacacion->taken }}</td>
+                                                <td>{{ $vacacion->available }}</td>
+                                            </tr>
+                                        @endif
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">

@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Position;
 
 use App\Models\Position;
+use App\Models\Profile;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -16,7 +17,7 @@ class PositionComponent extends Component
 
     public $position_id, $description, $status, $created_at, $updated_at, $accion = "store";
 
-    public $search = '', $perPage = '10', $total;
+    public $search = '', $perPage = '10', $total, $position;
 
     public $rules = [
         'description'  => 'required|string|max:200|unique:positions,description',
@@ -72,6 +73,7 @@ class PositionComponent extends Component
         $this->status       = $position->status;
         $this->created_at   = $position->created_at;
         $this->updated_at   = $position->updated_at;
+        $this->position     = $position;
     }
 
     public function close()
@@ -140,20 +142,23 @@ class PositionComponent extends Component
 
     public function render()
     {
+        $perfiles = Profile::latest('id')->get();
+        
         if ($this->search != '') {
             $this->page = 1;
         }
         if (isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)) {
             $this->reset(['perPage']);
         }
-        
+
         return view(
             'livewire.position.position-component',
             ['positions' => Position::latest('id')
                 ->where('id', 'LIKE', "%{$this->search}%")
                 ->orWhere('description', 'LIKE', "%{$this->search}%")
                 ->paginate($this->perPage)
-            ]
+            ],
+            compact('perfiles')
         );
     }
 }

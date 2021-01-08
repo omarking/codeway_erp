@@ -17,7 +17,7 @@ class TypeComponent extends Component
 
     public $type_id, $description, $status, $created_at, $updated_at, $accion = "store";
 
-    public $search = '', $perPage = '10', $total, $task, $type;
+    public $search = '', $perPage = '10', $total, $type;
 
     public $rules = [
         'description'  => 'required|string|max:100|unique:types,description',
@@ -129,7 +129,6 @@ class TypeComponent extends Component
             'description',
             'status',
             'accion',
-            'task',
             'type',
             'created_at',
             'updated_at',
@@ -152,7 +151,7 @@ class TypeComponent extends Component
         if (isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)) {
             $this->reset(['perPage']);
         }
-        
+
         return view(
             'livewire.type.type-component',
             ['types' => Type::latest('id')

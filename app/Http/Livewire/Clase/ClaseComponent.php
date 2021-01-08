@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Clase;
 
 use App\Models\Clas;
+use App\Models\Project;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -16,7 +17,7 @@ class ClaseComponent extends Component
 
     public $class_id, $description, $status, $created_at, $updated_at, $accion = "store";
 
-    public $search = '', $perPage = '10', $total;
+    public $search = '', $perPage = '10', $total, $clase;
 
     public $rules = [
         'description'  => 'required|string|max:200|unique:class,description',
@@ -72,6 +73,7 @@ class ClaseComponent extends Component
         $this->status       = $clase->status;
         $this->created_at   = $clase->created_at;
         $this->updated_at   = $clase->updated_at;
+        $this->clase        = $clase;
     }
 
     public function close()
@@ -126,6 +128,7 @@ class ClaseComponent extends Component
             'description',
             'status',
             'accion',
+            'clase',
             'created_at',
             'updated_at',
         ]);
@@ -139,6 +142,8 @@ class ClaseComponent extends Component
 
     public function render()
     {
+        $proyectos = Project::orderBy('name')->get();
+
         if ($this->search != '') {
             $this->page = 1;
         }
@@ -153,7 +158,8 @@ class ClaseComponent extends Component
                     ->where('id', 'LIKE', "%{$this->search}%")
                     ->orWhere('description', 'LIKE', "%{$this->search}%")
                     ->paginate($this->perPage)
-            ]
+            ],
+            compact('proyectos')
         );
     }
 }
