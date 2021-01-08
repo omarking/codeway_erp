@@ -26,7 +26,7 @@
                             <option value="10">10 por página</option>
                             <option value="25">25 por página</option>
                             <option value="50">50 por página</option>
-                            {{-- <option value="100">100 por página</option> --}}
+                            <option value="100">100 por página</option>
                         </select>
                     </div>
                     @if ($search !== '')
@@ -81,7 +81,7 @@
             @if ($preusers->count())
                 <nav class="col col-lg-6 justify-content-start" aria-label="Page navigation example">
                     <ul class="pagination justify-content">
-                        <h6>Mostrando {{ $perPage }} registros de {{ $total }} registros totales en la pagina {{ $page }}</h6>
+                        <h6>Mostrando {{ $preusers->count() }} registros de {{ $total }} registros totales en la pagina {{ $page }}</h6>
                     </ul>
                 </nav>
                 <nav class="col col-lg-6 justify-content-end" aria-label="Page navigation example">

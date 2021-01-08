@@ -19,7 +19,7 @@ class UserComponent extends Component
 
     public $user_id, $nameUser, $firstLastname, $secondLastname, $phone, $name, $email, $corporative, $password, $status, $created_at, $updated_at, $accion = "store";
 
-    public $search = '', $perPage = '10', $total, $role, $now, $user, $rool, $pag, $per, $busca;
+    public $search = '', $perPage = '10', $total, $role, $now, $user, $rool;
 
     public $rules = [
         'nameUser'       => 'required|string|max:100',
@@ -234,9 +234,9 @@ class UserComponent extends Component
             'password',
             'status',
             'accion',
+            'user',
             'role',
             'rool',
-            'pag',
             'created_at',
             'updated_at',
         ]);
@@ -245,7 +245,7 @@ class UserComponent extends Component
 
     public function clear()
     {
-        $this->reset(['search', 'perPage', 'page', 'pag']);
+        $this->reset(['search', 'perPage', 'page']);
     }
 
     public function render()
@@ -253,11 +253,10 @@ class UserComponent extends Component
         $roless = Role::orderBy('name')->get();
 
         if ($this->search != '') {
-            $this->pag = $this->page;
             $this->page = 1;
         }
-        if ($this->page != 1) {
-            $this->pag = $this->perPage;
+        if(isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)){
+            $this->reset(['perPage']);
         }
 
         return view(

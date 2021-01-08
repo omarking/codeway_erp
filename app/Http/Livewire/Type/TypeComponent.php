@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Type;
 
+use App\Models\Task;
 use App\Models\Type;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -16,7 +17,7 @@ class TypeComponent extends Component
 
     public $type_id, $description, $status, $created_at, $updated_at, $accion = "store";
 
-    public $search = '', $perPage = '10', $total;
+    public $search = '', $perPage = '10', $total, $task, $type;
 
     public $rules = [
         'description'  => 'required|string|max:100|unique:types,description',
@@ -72,6 +73,7 @@ class TypeComponent extends Component
         $this->status       = $type->status;
         $this->created_at   = $type->created_at;
         $this->updated_at   = $type->updated_at;
+        $this->$type        = $type;
     }
 
     public function close()
@@ -127,6 +129,8 @@ class TypeComponent extends Component
             'description',
             'status',
             'accion',
+            'task',
+            'type',
             'created_at',
             'updated_at',
         ]);
@@ -140,6 +144,15 @@ class TypeComponent extends Component
 
     public function render()
     {
+        $tareas = Task::orderBy('name')->get();
+
+        if ($this->search != '') {
+            $this->page = 1;
+        }
+        if (isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)) {
+            $this->reset(['perPage']);
+        }
+        
         return view(
             'livewire.type.type-component',
             ['types' => Type::latest('id')
@@ -147,7 +160,8 @@ class TypeComponent extends Component
                 ->orWhere('description', 'LIKE', "%{$this->search}%")
                 ->orWhere('status', 'LIKE', "%{$this->search}%")
                 ->paginate($this->perPage)
-            ]
+            ],
+            compact('tareas')
         );
     }
 }

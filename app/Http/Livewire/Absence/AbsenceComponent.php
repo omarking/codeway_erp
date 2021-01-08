@@ -139,6 +139,13 @@ class AbsenceComponent extends Component
 
     public function render()
     {
+        if ($this->search != '') {
+            $this->page = 1;
+        }
+        if (isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)) {
+            $this->reset(['perPage']);
+        }
+        
         return view(
             'livewire.absence.absence-component',
             [

@@ -10,11 +10,9 @@
             <div class="modal-body">
                 <form>
                     <div class="form-group">
-
                         <label class="text-muted" for="description">Descripción:</label>
                         <input type="text" name="description" class="form-control @error('description') is-invalid @enderror"
                                 wire:model="description" wire:dirty.class="bg-primary">
-                        {{-- <span wire:dirty wire:target="description">validando...</span> --}}
                         @error('description')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>

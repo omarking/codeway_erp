@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Status;
 
 use App\Models\Statu;
+use App\Models\Task;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -16,7 +17,7 @@ class StatusComponent extends Component
 
     public $status_id, $description, $status, $created_at, $updated_at, $accion = "store";
 
-    public $search = '', $perPage = '10', $total;
+    public $search = '', $perPage = '10', $total, $task, $statu;
 
     public $rules = [
         'description'  => 'required|string|max:200|unique:status,description',
@@ -72,6 +73,7 @@ class StatusComponent extends Component
         $this->status       = $status->status;
         $this->created_at   = $status->created_at;
         $this->updated_at   = $status->updated_at;
+        $this->statu        = $status;
     }
 
     public function close()
@@ -122,10 +124,12 @@ class StatusComponent extends Component
     public function clean()
     {
         $this->reset([
+            'status_id',
             'description',
             'status',
-            'status_id',
             'accion',
+            'task',
+            'statu',
             'created_at',
             'updated_at',
         ]);
@@ -139,13 +143,24 @@ class StatusComponent extends Component
 
     public function render()
     {
+        $tareas = Task::orderBy('name')->get();
+
+        if ($this->search != '') {
+            $this->page = 1;
+        }
+        if (isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)) {
+            $this->reset(['perPage']);
+        }
+
         return view(
             'livewire.status.status-component',
-            ['estados' => Statu::latest('id')
-                ->where('id', 'LIKE', "%{$this->search}%")
-                ->orWhere('description', 'LIKE', "%{$this->search}%")
-                ->paginate($this->perPage)
-            ]
+            [
+                'estados' => Statu::latest('id')
+                    ->where('id', 'LIKE', "%{$this->search}%")
+                    ->orWhere('description', 'LIKE', "%{$this->search}%")
+                    ->paginate($this->perPage)
+            ],
+            compact('tareas')
         );
     }
 }

@@ -83,7 +83,7 @@
                     </div>
                     <div class="form-group">
                         <label class="text-muted" for="statu_id">Estado:</label>
-                        <select wire:model="statu_id" class="form-control @error('statu_id') is-invalid @enderror" name="statu_id" wire:dirty.class="bg-success" id="statu_id">
+                        <select wire:model="statu_id" class="form-control @error('statu_id') is-invalid @enderror" name="statu_id" wire:dirty.class="bg-success">
                             <option value="">--Seleccione el estado--</option>
                             @foreach($estados as $estado)
                                 <option  value="{{ $estado->id }}"
@@ -105,7 +105,7 @@
                     </div>
                     <div class="form-group">
                         <label class="text-muted" for="type_id">Tipo:</label>
-                        <select wire:model="type_id" class="form-control @error('type_id') is-invalid @enderror"  name="type_id" wire:dirty.class="bg-success" id="type_id">
+                        <select wire:model="type_id" class="form-control @error('type_id') is-invalid @enderror"  name="type_id" wire:dirty.class="bg-success">
                             <option value="">--Seleccione el tipo--</option>
                             @foreach($types as $type)
                                 <option  value="{{ $type->id }}"
@@ -127,7 +127,7 @@
                     </div>
                     <div class="form-group">
                         <label class="text-muted" for="priority_id">Prioridad:</label>
-                        <select wire:model="priority_id" class="form-control @error('priority_id') is-invalid @enderror"  name="priority_id" wire:dirty.class="bg-success" id="priority_id">
+                        <select wire:model="priority_id" class="form-control @error('priority_id') is-invalid @enderror"  name="priority_id" wire:dirty.class="bg-success">
                             <option value="">--Seleccione la prioridad--</option>
                             @foreach($priorities as $priority)
                                 <option  value="{{ $priority->id }}"

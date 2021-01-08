@@ -202,7 +202,15 @@ class RoleComponent extends Component
 
     public function render()
     {
-        $permissions = Permission::get();
+        $permissions = Permission::orderBy('name')->get();
+
+        if ($this->search != '') {
+            $this->page = 1;
+        }
+        if(isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)){
+            $this->reset(['perPage']);
+        }
+
         return view(
             'livewire.role.role-component',
             ['roles' => Role::latest('id')

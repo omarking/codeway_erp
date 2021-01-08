@@ -43,11 +43,9 @@
                             <th scope="col">Telefono</th>
                             <th scope="col">Usuario</th>
                             <th scope="col">Email</th>
-                            <th scope="col">Corporativo</th>
+                            {{-- <th scope="col">Corporativo</th> --}}
                             <th scope="col">Roles</th>
                             <th scope="col">Estado</th>
-                            <th scope="col">Creado</th>
-                            <th scope="col">Actualizado</th>
                             <th scope="colgroup">Acciones</th>
                         </tr>
                     </thead>
@@ -59,21 +57,21 @@
                                 <td>{{ $user->phone }}</td>
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->email }}</td>
-                                <td>{{ $user->corporative }}</td>
+                                {{-- <td>{{ $user->corporative }}</td> --}}
                                 <td>
                                     @isset( $user->roles[0]->name )
                                         {{ $user->roles[0]->name }}
+                                    @else
+                                        Sin Rol
                                     @endisset
                                 </td>
                                 <td>
                                     @if ($user->status == "1")
-                                        Activa
+                                        Activo
                                     @else
                                         Inactivo
                                     @endif
                                 </td>
-                                <td>{{ $user->created_at->diffForHumans() }}</td>
-                                <td>{{ $user->updated_at->diffForHumans() }}</td>
                                 <td>
                                     <div class="btn-group" role="group">
                                         <button type="button" wire:click.prevent="show({{ $user->id }})" class="btn btn-info" data-toggle="modal" data-target="#showUser">Mostrar</button>
@@ -91,12 +89,13 @@
             @if ($users->count())
                 <nav class="col col-lg-6 justify-content-start" aria-label="Page navigation example">
                     <ul class="pagination justify-content">
-                        <h6>Mostrando {{ $perPage }} registros de {{ $total }} registros totales en la pagina {{ $page }}</h6>
+                        <h6>Mostrando {{ $users->count() }} registros de {{ $total }} registros totales en la pagina {{ $page }}</h6>
                     </ul>
                     <ul>
                         <small>Paginas: {{ $page }}</small>
                         <small>Buscar: {{ $search }}</small>
                         <small>PerPage: {{ $perPage }}</small>
+                        <small>Users: {{ $users->count() }}</small>
                     </ul>
                 </nav>
                 <nav class="col col-lg-6 justify-content-end" aria-label="Page navigation example">
@@ -113,6 +112,7 @@
                         <small>Paginas: {{ $page }}</small>
                         <small>Buscar: {{ $search }}</small>
                         <small>PerPage: {{ $perPage }}</small>
+                        <small>Users: {{ $users->count() }}</small>
                     </ul>
                 </nav>
             @endif

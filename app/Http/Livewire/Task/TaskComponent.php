@@ -254,6 +254,14 @@ class TaskComponent extends Component
         $estados    = Statu::orderBy('description')->where('status', '1')->get();
         $types      = Type::orderBy('description')->where('status', '1')->get();
         $priorities = Priority::orderBy('description')->where('status', '1')->get();
+
+        if ($this->search != '') {
+            $this->page = 1;
+        }
+        if (isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)) {
+            $this->reset(['perPage']);
+        }
+        
         return view(
             'livewire.task.task-component',
             [

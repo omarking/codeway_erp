@@ -29,6 +29,29 @@
                         <label class="text-muted" for="updated_at">Actualizado:</label>
                         <h5>{{ $updated_at }}</h5>
                     </div>
+                    <div class="form-group ">
+                        <label class="text-muted text-uppercase" for="updated_at">Tareas relacionadas con este tipo</label>
+                        <div class="table-responsive">
+                            <table class="table table-white table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Tarea</th>
+                                        <th scope="col">Descripción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($tareas as $tarea)
+                                        @if ($priority_id == $tarea->priority_id)
+                                            <tr>
+                                                <td>{{ $tarea->name }}</td>
+                                                <td>{{ $tarea->description }}</td>
+                                            </tr>
+                                        @endif
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">

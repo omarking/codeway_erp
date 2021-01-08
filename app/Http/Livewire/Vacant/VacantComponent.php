@@ -159,13 +159,21 @@ class VacantComponent extends Component
 
     public function render()
     {
+        if ($this->search != '') {
+            $this->page = 1;
+        }
+        if (isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)) {
+            $this->reset(['perPage']);
+        }
+
         return view(
             'livewire.vacant.vacant-component',
-            ['vacants' => Vacant::latest('id')
-                ->where('id', 'LIKE', "%{$this->search}%")
-                ->orWhere('name', 'LIKE', "%{$this->search}%")
-                ->orWhere('description', 'LIKE', "%{$this->search}%")
-                ->paginate($this->perPage)
+            [
+                'vacants' => Vacant::latest('id')
+                    ->where('id', 'LIKE', "%{$this->search}%")
+                    ->orWhere('name', 'LIKE', "%{$this->search}%")
+                    ->orWhere('description', 'LIKE', "%{$this->search}%")
+                    ->paginate($this->perPage)
             ]
         );
     }

@@ -159,14 +159,22 @@ class PermissionComponent extends Component
 
     public function render()
     {
+        if ($this->search != '') {
+            $this->page = 1;
+        }
+        if (isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)) {
+            $this->reset(['perPage']);
+        }
+
         return view(
             'livewire.permission.permission-component',
-            ['permissions' => Permission::latest('id')
-                ->where('id', 'LIKE', "%{$this->search}%")
-                ->orWhere('name', 'LIKE', "%{$this->search}%")
-                ->orWhere('slug', 'LIKE', "%{$this->search}%")
-                ->orWhere('description', 'LIKE', "%{$this->search}%")
-                ->paginate($this->perPage)
+            [
+                'permissions' => Permission::latest('id')
+                    ->where('id', 'LIKE', "%{$this->search}%")
+                    ->orWhere('name', 'LIKE', "%{$this->search}%")
+                    ->orWhere('slug', 'LIKE', "%{$this->search}%")
+                    ->orWhere('description', 'LIKE', "%{$this->search}%")
+                    ->paginate($this->perPage)
             ]
         );
     }

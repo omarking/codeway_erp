@@ -112,7 +112,6 @@
                     <div class="form-group">
                         <label class="text-muted" for="role">Rol:</label>
                         <h6>{{ $rool }}</h6>
-                        {{-- <h6>user->roles  {{ $user->roles[0]->name }}</h6> --}}
                         <select wire:model="role" class="form-control @error('role') is-invalid @enderror" name="role" wire:dirty.class="bg-success" id="role">
                             <option value="">--Seleccione el rol--</option>
                             @foreach($roless as $rol)

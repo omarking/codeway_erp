@@ -39,7 +39,6 @@
                     </div>
                     <div class="form-group">
                         <label class="text-muted" for="role">Rol</label>
-
                         @isset ($user->roles[0]->name)
                             @if ($role != "")
                                 <h5>{{ $role }}</h5>
