@@ -109,7 +109,7 @@
                             @foreach($types as $type)
                                 <option  value="{{ $type->id }}"
                                     @isset( $type->description )
-                                        @if( $estado->description )
+                                        @if( $type->description )
                                             selected
                                         @endif
                                     @endisset

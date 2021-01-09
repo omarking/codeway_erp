@@ -3,13 +3,16 @@
 use App\Http\Controllers\AbsenceController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClassController;
+use App\Http\Controllers\DepartamentController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\PeriodController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\PreuserController;
 use App\Http\Controllers\PriorityController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TypeController;
 use App\Http\Controllers\StatusController;
@@ -90,5 +93,10 @@ Route::resource('/role', RoleController::class)->names('role');
 
 Route::resource('/vacant', VacantController::class)->names('vacant');
 
-
 Route::resource('/user', UserController::class)->names('user');
+
+Route::resource('/project', ProjectController::class)->names('project');
+
+Route::resource('/departament', DepartamentController::class)->names('departament');
+
+Route::resource('/holiday', HolidayController::class)->names('holiday');

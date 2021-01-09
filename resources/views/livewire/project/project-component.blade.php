@@ -2,10 +2,10 @@
     <div class="card">
         <div class="card-header bg-secondary">
             <div class="text-xl-left">
-                <h3 class="card-title text-uppercase">Usuarios</h3>
+                <h3 class="card-title text-uppercase">Proyectos</h3>
             </div>
             <div>
-                <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#createUser">Agregar Usuario</button>
+                <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#createProject">Agregar Proyecto</button>
             </div>
         </div>
         <div class="card-body">
@@ -35,48 +35,48 @@
                     </div>
                     @endif
                 </div>
-                <table wire:poll.10000ms id="userTable" class="table table-white table-striped table-hover">
+                <table wire:poll.10000ms id="projectTable" class="table table-white table-striped table-hover">
                     <thead>
                         <tr>
                             <th scope="col">#</th>
+                            <th scope="col">Clave</th>
                             <th scope="col">Nombre</th>
-                            <th scope="col">Telefono</th>
-                            <th scope="col">Usuario</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Corporativo</th>
-                            <th scope="col">Roles</th>
+                            <th scope="col">Descripción</th>
+                            <th scope="col">Responsable</th>
                             <th scope="col">Estado</th>
+                            <th scope="col">Clase</th>
+                            <th scope="col">Categoria</th>
                             <th scope="colgroup">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($users as $user)
+                        @foreach($projects as $project)
                             <tr>
-                                <th scope="row">{{ $user->id }}</th>
-                                <td>{{ $user->nameUser }} {{ $user->firstLastname }} {{ $user->secondLastname }}</td>
-                                <td>{{ $user->phone }}</td>
-                                <td>{{ $user->name }}</td>
-                                <td>{{ $user->email }}</td>
-                                <td>{{ $user->corporative }}</td>
+                                <th scope="row">{{ $project->id }}</th>
+                                <td>{{ $project->key }}</td>
+                                <td>{{ $project->name }}</td>
+                                <td>{{ $project->description }}</td>
+                                <td>{{ $project->responsable }}</td>
+                                <td>{{ $project->status }}</td>
                                 <td>
-                                    @isset( $user->roles[0]->name )
-                                        {{ $user->roles[0]->name }}
+                                    @isset($project->clas->description)
+                                        {{ $project->clas->description }}
                                     @else
-                                        Sin Rol
+                                        Sin clase
                                     @endisset
                                 </td>
                                 <td>
-                                    @if ($user->status == "1")
-                                        Activo
+                                    @isset($project->category->description)
+                                        {{ $project->category->description }}
                                     @else
-                                        Inactivo
-                                    @endif
+                                        Sin categoria
+                                    @endisset
                                 </td>
                                 <td>
                                     <div class="btn-group" role="group">
-                                        <button type="button" wire:click.prevent="show({{ $user->id }})" class="btn btn-info" data-toggle="modal" data-target="#showUser">Mostrar</button>
-                                        <button type="button" wire:click.prevent="edit({{ $user->id }})" class="btn btn-success" data-toggle="modal" data-target="#updateUser">Editar</button>
-                                        <button type="button" wire:click.prevent="delete({{ $user->id }})" class="btn btn-danger" data-toggle="modal" data-target="#deleteUser">Borrar</button>
+                                        <button type="button" wire:click.prevent="show({{ $project->id }})" class="btn btn-info" data-toggle="modal" data-target="#showProject">Mostrar</button>
+                                        <button type="button" wire:click.prevent="edit({{ $project->id }})" class="btn btn-success" data-toggle="modal" data-target="#updateProject">Editar</button>
+                                        <button type="button" wire:click.prevent="delete({{ $project->id }})" class="btn btn-danger" data-toggle="modal" data-target="#deleteProject">Borrar</button>
                                     </div>
                                 </td>
                             </tr>
@@ -86,40 +86,28 @@
             </div>
         </div>
         <div class="card-footer d-flex justify-content-between">
-            @if ($users->count())
+            @if ($projects->count())
                 <nav class="col col-lg-6 justify-content-start" aria-label="Page navigation example">
                     <ul class="pagination justify-content">
-                        <h6>Mostrando {{ $users->count() }} registros de {{ $total }} registros totales en la pagina {{ $page }}</h6>
-                    </ul>
-                    <ul>
-                        <small>Paginas: {{ $page }}</small>
-                        <small>Buscar: {{ $search }}</small>
-                        <small>PerPage: {{ $perPage }}</small>
-                        <small>Users: {{ $users->count() }}</small>
+                        <h6>Mostrando {{ $projects->count() }} registros de {{ $total }} registros totales en la pagina {{ $page }}</h6>
                     </ul>
                 </nav>
                 <nav class="col col-lg-6 justify-content-end" aria-label="Page navigation example">
                     <ul class="pagination justify-content-end">
-                        {{ $users->links() }}
+                        {{ $projects->links() }}
                     </ul>
                 </nav>
             @else
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content">
-                        <h6>No hay resultados para la búsqueda "{{ $search }}" en la página {{ $page }} al mostrar {{ $perPage }} por página</h6>
-                    </ul>
-                    <ul>
-                        <small>Paginas: {{ $page }}</small>
-                        <small>Buscar: {{ $search }}</small>
-                        <small>PerPage: {{ $perPage }}</small>
-                        <small>Users: {{ $users->count() }}</small>
+                        <h6>No hay resultados para la búsqueda "{{ $search}}" en la página {{ $page }} al mostrar {{ $perPage }} por página</h6>
                     </ul>
                 </nav>
             @endif
         </div>
     </div>
-    @include('livewire.user.create')
-    @include('livewire.user.show')
-    @include('livewire.user.update')
-    @include('livewire.user.delete')
+    @include('livewire.project.create')
+    @include('livewire.project.show')
+    @include('livewire.project.update')
+    @include('livewire.project.delete')
 </div>

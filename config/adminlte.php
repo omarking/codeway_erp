@@ -583,6 +583,21 @@ return [
             'url'   => 'vacant',
             'icon'  => 'fas fa-fw fa-sticky-note',
         ],
+        [
+            'text'  => 'Departamentos',
+            'url'   => 'departament',
+            'icon'  => 'fas fa-fw fa-building',
+        ],
+        [
+            'text'  => 'Vacaciones',
+            'url'   => 'holiday',
+            'icon'  => 'fas fa-fw fa-plane-departure',
+        ],
+        [
+            'text'  => 'Proyectos',
+            'url'   => 'project',
+            'icon'  => 'fas fa-fw fa-project-diagram',
+        ],
         ['header' => 'labels'],
         [
             'text'       => 'important',
