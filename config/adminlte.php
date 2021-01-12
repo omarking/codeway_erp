@@ -274,7 +274,7 @@ return [
     /* Cambia la URL de inicio de sesión. Esta URL se utilizará cuando haga clic en el botón de inicio de sesión */
     'login_url' => 'login',
     /* Cambia la URL de registro. Configure esta opción para falseocultar el enlace de registro que se muestra en la vista de inicio de sesión */
-    'register_url' => 'register',
+    'register_url' => false,
     /* Cambia la URL de restablecimiento de contraseña. Esta URL debe apuntar a la vista que muestra el formulario de restablecimiento de contraseña. Configure esta opción para falseocultar el enlace de restablecimiento de contraseña que se muestra en la vista de inicio de sesión */
     'password_reset_url' => 'password/reset',
     /* Cambia la URL de correo electrónico de la contraseña. Esta URL debe apuntar a la vista que muestra el formulario de enlace de restablecimiento de envío */
@@ -377,226 +377,239 @@ return [
             'input_name' => 'menu-search-input', // the input name
             'text' => 'Buscar',                  // the input placeholder
         ],
+        /* Links en el navbar del lado izquierdo */
+        /*
         [
-            /* Links en el navbar del lado izquierdo */
-            /* 'text' => 'Home',
+            'text' => 'Home',
             'url'  => '#',
             'can'  => '',
-            'topnav' => false, */],
+            'topnav' => false,
+        ],
         [
-            /* Links en el navbar del lado izquierdo */
-            /*  'text' => 'Explore',
+             'text' => 'Explore',
             'url'  => '#',
             'can'  => '',
-            'topnav' => false, */],
+            'topnav' => false,
+        ],
+    */
+        /* Links en el navbar del lado derecho */
+        /*
         [
-            /* Links en el navbar del lado derecho */
-            /* 'text' => 'Contact',
+            'text' => 'Contact',
             'url'  => '#',
             'can'  => '',
-            'topnav_right' => false, */],
+            'topnav_right' => false,
+        ],
         [
-            /* Links en el navbar del lado derecho */
-            /* 'text' => 'Info',
+            'text' => 'Info',
             'url'  => '#',
             'can'  => '',
-            'topnav_right' => false, */],
+            'topnav_right' => false,
+        ],
+    */
+        /* Links en el menu del usuario */
+        /*
         [
-            /* Links en el menu del usuario */
             'text' => 'Acount',
             'url'  => '#',
             'can'  => '',
             'topnav_user' => true,
         ],
         [
-            /* Links en el menu del usuario */
             'text' => 'Info',
             'url'  => '#',
             'can'  => '',
             'topnav_user' => true,
         ],
+    */
+        /* Configuraciones con diferentes tipos de etiquetas */
+        /*
         [
-            /* Links en el sidebar */
-            'text' => 'Dashoboard',
+            'text' => 'Config',
+            'url'  => '#',
+            'can'  => '',
+            'label'       => 10,
+            'label_color' => 'info',
+        ],
+        [
+            'text' => 'Files',
+            'url'  => '#',
+            'can'  => '',
+            'label'       => 2,
+            'label_color' => 'danger',
+        ],
+        [
+            'text'        => 'pages',
+            'url'         => '#',
+            'icon'        => 'far fa-fw fa-file',
+            'label'       => 4,
+            'label_color' => 'success',
+        ],
+    */
+        /* Inicia ASIDE */
+        [
+            'text' => 'Principal',
             'url'  => 'home',
             'can'  => '',
             'icon' => 'fas fa-fw fa-home'
         ],
+        /* ['header' => 'TAREAS'], */
         [
-            /* Links en el sidebar */
-            /* 'text' => 'Config',
-            'url'  => '#',
-            'can'  => '',
-            'label'       => 10,
-            'label_color' => 'info', */],
-        [
-            /* 'text' => 'Files',
-            'url'  => '#',
-            'can'  => '',
-            'label'       => 2,
-            'label_color' => 'danger', */],
-        [
-            /* 'text'        => 'pages',
-            'url'         => '#',
-            'icon'        => 'far fa-fw fa-file',
-            'label'       => 4,
-            'label_color' => 'success', */],
-        ['header' => 'account_settings'],
-        /* [
-            'text' => 'profile',
-            'url'  => '#',
-            'icon' => 'fas fa-fw fa-user',
-        ], */
-        [
-            'text' => 'Usuario',
-            'url'  => 'user',
-            'icon' => 'fas fa-fw fa-user',
-        ],
-        [
-            'text' => 'change_password',
-            'url'  => '#',
-            'icon' => 'fas fa-fw fa-lock',
-        ],
-        [
-            'text'    => 'multilevel',
-            'icon'    => 'fas fa-fw fa-share',
+            'text'    => 'Tareas',
+            'icon'    => 'fas fa-fw fa-tasks',
             'submenu' => [
                 [
-                    'text' => 'level_one',
-                    'url'  => '#',
+                    'text'  => 'Tareas',
+                    'url'   => 'task',
+                    'icon'  => 'fas fa-fw fa-tasks',
                 ],
                 [
-                    'text'    => 'level_one',
-                    'url'     => '#',
-                    'submenu' => [
-                        [
-                            'text' => 'level_two',
-                            'url'  => '#',
-                        ],
-                        [
-                            'text'    => 'level_two',
-                            'url'     => '#',
-                            'submenu' => [
-                                [
-                                    'text' => 'level_three',
-                                    'url'  => '#',
-                                ],
-                                [
-                                    'text' => 'level_three',
-                                    'url'  => '#',
-                                ],
-                            ],
-                        ],
-                    ],
+                    'text'  => 'Tipos',
+                    'url'   => 'type',
+                    'icon'  => 'fas fa-fw fa-crop-alt',
                 ],
                 [
-                    'text' => 'level_one',
-                    'url'  => '#',
+                    'text'  => 'Prioridades',
+                    'url'   => 'priority',
+                    'icon'  => 'fas fa-fw fa-list-ol',/* stream */
+                ],
+                [
+                    'text'  => 'Estados',
+                    'url'   => 'status',
+                    'icon'  => 'fas fa-fw fa-spinner',
                 ],
             ],
         ],
-        /*  ['header' => 'USER'],
+        /* ['header' => 'PROYECTOS'], */
         [
-            'text' => 'Permission',
-            'url'  => '#',
-            'icon' => 'fas fa-fw fa-user',
+            'text'    => 'Proyectos',
+            'icon'    => 'fas fa-fw fa-project-diagram',
+            'submenu' => [
+                [
+                    'text'  => 'Proyectos',
+                    'url'   => 'project',
+                    'icon'  => 'fas fa-fw fa-project-diagram',
+                ],
+                [
+                    'text'  => 'Categorias',
+                    'url'   => 'category',
+                    'icon'  => 'fas fa-fw fa-boxes',
+                ],
+                [
+                    'text'  => 'Clases',
+                    'url'   => 'class',
+                    'icon'  => 'fas fa-fw fa-layer-group',/*folder-tree layer-group bring-forward*/
+                ],
+            ],
         ],
+        /* ['header' => 'VACACIONES'], */
         [
-            'text' => 'Roles',
-            'url'  => '#',
-            'icon' => 'fas fa-fw fa-lock',
-        ], */
-        ['header' => 'TASK'],
-        [
-            'text'  =>  'Tareas',
-            'url'   =>  'task',
-            'icon'  =>  'fas fa-fw fa-map',
+            'text'    => 'Vacaciones',
+            'icon'    => 'fas fa-fw fa-plane-departure',
+            'submenu' => [
+                [
+                    'text'  => 'Vacaciones',
+                    'url'   => 'holiday',
+                    'icon'  => 'fas fa-fw fa-plane-departure',
+                ],
+                [
+                    'text'  => 'Periodos',
+                    'url'   => 'period',
+                    'icon'  => 'fas fa-fw fa-thumbtack',
+                ],
+                [
+                    'text'  => 'Ausencias',
+                    'url'   => 'absence',
+                    'icon'  => 'fas fa-fw fa-user-slash',/* user-times */
+                ],
+            ],
         ],
+        /* ['header' => 'VACANTES'], */
         [
-            'text'  =>  'Tipos',
-            'url'   =>  'type',
-            'icon'  =>  'fas fa-fw fa-tasks',
+            'text'    => 'Vacantes',
+            'icon'    => 'fas fa-fw fa-clipboard',
+            'submenu' => [
+                [
+                    'text'  => 'Vacantes',
+                    'url'   => 'vacant',
+                    'icon'  => 'fas fa-fw fa-clipboard',/* sticky-note */
+                ],
+                [
+                    'text'  => 'Asirantes',
+                    'url'   => 'preuser',
+                    'icon'  => 'fas fa-fw fa-portrait',/* user-check user-plus */
+                ],
+            ],
         ],
+        /* ['header' => 'USUARIOS'], */
         [
-            'text'  =>  'Prioridad',
-            'url'   =>  'priority',
-            'icon'  =>  'fas fa-fw fa-columns',
-        ],
-        [
-            'text'  =>  'Estado',
-            'url'   =>  'status',
-            'icon'  =>  'fas fa-fw fa-spinner',
-        ],
-        [
-            'text'  =>  'Categorias',
-            'url'   =>  'category',
-            'icon'  =>  'fas fa-fw fa-boxes',
-        ],
-        [
-            'text'  =>  'Clases',
-            'url'   =>  'class',
-            'icon'  =>  'fas fa-fw fa-kaaba',
-        ],
-        ['header' => 'NEWS'],
-        [
-            'text'  => 'Ausencias',
-            'url'   => 'absence',
-            'icon'  => 'fas fa-fw fa-bone',
+            'text' => 'Usuarios',
+            'url'  => 'user',
+            'icon' => 'fas fa-fw fa-users',
         ],
         [
             'text'  => 'Eventos',
             'url'   => 'event',
-            'icon'  => 'fas fa-fw fa-burn',
-        ],
-        [
-            'text'  => 'Grupos',
-            'url'   => 'group',
-            'icon'  => 'fas fa-fw fa-bookmark',
-        ],
-        [
-            'text'  => 'Periodos',
-            'url'   => 'period',
-            'icon'  => 'fas fa-fw fa-edit',
-        ],
-        [
-            'text'  => 'Permisos',
-            'url'   => 'permission',
-            'icon'  => 'fas fa-fw fa-book',
+            'icon'  => 'fas fa-fw fa-calendar-check',/* calendar-check */
         ],
         [
             'text'  => 'Posiciones',
             'url'   => 'position',
-            'icon'  => 'fas fa-fw fa-paperclip',
+            'icon'  => 'fas fa-fw fa-address-card',/* user-chart */
         ],
         [
-            'text'  => 'Preusuarios',
-            'url'   => 'preuser',
-            'icon'  => 'fas fa-fw fa-user',
+            'text'    => 'Departamentos',
+            'icon'    => 'fas fa-fw fa-building',
+            'submenu' => [
+                [
+                    'text'  => 'Departamentos',
+                    'url'   => 'departament',
+                    'icon'  => 'fas fa-fw fa-building',
+                ],
+                [
+                    'text'  => 'Grupos',
+                    'url'   => 'group',
+                    'icon'  => 'fas fa-fw fa-user-friends',
+                ],
+            ],
         ],
         [
-            'text'  => 'Roles',
-            'url'   => 'role',
-            'icon'  => 'fas fa-fw fa-thumbtack',
+            'text'    => 'Roles',
+            'icon'    => 'fas fa-fw fa-user-tag',
+            'submenu' => [
+                [
+                    'text' => 'Roles',
+                    'url'  => 'role',
+                    'icon' => 'fas fa-fw fa-user-tag',/* user-shield */
+                ],
+                [
+                    'text' => 'Permisos',
+                    'url'  => 'permission',
+                    'icon' => 'fas fa-fw fa-user-lock',
+                ],
+            ],
         ],
+        ['header' => 'AJUSTES DE LA CUENTA'],
         [
-            'text'  => 'Vacantes',
-            'url'   => 'vacant',
-            'icon'  => 'fas fa-fw fa-sticky-note',
-        ],
-        [
-            'text'  => 'Departamentos',
-            'url'   => 'departament',
-            'icon'  => 'fas fa-fw fa-building',
-        ],
-        [
-            'text'  => 'Vacaciones',
-            'url'   => 'holiday',
-            'icon'  => 'fas fa-fw fa-plane-departure',
-        ],
-        [
-            'text'  => 'Proyectos',
-            'url'   => 'project',
-            'icon'  => 'fas fa-fw fa-project-diagram',
+            'text'    => 'Perfil',
+            'icon'    => 'fas fa-fw fa-user',
+            'submenu' => [
+                [
+                    'text' => 'Ver Perfil',
+                    'url'  => '#',
+                    'icon' => 'fas fa-fw fa-user-tie',
+                ],
+                [
+                    'text' => 'Configurar Perfil',
+                    'url'  => '#',
+                    'icon' => 'fas fa-fw fa-user-edit',
+                ],
+                [
+                    'text' => 'Cambiar Contraseña',
+                    'url'  => '#',
+                    'icon' => 'fas fa-fw fa-lock',
+                ],
+            ],
         ],
         ['header' => 'labels'],
         [

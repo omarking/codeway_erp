@@ -19,7 +19,7 @@ class Absence extends Model
     protected $table = 'absences';
 
     protected $dates = ['deleted_at'];
-    
+
     /**
      * The attributes that are mass assignable.
      *

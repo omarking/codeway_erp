@@ -13,7 +13,10 @@
                 <link class="fas fa-fw fa-home" rel="icon">
                 <a class="text-uppercase" href="{{ route('home') }}">Codeway</a>
                 /
-                <link class="fas fa-fw fa-burn" rel="icon">
+                <link class="fas fa-fw fa-users" rel="icon">
+                <a class="text-uppercase" href="{{ route('user.index') }}">Usuarios</a>
+                /
+                <link class="fas fa-fw fa-calendar-check" rel="icon">
                 <a class="text-uppercase" href="{{ route('event.index') }}">Eventos</a>
             </h3>
         </div>

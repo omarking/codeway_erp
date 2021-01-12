@@ -13,8 +13,11 @@
                 <link class="fas fa-fw fa-home" rel="icon">
                 <a class="text-uppercase" href="{{ route('home') }}">Codeway</a>
                 /
-                <link class="fas fa-fw fa-user" rel="icon">
-                <a class="text-uppercase" href="{{ route('preuser.index') }}">Preusuario</a>
+                <link class="fas fa-fw fa-clipboard" rel="icon">
+                <a class="text-uppercase" href="{{ route('vacant.index') }}">Vacantes</a>
+                /
+                <link class="fas fa-fw fa-portrait" rel="icon">
+                <a class="text-uppercase" href="{{ route('preuser.index') }}">Aspirantes</a>
             </h3>
         </div>
     </div>

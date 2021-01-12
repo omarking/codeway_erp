@@ -2,10 +2,12 @@
 
 namespace App\Http\Livewire\User;
 
+use App\Mail\MessageReceived;
 use App\Models\Role;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -117,6 +119,9 @@ class UserComponent extends Component
         if ($this->role) {
             $user->roles()->sync($this->role);
         }
+        /* Envio de email */
+        Mail::to('admin@admin.com')->queue(new MessageReceived($user));
+
         session()->flash('message', 'Usuario creado correctamente.');
         $this->clean();
         $this->emit('userCreatedEvent');
@@ -255,7 +260,7 @@ class UserComponent extends Component
         if ($this->search != '') {
             $this->page = 1;
         }
-        if(isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)){
+        if (isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)) {
             $this->reset(['perPage']);
         }
 

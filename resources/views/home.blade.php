@@ -2,8 +2,6 @@
 @extends('adminlte::page')
 {{-- Le asignamos en sufijo al titlo de la pagina --}}
 @section('title_postfix', 'Home')
-{{-- Asi podemos hacer uso de un plugin, en este caso Sweet Alert 2 --}}
-@section('plugins.Sweetalert2', true)
 {{-- Este es la seccion del header en el body de la plantilla Admin LTE --}}
 @section('content_header')
     <h1>Codeway</h1>

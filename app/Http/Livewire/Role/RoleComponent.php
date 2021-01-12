@@ -202,7 +202,7 @@ class RoleComponent extends Component
 
     public function render()
     {
-        $permissions = Permission::orderBy('name')->get();
+        $permissions = Permission::all();
 
         if ($this->search != '') {
             $this->page = 1;

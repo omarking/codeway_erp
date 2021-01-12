@@ -13,6 +13,9 @@
                 <link class="fas fa-fw fa-home" rel="icon">
                 <a class="text-uppercase" href="{{ route('home') }}">Codeway</a>
                 /
+                <link class="fas fa-fw fa-project-diagram" rel="icon">
+                <a class="text-uppercase" href="{{ route('project.index') }}">Proyectos</a>
+                /
                 <link class="fas fa-fw fa-boxes" rel="icon">
                 <a class="text-uppercase" href="{{ route('category.index') }}">Categorias</a>
             </h3>

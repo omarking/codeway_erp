@@ -14,6 +14,9 @@
                 <a class="text-uppercase" href="{{ route('home') }}">Codeway</a>
                 /
                 <link class="fas fa-fw fa-tasks" rel="icon">
+                <a class="text-uppercase" href="{{ route('task.index') }}">Tareas</a>
+                /
+                <link class="fas fa-fw fa-crop-alt" rel="icon">
                 <a class="text-uppercase" href="{{ route('type.index') }}">Tipos</a>
             </h3>
         </div>

@@ -19,7 +19,7 @@ class Permission extends Model
     protected $table = 'permissions';
 
     protected $dates = ['deleted_at'];
-    
+
     /**
      * The attributes that are mass assignable.
      *
@@ -37,4 +37,13 @@ class Permission extends Model
     {
         return $this->belongsToMany(Role::class)->withTimestamps();
     }
+
+    /*
+        Con este metodo estamos mostrando el slug en vez de mostrar el id del permiso
+        esto no permite trabajar con Url's amigables para los usuarios
+    */
+    /* public function getRouteKeyName()
+    {
+        return 'slug';
+    } */
 }

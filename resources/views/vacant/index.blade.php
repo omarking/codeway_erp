@@ -13,7 +13,7 @@
                 <link class="fas fa-fw fa-home" rel="icon">
                 <a class="text-uppercase" href="{{ route('home') }}">Codeway</a>
                 /
-                <link class="fas fa-fw fa-sticky-note" rel="icon">
+                <link class="fas fa-fw fa-clipboard" rel="icon">
                 <a class="text-uppercase" href="{{ route('vacant.index') }}">Vacantes</a>
             </h3>
         </div>

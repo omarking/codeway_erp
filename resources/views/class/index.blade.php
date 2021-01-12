@@ -13,7 +13,10 @@
                 <link class="fas fa-fw fa-home" rel="icon">
                 <a class="text-uppercase" href="{{ route('home') }}">Codeway</a>
                 /
-                <link class="fas fa-fw fa-kaaba" rel="icon">
+                <link class="fas fa-fw fa-project-diagram" rel="icon">
+                <a class="text-uppercase" href="{{ route('project.index') }}">Proyectos</a>
+                /
+                <link class="fas fa-fw fa-layer-group" rel="icon">
                 <a class="text-uppercase" href="{{ route('class.index') }}">Clases</a>
             </h3>
         </div>

@@ -13,7 +13,13 @@
                 <link class="fas fa-fw fa-home" rel="icon">
                 <a class="text-uppercase" href="{{ route('home') }}">Codeway</a>
                 /
-                <link class="fas fa-fw fa-book" rel="icon">
+                <link class="fas fa-fw fa-users" rel="icon">
+                <a class="text-uppercase" href="{{ route('user.index') }}">Usuarios</a>
+                /
+                <link class="fas fa-fw fa-user-tag" rel="icon">
+                <a class="text-uppercase" href="{{ route('role.index') }}">Roles</a>
+                /
+                <link class="fas fa-fw fa-user-lock" rel="icon">
                 <a class="text-uppercase" href="{{ route('permission.index') }}">Permisos</a>
             </h3>
         </div>

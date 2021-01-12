@@ -54,7 +54,7 @@
                             <tr>
                                 <th scope="row">{{ $project->id }}</th>
                                 <td>{{ $project->key }}</td>
-                                <td>{{ $project->name }}</td>
+                                <td><a class="color-bg" href="{{ route('task.show', $project->id) }}">{{ $project->name }}</a></td>
                                 <td>{{ $project->description }}</td>
                                 <td>{{ $project->responsable }}</td>
                                 <td>{{ $project->status }}</td>

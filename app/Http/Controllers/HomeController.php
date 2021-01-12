@@ -44,4 +44,8 @@ class HomeController extends Controller
 
         return view('home', compact('users', 'projects', 'tasks', 'holidays', 'groups', 'departaments'));
     }
+
+    public function dale(){
+        return view('type.index');
+    }
 }

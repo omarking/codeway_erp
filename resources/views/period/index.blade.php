@@ -13,7 +13,10 @@
                 <link class="fas fa-fw fa-home" rel="icon">
                 <a class="text-uppercase" href="{{ route('home') }}">Codeway</a>
                 /
-                <link class="fas fa-fw fa-edit" rel="icon">
+                <link class="fas fa-fw fa-plane-departure" rel="icon">
+                <a class="text-uppercase" href="{{ route('holiday.index') }}">Vacaciones</a>
+                /
+                <link class="fas fa-fw fa-thumbtack" rel="icon">
                 <a class="text-uppercase" href="{{ route('period.index') }}">Periodos</a>
             </h3>
         </div>
