@@ -8,11 +8,14 @@ use App\Models\Task;
 use App\Models\Type;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 
 class TaskComponent extends Component
 {
     use WithPagination;
+
+    use WithFileUploads;
 
     public $page = 1;
 
@@ -22,12 +25,12 @@ class TaskComponent extends Component
 
     public $estado, $tipo, $prioridad, $statu_id, $priority_id, $type_id;
 
-    public $search = '', $perPage = '10', $total;
+    public $search = '', $perPage = '10', $total, $temporary;
 
     public $rules = [
         'name'          => 'required|string|max:200|unique:tasks,name',
         'description'   => 'required|string',
-        'file'          => '',
+        'file'          => 'image|file|max:4096',
         'start'         => 'required|date',
         'end'           => 'required|date',
         'informer'      => 'required|string|',
@@ -72,7 +75,7 @@ class TaskComponent extends Component
             $this->validateOnly($propertyName, [
                 'name'          => 'required|string|max:200|unique:tasks,name',
                 'description'   => 'required|string',
-                'file'          => '',
+                'file'          => 'image|file|max:4096',
                 'start'         => 'required|date',
                 'end'           => 'required|date',
                 'informer'      => 'required|string',
@@ -85,7 +88,7 @@ class TaskComponent extends Component
             $this->validateOnly($propertyName, [
                 'name'          => 'required|string|max:200|unique:tasks,name,' . $this->task_id,
                 'description'   => 'required|string',
-                'file'          => '',
+                'file'          => 'image|file|max:4096',
                 'start'         => 'required|date',
                 'end'           => 'required|date',
                 'informer'      => 'required|string',
@@ -99,10 +102,11 @@ class TaskComponent extends Component
 
     public function store()
     {
-        $validateData = $this->validate([
+        $this->temporary = /* $this->file . '.' .  */$this->file->getClientOriginalName();
+        $temp = $this->validate([
             'name'          => 'required|string|max:200|unique:tasks,name',
             'description'   => 'required|string|',
-            'file'          => '',
+            'file'          => 'image|file|max:4096',
             'start'         => 'required|date',
             'end'           => 'required|date',
             'informer'      => 'required|string',
@@ -111,7 +115,21 @@ class TaskComponent extends Component
             'priority_id'   => 'required',
             'type_id'       => 'required',
         ]);
-        Task::create($validateData);
+        $task = Task::create([
+            'name'          => $this->name,
+            'description'   => $this->description,
+            'file'          => 'files/' . $this->file->getClientOriginalName(),
+            'start'         => $this->start,
+            'end'           => $this->end,
+            'informer'      => $this->informer,
+            'responsable'   => Auth::user()->name,
+            'statu_id'      => $this->statu_id,
+            'priority_id'   => $this->priority_id,
+            'type_id'       => $this->type_id,
+        ]);
+        if ($this->file) {
+            $this->file->store('files');
+        }
         session()->flash('message', 'Tarea creada correctamente.');
         $this->clean();
         $this->emit('taskCreatedEvent');
@@ -134,17 +152,17 @@ class TaskComponent extends Component
         $this->updated_at    = $task->updated_at;
         if (isset($task->statu->description)) {
             $this->estado   = $task->statu->description;
-        }else{
+        } else {
             $this->estado   = "Sin estado";
         }
         if (isset($task->type->description)) {
             $this->tipo     = $task->type->description;
-        }else{
+        } else {
             $this->tipo     = "Sin tipo";
         }
         if (isset($task->priority->description)) {
             $this->prioridad = $task->priority->description;
-        }else{
+        } else {
             $this->prioridad = "Sin prioridad";
         }
     }
@@ -177,7 +195,7 @@ class TaskComponent extends Component
         $this->validate([
             'name'          => 'required|string|max:200|unique:tasks,name,' . $this->task_id,
             'description'   => 'required|string',
-            'file'          => '',
+            'file'          => 'image|file|max:4096',
             'start'         => 'required|date',
             'end'           => 'required|date',
             'informer'      => 'required|string',
@@ -191,14 +209,13 @@ class TaskComponent extends Component
             $task->update([
                 'name'          => $this->name,
                 'description'   => $this->description,
-                'file'          => $this->file,
+                'file'          => 'files/' . $this->file->getClientOriginalName(),
                 'end'           => $this->end,
                 'informer'      => $this->informer,
                 'responsable'   => Auth::user()->name,
                 'statu_id'      => $this->statu_id,
                 'priority_id'   => $this->priority_id,
                 'type_id'       => $this->type_id,
-
             ]);
             session()->flash('message', 'Tarea actualizada correctamente.');
             $this->clean();
@@ -261,7 +278,7 @@ class TaskComponent extends Component
         if (isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)) {
             $this->reset(['perPage']);
         }
-        
+
         return view(
             'livewire.task.task-component',
             [

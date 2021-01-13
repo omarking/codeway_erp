@@ -57,6 +57,34 @@
                         <label class="text-muted" for="updated_at">Actualizado:</label>
                         <h5>{{ $updated_at }}</h5>
                     </div>
+                    <div class="form-group">
+                        <label class="text-muted text-uppercase" for="permisos">Tareas</label>
+                        <div>
+                            @foreach ($tareas as $tarea)
+                            <h6> {{ $tarea }} </h6>
+                                {{-- @if ()
+
+                                @endif --}}
+                                <div class="custom-control custom-checkbox">
+                                    <label for="tarea"></label>
+                                    {{-- <input type="checkbox" disabled class="custom-control-input"
+                                        id="permission_{{ $permission->id }}" wire:model="permission_role"
+                                        value="{{ $permission->id }}"
+                                        @if(is_array($permission_role) && in_array("$permission->id", $permission_role))
+                                            checked
+                                        @endif
+                                    >
+                                    <label class="custom-control-label"
+                                        for="permission_{{ $permission->id }}">
+                                        {{ $permission->id }}
+                                        -
+                                        {{ $permission->name }}
+                                        <em>( {{ $permission->description }} )</em>
+                                    </label> --}}
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">

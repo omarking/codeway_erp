@@ -39,11 +39,7 @@
                     </div>
                     <div class="form-group">
                         <label class="text-muted" for="role">Rol</label>
-                        @isset ($user->roles[0]->name)
-                            @if ($role != "")
-                                <h5>{{ $role }}</h5>
-                            @endif
-                        @endisset
+                        <h5>{{ $role }}</h5>
                     </div>
                     <div class="form-group">
                         <label class="text-muted" for="created_at">Creado:</label>

@@ -140,6 +140,7 @@ class UserComponent extends Component
         $this->status         = $user->status;
         $this->created_at     = $user->created_at;
         $this->updated_at     = $user->updated_at;
+        $this->user           = $user;
 
         if (isset($user->roles[0]->name)) {
             $this->role  = $user->roles[0]->name;
@@ -169,8 +170,8 @@ class UserComponent extends Component
         $this->accion         = "update";
         $this->user           = $user;
 
-        if (isset($user->roles[0]->name)) {
-            $this->rool  = $user->roles[0]->name;
+        foreach ($user->roles as $role) {
+            $this->role = $role->id;
         }
     }
 

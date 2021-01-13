@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Project;
 use App\Models\Category;
 use App\Models\Clas;
 use App\Models\Project;
+use App\Models\Task;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -21,7 +22,7 @@ class ProjectComponent extends Component
 
     public $clase, $categoria, $clas_id, $category_id;
 
-    public $search = '', $perPage = '10', $total;
+    public $search = '', $perPage = '10', $total, $projects_task;
 
     public $rules = [
         'avatar'        => '',
@@ -114,6 +115,8 @@ class ProjectComponent extends Component
         $this->category_id   = $project->category_id;
         $this->created_at    = $project->created_at;
         $this->updated_at    = $project->updated_at;
+
+        /* projects_task */
 
         if (isset($project->clas->description)) {
             $this->clase   = $project->clas->description;
@@ -224,6 +227,7 @@ class ProjectComponent extends Component
     {
         $clases      = Clas::orderBy('description')->where('status', '1')->get();
         $categorias  = Category::orderBy('description')->where('status', '1')->get();
+        $tareas      = Task::latest('id')->get();
 
         if ($this->search != '') {
             $this->page = 1;
@@ -244,7 +248,7 @@ class ProjectComponent extends Component
                     ->orWhere('responsable', 'LIKE', "%{$this->search}%")
                     ->paginate($this->perPage)
             ],
-            compact('clases', 'categorias')
+            compact('clases', 'categorias', 'tareas')
         );
     }
 }

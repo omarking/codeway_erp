@@ -43,7 +43,7 @@
                             <th scope="col">Telefono</th>
                             <th scope="col">Usuario</th>
                             <th scope="col">Email</th>
-                            <th scope="col">Corporativo</th>
+                            {{-- <th scope="col">Corporativo</th> --}}
                             <th scope="col">Roles</th>
                             <th scope="col">Estado</th>
                             <th scope="colgroup">Acciones</th>
@@ -57,7 +57,7 @@
                                 <td>{{ $user->phone }}</td>
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->email }}</td>
-                                <td>{{ $user->corporative }}</td>
+                                {{-- <td>{{ $user->corporative }}</td> --}}
                                 <td>
                                     @isset( $user->roles[0]->name )
                                         {{ $user->roles[0]->name }}

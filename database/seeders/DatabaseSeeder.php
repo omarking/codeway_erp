@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
 
             Estos se encargaran de llenar con algunos datos la base de datos
         */
-       /*  $this->call(AbsenceSeeder::class);
+        $this->call(AbsenceSeeder::class);
 
         $this->call(ClassSeeder::class);
 
@@ -39,17 +39,17 @@ class DatabaseSeeder extends Seeder
 
         $this->call(GroupSeeder::class);
 
-        $this->call(PeriodSeeder::class); */
+        $this->call(PeriodSeeder::class);
 
         $this->call(PermissionListSeeder::class);
 
-       /*  $this->call(PrioritySeeder::class); */
+        $this->call(PrioritySeeder::class);
 
         $this->call(RolSeeder::class);
 
-        /* $this->call(StatusSeeder::class);
+        $this->call(StatusSeeder::class);
 
-        $this->call(TypeSeeder::class); */
+        $this->call(TypeSeeder::class);
 
         /*
             Mando llamar a los faker que he creado
@@ -57,17 +57,17 @@ class DatabaseSeeder extends Seeder
             Estos se encargaran de poblar mi base de datos
         */
 
-      /*   User::factory(49)->create();
+        User::factory(49)->create();
 
         Position::factory(10)->create();
 
         Profile::factory(50)->create();
 
-        Holiday::factory(50)->create(); */
+        Holiday::factory(50)->create();
 
         /* Priority::factory(200)->create(); */
 
-     /*    Task::factory(100)->create();
+        Task::factory(100)->create();
 
         Project::factory(50)->create();
 
@@ -77,6 +77,6 @@ class DatabaseSeeder extends Seeder
 
         Vacant::factory(10)->create();
 
-        Comment::factory(150)->create(); */
+        Comment::factory(150)->create();
     }
 }
