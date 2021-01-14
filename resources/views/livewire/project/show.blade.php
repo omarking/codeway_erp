@@ -9,10 +9,10 @@
             </div>
             <div class="modal-body">
                 <form>
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <label class="text-muted" for="avatar">Avatar:</label>
                         <h5>{{ $avatar }}</h5>
-                    </div>
+                    </div> --}}
                     <div class="form-group">
                         <label class="text-muted" for="key">Clave:</label>
                         <h5>{{ $key }}</h5>
@@ -57,17 +57,17 @@
                         <label class="text-muted" for="updated_at">Actualizado:</label>
                         <h5>{{ $updated_at }}</h5>
                     </div>
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <label class="text-muted text-uppercase" for="permisos">Tareas</label>
                         <div>
                             @foreach ($tareas as $tarea)
                             <h6> {{ $tarea }} </h6>
-                                {{-- @if ()
+                                @if ()
 
-                                @endif --}}
+                                @endif
                                 <div class="custom-control custom-checkbox">
                                     <label for="tarea"></label>
-                                    {{-- <input type="checkbox" disabled class="custom-control-input"
+                                    <input type="checkbox" disabled class="custom-control-input"
                                         id="permission_{{ $permission->id }}" wire:model="permission_role"
                                         value="{{ $permission->id }}"
                                         @if(is_array($permission_role) && in_array("$permission->id", $permission_role))
@@ -80,11 +80,11 @@
                                         -
                                         {{ $permission->name }}
                                         <em>( {{ $permission->description }} )</em>
-                                    </label> --}}
+                                    </label>
                                 </div>
                             @endforeach
                         </div>
-                    </div>
+                    </div> --}}
                 </form>
             </div>
             <div class="modal-footer">

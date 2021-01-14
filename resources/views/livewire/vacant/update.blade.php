@@ -30,7 +30,7 @@
                     </div>
                     <div class="form-group">
                         <label class="text-muted" for="quantity">Cantidad:</label>
-                        <input type="text" name="quantity" wire:dirty.class="bg-success"
+                        <input type="number" name="quantity" wire:dirty.class="bg-success"
                             class="form-control @error('quantity') is-invalid @enderror" wire:model="quantity">
                         @error('quantity')
                             <span class="invalid-feedback" role="alert">

@@ -9,7 +9,7 @@
             </div>
             <div class="modal-body">
                 <form>
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <label class="text-muted" for="avatar">Imagen:</label>
                         <input type="text" name="avatar" wire:dirty.class="bg-success"
                             class="form-control @error('avatar') is-invalid @enderror" wire:model="avatar">
@@ -18,7 +18,7 @@
                                 <strong>{{ $message }}</strong>
                             </span>
                         @enderror
-                    </div>
+                    </div> --}}
                     <div class="form-group">
                         <label class="text-muted" for="key">Clave:</label>
                         <input type="text" name="key" wire:dirty.class="bg-success"

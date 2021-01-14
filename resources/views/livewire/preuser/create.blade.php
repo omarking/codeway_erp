@@ -31,7 +31,7 @@
                     </div>
                     <div class="form-group">
                         <label class="text-muted" for="phone">Telefono:</label>
-                        <input type="text" name="phone" class="form-control @error('phone') is-invalid @enderror"
+                        <input type="number" name="phone" class="form-control @error('phone') is-invalid @enderror"
                                 wire:model="phone" wire:dirty.class="bg-primary">
                         @error('phone')
                             <span class="invalid-feedback" role="alert">

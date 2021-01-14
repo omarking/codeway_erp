@@ -57,7 +57,13 @@
                                 <td><a class="color-bg" href="{{ route('task.show', $project->id) }}">{{ $project->name }}</a></td>
                                 <td>{{ $project->description }}</td>
                                 <td>{{ $project->responsable }}</td>
-                                <td>{{ $project->status }}</td>
+                                <td>
+                                    @if($project->status == 1)
+                                        Activo
+                                    @else
+                                        Inactivo
+                                    @endif
+                                </td>
                                 <td>
                                     @isset($project->clas->description)
                                         {{ $project->clas->description }}

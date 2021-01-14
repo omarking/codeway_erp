@@ -34,29 +34,28 @@
                                     </span>
                                 @enderror
                             </div>
-                            <div class="form-group">
+                            {{-- <div class="form-group">
                                 <label class="text-muted" for="file">Archivo:</label>
                                 <input type="file" name="file" wire:dirty.class="bg-success"
-                                    class="form-control @error('file') is-invalid @enderror" wire:model="file">
+                                    class="form-control-file @error('file') is-invalid @enderror" wire:model="file">
                                 @error('file')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
-                            </div>
+                            </div> --}}
                         </div>
                         @if($file)
                             <div class="col-lg-5">
                                 <label class="text-muted" for="name">Vista previa:</label>
-                                <h6> es :{{ $temporary }}</h6>
                                 <div>
-                                    <img class="img-fluid" alt="archivo" src="{{-- {{ $file->temporaryUrl() }} --}}">
+                                    <img class="img-fluid" alt="archivo" src="{{ asset($file) }}">
                                 </div>
                                 <div wire:loading wire:target="file">Cargando...</div>
                             </div>
                         @endif
                     </div>
-                    <div class="d-flex justify-content-between mb-auto ">
+                    <div class="d-flex justify-content-between mb-auto">
                         <div class="form-group justify-content-start">
                             <label class="text-muted" for="start">Inicio:</label>
                             <h5>{{ $start }}</h5>

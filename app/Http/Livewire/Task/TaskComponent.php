@@ -30,6 +30,7 @@ class TaskComponent extends Component
     public $rules = [
         'name'          => 'required|string|max:200|unique:tasks,name',
         'description'   => 'required|string',
+        'temporary'     => 'image|file|max:4096',
         'file'          => 'image|file|max:4096',
         'start'         => 'required|date',
         'end'           => 'required|date',
@@ -53,6 +54,7 @@ class TaskComponent extends Component
     protected $validationAttributes = [
         'name'          => 'nombre',
         'description'   => 'descripción',
+        'temporary'     => 'archivo',
         'file'          => 'archivo',
         'start'         => 'fecha de inicio',
         'end'           => 'fecha termino',
@@ -75,7 +77,7 @@ class TaskComponent extends Component
             $this->validateOnly($propertyName, [
                 'name'          => 'required|string|max:200|unique:tasks,name',
                 'description'   => 'required|string',
-                'file'          => 'image|file|max:4096',
+                'temporary'     => 'image|file|max:4096',
                 'start'         => 'required|date',
                 'end'           => 'required|date',
                 'informer'      => 'required|string',
@@ -88,6 +90,7 @@ class TaskComponent extends Component
             $this->validateOnly($propertyName, [
                 'name'          => 'required|string|max:200|unique:tasks,name,' . $this->task_id,
                 'description'   => 'required|string',
+                'temporary'     => 'image|file|max:4096',
                 'file'          => 'image|file|max:4096',
                 'start'         => 'required|date',
                 'end'           => 'required|date',
@@ -102,11 +105,10 @@ class TaskComponent extends Component
 
     public function store()
     {
-        $this->temporary = /* $this->file . '.' .  */$this->file->getClientOriginalName();
-        $temp = $this->validate([
+        $this->validate([
             'name'          => 'required|string|max:200|unique:tasks,name',
             'description'   => 'required|string|',
-            'file'          => 'image|file|max:4096',
+            'temporary'     => 'image|file|max:4096',
             'start'         => 'required|date',
             'end'           => 'required|date',
             'informer'      => 'required|string',
@@ -115,10 +117,11 @@ class TaskComponent extends Component
             'priority_id'   => 'required',
             'type_id'       => 'required',
         ]);
-        $task = Task::create([
+        $nameFile = time() . '_' . $this->temporary->getClientOriginalName();
+        Task::create([
             'name'          => $this->name,
             'description'   => $this->description,
-            'file'          => 'files/' . $this->file->getClientOriginalName(),
+            'file'          => $nameFile,
             'start'         => $this->start,
             'end'           => $this->end,
             'informer'      => $this->informer,
@@ -127,8 +130,8 @@ class TaskComponent extends Component
             'priority_id'   => $this->priority_id,
             'type_id'       => $this->type_id,
         ]);
-        if ($this->file) {
-            $this->file->store('files');
+        if ($this->temporary) {
+            $this->temporary->storePubliclyAs('storage/files', $nameFile, 'public_uploads');
         }
         session()->flash('message', 'Tarea creada correctamente.');
         $this->clean();
@@ -140,7 +143,7 @@ class TaskComponent extends Component
         $this->task_id       = $task->id;
         $this->name          = $task->name;
         $this->description   = $task->description;
-        $this->file          = $task->file;
+        $this->file          = 'storage/files/' . $task->file;
         $this->start         = $task->start;
         $this->end           = $task->end;
         $this->informer      = $task->informer;
@@ -150,6 +153,7 @@ class TaskComponent extends Component
         $this->type_id       = $task->type_id;
         $this->created_at    = $task->created_at;
         $this->updated_at    = $task->updated_at;
+
         if (isset($task->statu->description)) {
             $this->estado   = $task->statu->description;
         } else {
@@ -178,7 +182,7 @@ class TaskComponent extends Component
         $this->task_id       = $task->id;
         $this->name          = $task->name;
         $this->description   = $task->description;
-        $this->file          = $task->file;
+        $this->file          = 'storage/files/' . $task->file;
         $this->start         = $task->start;
         $this->end           = $task->end;
         $this->informer      = $task->informer;
@@ -195,7 +199,7 @@ class TaskComponent extends Component
         $this->validate([
             'name'          => 'required|string|max:200|unique:tasks,name,' . $this->task_id,
             'description'   => 'required|string',
-            'file'          => 'image|file|max:4096',
+            /* 'file'          => 'image|file|max:4096', */
             'start'         => 'required|date',
             'end'           => 'required|date',
             'informer'      => 'required|string',
@@ -204,12 +208,13 @@ class TaskComponent extends Component
             'priority_id'   => 'required',
             'type_id'       => 'required',
         ]);
+        /* $nameFile = time() . '_' . $this->temporary->getClientOriginalName(); */
         if ($this->task_id) {
             $task = Task::find($this->task_id);
             $task->update([
                 'name'          => $this->name,
                 'description'   => $this->description,
-                'file'          => 'files/' . $this->file->getClientOriginalName(),
+                /* 'file'          => $nameFile, */
                 'end'           => $this->end,
                 'informer'      => $this->informer,
                 'responsable'   => Auth::user()->name,
@@ -217,6 +222,9 @@ class TaskComponent extends Component
                 'priority_id'   => $this->priority_id,
                 'type_id'       => $this->type_id,
             ]);
+            /* if ($this->temporary) {
+                $this->temporary->storePubliclyAs('storage/files', $nameFile, 'public_uploads');
+            } */
             session()->flash('message', 'Tarea actualizada correctamente.');
             $this->clean();
             $this->emit('taskUpdatedEvent');
@@ -244,6 +252,7 @@ class TaskComponent extends Component
             'name',
             'description',
             'file',
+            'temporary',
             'start',
             'end',
             'informer',

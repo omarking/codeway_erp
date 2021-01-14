@@ -10,7 +10,7 @@
             <div class="modal-body">
                 <form>
                     <div class="row">
-                        @if($file)
+                        @if($temporary)
                             <div class="col-lg-7 mb-4">
                         @else
                             <div class="col-lg-12 mb-4">
@@ -35,24 +35,33 @@
                                 @enderror
                             </div>
                             <div class="form-group">
-                                <label class="text-muted" for="file">Archivo:</label>
-                                <input type="file" name="file" class="form-control @error('file') is-invalid @enderror"
-                                        wire:model="file" wire:dirty.class="bg-primary">
-                                @error('file')
+                                <label class="text-muted" for="temporary">Archivo:</label>
+                                <input type="file" name="temporary" class="form-control-file @error('temporary') is-invalid @enderror"
+                                        wire:model="temporary" wire:dirty.class="bg-primary">
+                                @error('temporary')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
                         </div>
-                        @if($file)
+                        {{-- @if($file)
                             <div class="col-lg-5">
                                 <label class="text-muted" for="name">Vista previa:</label>
                                 <h6> es :{{ $temporary }}</h6>
                                 <div>
-                                    {{-- <img class="img-fluid" alt="archivo" src="{{ $file->temporaryUrl() }}"> --}}
+                                    <img class="img-fluid" alt="archivo" src="{{ $file->temporaryUrl() }}">
                                 </div>
                                 <div wire:loading wire:target="file">Cargando...</div>
+                            </div>
+                        @endif --}}
+                        @if($temporary)
+                            <div class="col-lg-5">
+                                <label class="text-muted" for="name">Vista previa:</label>
+                                <div>
+                                    <img class="img-fluid" alt="archivo" src="{{ $temporary->temporaryUrl() }}">
+                                </div>
+                                <div wire:loading wire:target="temporary">Cargando...</div>
                             </div>
                         @endif
                     </div>

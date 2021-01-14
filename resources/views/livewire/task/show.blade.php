@@ -10,7 +10,7 @@
             <div class="modal-body">
                 <form>
                     <div class="row">
-                        <div class="col-lg-7">
+                        <div class="col-lg-5">
                             <div class="form-group">
                                 <label class="text-muted" for="description">Nombre:</label>
                                 <h5>{{ $name }}</h5>
@@ -20,10 +20,10 @@
                                 <h5>{{ $description }}</h5>
                             </div>
                         </div>
-                        <div class="col-lg-5">
+                        <div class="col-lg-7">
                             <div class="form-group">
                                 <label class="text-muted" for="description">Archivo:</label>
-                                <h5>{{ $file }}</h5>
+                                <img class="img-fluid" src="{{ asset($file) }}" alt="Archivo">
                             </div>
                         </div>
                     </div>
