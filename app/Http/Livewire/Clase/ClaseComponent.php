@@ -40,6 +40,8 @@ class ClaseComponent extends Component
     public function mount()
     {
         $this->total = count(Clas::all());
+        $this->resetErrorBag();
+        $this->resetValidation();
     }
 
     public function updated($propertyName)

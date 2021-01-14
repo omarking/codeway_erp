@@ -45,6 +45,8 @@ class DepartamentComponent extends Component
     {
         $this->total = count(Departament::all());
         $this->responsable = Auth::user()->name;
+        $this->resetErrorBag();
+        $this->resetValidation();
     }
 
     public function updated($propertyName)

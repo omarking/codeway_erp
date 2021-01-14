@@ -58,6 +58,8 @@ class ProjectComponent extends Component
     {
         $this->total = count(Project::all());
         $this->responsable = Auth::user()->name;
+        $this->resetErrorBag();
+        $this->resetValidation();
     }
 
     public function updated($propertyName)

@@ -43,6 +43,8 @@ class VacantComponent extends Component
     public function mount()
     {
         $this->total = count(Vacant::all());
+        $this->resetErrorBag();
+        $this->resetValidation();
     }
 
     public function updated($propertyName)

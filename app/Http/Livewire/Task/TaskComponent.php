@@ -69,6 +69,8 @@ class TaskComponent extends Component
     {
         $this->total = count(Task::all());
         $this->responsable = Auth::user()->name;
+        $this->resetErrorBag();
+        $this->resetValidation();
     }
 
     public function updated($propertyName)

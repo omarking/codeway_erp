@@ -40,6 +40,8 @@ class PeriodComponent extends Component
     public function mount()
     {
         $this->total = count(Period::all());
+        $this->resetErrorBag();
+        $this->resetValidation();
     }
 
     public function updated($propertyName)

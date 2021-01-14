@@ -40,6 +40,8 @@ class PriorityComponent extends Component
     public function mount()
     {
         $this->total = count(Priority::all());
+        $this->resetErrorBag();
+        $this->resetValidation();
     }
 
     public function updated($propertyName)
@@ -151,7 +153,7 @@ class PriorityComponent extends Component
         if (isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)) {
             $this->reset(['perPage']);
         }
-        
+
         return view(
             'livewire.priority.priority-component',
             ['priorities' => Priority::latest('id')

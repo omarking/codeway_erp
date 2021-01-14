@@ -63,6 +63,8 @@ class HolidayComponent extends Component
     {
         $this->total = count(Holiday::all());
         $this->responsable = Auth::user()->name;
+        $this->resetErrorBag();
+        $this->resetValidation();
     }
 
     public function updated($propertyName)

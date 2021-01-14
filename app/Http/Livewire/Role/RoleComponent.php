@@ -53,6 +53,8 @@ class RoleComponent extends Component
         $this->total = count(Role::all());
         $this->responsable = Auth::user()->name;
         $this->fullAccess = 'no';
+        $this->resetErrorBag();
+        $this->resetValidation();
     }
 
     public function updated($propertyName)

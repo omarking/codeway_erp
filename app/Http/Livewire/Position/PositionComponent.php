@@ -40,6 +40,8 @@ class PositionComponent extends Component
     public function mount()
     {
         $this->total = count(Position::all());
+        $this->resetErrorBag();
+        $this->resetValidation();
     }
 
     public function updated($propertyName)
@@ -143,7 +145,7 @@ class PositionComponent extends Component
     public function render()
     {
         $perfiles = Profile::latest('id')->get();
-        
+
         if ($this->search != '') {
             $this->page = 1;
         }

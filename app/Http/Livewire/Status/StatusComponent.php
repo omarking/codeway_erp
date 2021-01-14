@@ -40,6 +40,8 @@ class StatusComponent extends Component
     public function mount()
     {
         $this->total = count(Statu::all());
+        $this->resetErrorBag();
+        $this->resetValidation();
     }
 
     public function updated($propertyName)

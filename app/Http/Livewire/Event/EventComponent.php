@@ -49,6 +49,8 @@ class EventComponent extends Component
     public function mount()
     {
         $this->total = count(Event::all());
+        $this->resetErrorBag();
+        $this->resetValidation();
     }
 
     public function updated($propertyName)
@@ -195,7 +197,7 @@ class EventComponent extends Component
         if(isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)){
             $this->reset(['perPage']);
         }
-        
+
         return view(
             'livewire.event.event-component',
             ['events' => Event::latest('id')

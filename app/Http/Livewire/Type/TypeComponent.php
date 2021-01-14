@@ -40,6 +40,8 @@ class TypeComponent extends Component
     public function mount()
     {
         $this->total = count(Type::all());
+        $this->resetErrorBag();
+        $this->resetValidation();
     }
 
     public function updated($propertyName)

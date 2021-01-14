@@ -40,6 +40,8 @@ class CategoryComponent extends Component
     public function mount()
     {
         $this->total = count(Category::all());
+        $this->resetErrorBag();
+        $this->resetValidation();
     }
 
     public function updated($propertyName)

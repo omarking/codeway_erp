@@ -40,6 +40,8 @@ class AbsenceComponent extends Component
     public function mount()
     {
         $this->total = count(Absence::all());
+        $this->resetErrorBag();
+        $this->resetValidation();
     }
 
     public function updated($propertyName)

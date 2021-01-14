@@ -61,6 +61,8 @@ class UserComponent extends Component
     {
         $this->total = count(User::all());
         $this->now = now();
+        $this->resetErrorBag();
+        $this->resetValidation();
     }
 
     public function updated($propertyName)

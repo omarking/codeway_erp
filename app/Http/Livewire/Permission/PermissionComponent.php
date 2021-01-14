@@ -43,6 +43,8 @@ class PermissionComponent extends Component
     public function mount()
     {
         $this->total = count(Permission::all());
+        $this->resetErrorBag();
+        $this->resetValidation();
     }
 
     public function updated($propertyName)

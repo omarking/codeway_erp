@@ -45,6 +45,8 @@ class PreuserComponent extends Component
     public function mount()
     {
         $this->total = count(Preuser::all());
+        $this->resetErrorBag();
+        $this->resetValidation();
     }
 
     public function updated($propertyName)
