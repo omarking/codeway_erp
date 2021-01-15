@@ -22,12 +22,13 @@ class ProfileFactory extends Factory
     public function definition()
     {
         return [
-            'avatar'        => $this->faker->imageUrl(1024, 1024, 'profiles', true, 'Faker'),
+            /* 'avatar'        => $this->faker->imageUrl(1024, 1024, 'profiles', true, 'Faker'), */
+            'avatar'        => 'user.png',
             'description'   => $this->faker->sentence(6),
             'birthday'      => $this->faker->date,
-            'facebook'      => $this->faker->userName(),
-            'instagram'     => $this->faker->userName,
-            'github'        => $this->faker->userName,
+            'facebook'      => $this->faker->unique()->userName(),
+            'instagram'     => $this->faker->unique()->userName(),
+            'github'        => $this->faker->unique()->userName(),
             'website'       => $this->faker->url,
             'other'         => $this->faker->word,
             'position_id'   => rand(1, 10),

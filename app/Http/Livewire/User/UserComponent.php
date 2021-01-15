@@ -3,9 +3,11 @@
 namespace App\Http\Livewire\User;
 
 use App\Mail\MessageReceived;
+use App\Models\Profile;
 use App\Models\Role;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Database\Events\TransactionBeginning;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
@@ -27,9 +29,9 @@ class UserComponent extends Component
         'nameUser'       => 'required|string|max:100',
         'firstLastname'  => 'required|string|max:100',
         'secondLastname' => 'required|string|max:100',
-        'phone'          => 'required|numeric',
+        'phone'          => 'required|numeric|min:10|max:15|size:10',
         'name'           => 'required|string|max:100|unique:users,name',
-        'email'          => 'required|email|max:100|unique:users,email',
+        'email'          => 'required|email:rfc,dns,strict,spoof|max:100|unique:users,email',
         'corporative'    => 'required|email|max:100|unique:users,corporative',
         'password'       => 'required|string|min:8|max:100',
         'role'           => 'required',
@@ -121,8 +123,11 @@ class UserComponent extends Component
         if ($this->role) {
             $user->roles()->sync($this->role);
         }
+        $perfil = Profile::create([
+            'user_id' => $user->id,
+        ]);
         /* Envio de email */
-        Mail::to('admin@admin.com')->queue(new MessageReceived($user));
+        /* Mail::to('admin@admin.com')->queue(new MessageReceived($user)); */
 
         session()->flash('message', 'Usuario creado correctamente.');
         $this->clean();

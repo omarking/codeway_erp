@@ -61,24 +61,37 @@ class User extends Authenticatable
     /* Funcion que obtiene la imagen de perfil de un usuario */
     public function adminlte_image()
     {
-        return 'https://picsum.photos/300/300';
+        $profile = Profile::where('user_id', $this->id)->first();
+
+        $photo = 'storage/users/' . $profile->avatar;
+
+        return $photo;
     }
 
     /* Funcion que obtiene el rol de un usuario */
     public function adminlte_desc()
     {
-        return 'Administrador';
+        $user = User::find($this->id);
+        if (isset($user->roles[0]->name)) {
+            $role  = $user->roles[0]->name;
+        } else {
+            $role  = "No tiene rol";
+        }
+
+        return $role;
     }
 
     /* Función que obtiene la ruta del perfil de un usuario */
     public function adminlte_profile_url()
     {
-        return 'profile/username';
+        return 'profile';
     }
 
     /* Un usuario tiene un solo perfil */
     public function profile()
     {
+        /* $profile = Profile::where('user_id', $this->id)->firts(); */
+
         return $this->hasOne(Profile::class);
     }
 

@@ -30,10 +30,10 @@ class TaskComponent extends Component
     public $rules = [
         'name'          => 'required|string|max:200|unique:tasks,name',
         'description'   => 'required|string',
-        'temporary'     => 'image|file|max:4096',
-        'file'          => 'image|file|max:4096',
-        'start'         => 'required|date',
-        'end'           => 'required|date',
+        'temporary'     => 'image|file|mimes:jpeg,png|max:4096|mimetypes:video/mp4',
+        'file'          => 'image|file|mimes:jpeg,png|max:4096|mimetypes:video/mp4',
+        'start'         => 'required|date|after:tomorrow',
+        'end'           => 'required|date|after:start',
         'informer'      => 'required|string|',
         'responsable'   => 'required|string|',
         'statu_id'      => 'required',
@@ -42,8 +42,8 @@ class TaskComponent extends Component
     ];
 
     /* protected $messages = [
-        'description.required' => 'La descripción es requerida.',
-        'description.unique' => 'La descripción ya esta en uso.',
+        'temporary.required' => 'La descripción es requerida.',
+        'temporary.unique' => 'La descripción ya esta en uso.',
     ]; */
 
     protected $queryString = [
@@ -79,7 +79,7 @@ class TaskComponent extends Component
             $this->validateOnly($propertyName, [
                 'name'          => 'required|string|max:200|unique:tasks,name',
                 'description'   => 'required|string',
-                'temporary'     => 'image|file|max:4096',
+                'temporary'     => 'image|file|mimes:jpeg,png|max:4096|mimetypes:video/mp4',
                 'start'         => 'required|date',
                 'end'           => 'required|date',
                 'informer'      => 'required|string',
@@ -92,8 +92,8 @@ class TaskComponent extends Component
             $this->validateOnly($propertyName, [
                 'name'          => 'required|string|max:200|unique:tasks,name,' . $this->task_id,
                 'description'   => 'required|string',
-                'temporary'     => 'image|file|max:4096',
-                'file'          => 'image|file|max:4096',
+                'temporary'     => 'image|file|mimes:jpeg,png|max:4096|mimetypes:video/mp4',
+                'file'          => 'image|file|mimes:jpeg,png|max:4096|mimetypes:video/mp4',
                 'start'         => 'required|date',
                 'end'           => 'required|date',
                 'informer'      => 'required|string',
@@ -110,7 +110,7 @@ class TaskComponent extends Component
         $this->validate([
             'name'          => 'required|string|max:200|unique:tasks,name',
             'description'   => 'required|string|',
-            'temporary'     => 'image|file|max:4096',
+            'temporary'     => 'image|file|mimes:jpeg,png|max:4096|',
             'start'         => 'required|date',
             'end'           => 'required|date',
             'informer'      => 'required|string',
@@ -201,7 +201,7 @@ class TaskComponent extends Component
         $this->validate([
             'name'          => 'required|string|max:200|unique:tasks,name,' . $this->task_id,
             'description'   => 'required|string',
-            /* 'file'          => 'image|file|max:4096', */
+            /* 'file'          => 'image|file|mimes:jpeg,png|max:4096|mimetypes:video/mp4', */
             'start'         => 'required|date',
             'end'           => 'required|date',
             'informer'      => 'required|string',
@@ -243,6 +243,7 @@ class TaskComponent extends Component
     {
         Task::find($this->task_id)->delete();
         session()->flash('message', 'Tarea eliminada correctamente.');
+        /* Storage::delete('file.jpg'); */
         $this->clean();
         $this->emit('taskDeletedEvent');
     }

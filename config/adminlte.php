@@ -591,25 +591,9 @@ return [
         ],
         ['header' => 'AJUSTES DE LA CUENTA'],
         [
-            'text'    => 'Perfil',
-            'icon'    => 'fas fa-fw fa-user',
-            'submenu' => [
-                [
-                    'text' => 'Ver Perfil',
-                    'url'  => '#',
-                    'icon' => 'fas fa-fw fa-user-tie',
-                ],
-                [
-                    'text' => 'Configurar Perfil',
-                    'url'  => '#',
-                    'icon' => 'fas fa-fw fa-user-edit',
-                ],
-                [
-                    'text' => 'Cambiar Contraseña',
-                    'url'  => '#',
-                    'icon' => 'fas fa-fw fa-lock',
-                ],
-            ],
+            'text'    => 'Configurar Perfil',
+            'url'     => 'profile',
+            'icon'    => 'fas fa-fw fa-user-tie',
         ],
         ['header' => 'labels'],
         [

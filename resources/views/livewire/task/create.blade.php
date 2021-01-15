@@ -37,7 +37,7 @@
                             <div class="form-group">
                                 <label class="text-muted" for="temporary">Archivo:</label>
                                 <input type="file" name="temporary" class="form-control-file @error('temporary') is-invalid @enderror"
-                                        wire:model="temporary" wire:dirty.class="bg-primary">
+                                        wire:model="temporary" wire:dirty.class="bg-primary" accept="image/png,image/jpeg,">
                                 @error('temporary')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>

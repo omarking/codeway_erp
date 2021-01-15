@@ -16,7 +16,7 @@ class CreateProfilesTable extends Migration
         Schema::create('profiles', function (Blueprint $table) {
             $table->id();
 
-            $table->string('avatar',200)->nullable()->default('user.png');
+            $table->string('avatar', 200)->nullable()->default('user.png');
             $table->text('description')->nullable();
             $table->date('birthday')->nullable();
             $table->string('facebook', 200)->nullable();
@@ -25,8 +25,8 @@ class CreateProfilesTable extends Migration
             $table->string('website', 200)->nullable();
             $table->string('other', 200)->nullable();
             $table->boolean('status')->default('1');
-            $table->foreignId('position_id')->references('id')->on('positions')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('position_id')->nullable()->references('id')->on('positions')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('user_id')->unique()->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
 
             $table->softDeletes();
             $table->timestamps();

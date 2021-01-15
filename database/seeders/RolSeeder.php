@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Profile;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
@@ -56,6 +57,18 @@ class RolSeeder extends Seeder
             'description'   => 'Rol que se le asigna a un usuario, tiene los permisos basicos',
             'fullAccess'    => 'no',
             'responsable'   => 'Administrador',
+        ]);
+
+        $profile = Profile::create([
+            'description'  => '',
+            'birthday'     => null,
+            'facebook'     => '',
+            'instagram'    => '',
+            'github'       => '',
+            'website'      => '',
+            'other'        => '',
+            'position_id'  => null,
+            'user_id'      => $useradmin->id,
         ]);
 
         /* Sincronizamos el usuario administrador con el rol administrador */
