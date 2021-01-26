@@ -38,7 +38,6 @@
                 <table wire:poll.10000ms id="preuserTable" class="table table-white table-striped table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
                             <th scope="col">Aspirante</th>
                             <th scope="col">Telefono</th>
                             <th scope="col">Email</th>
@@ -51,7 +50,6 @@
                     <tbody>
                         @foreach($preusers as $preuser)
                             <tr>
-                                <th scope="row">{{ $preuser->id }}</th>
                                 <td>{{ $preuser->name }} {{ $preuser->lastname }}</td>
                                 <td>{{ $preuser->phone }}</td>
                                 <td>{{ $preuser->email }}</td>
