@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire\Profile;
 
-use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -147,18 +146,14 @@ class ProfileComponent extends Component
             $usuario->update([
                 'name'  => $this->name,
             ]);
-
             $perfil = $usuario->profile;
-
             if ($this->temporary) {
                 $avatarUser = time() . '_' . $this->temporary->getClientOriginalName();
                 $this->temporary->storePubliclyAs('storage/users', $avatarUser, 'public_uploads');
-
                 $perfil->update([
                     'avatar'        => $avatarUser,
                 ]);
             }
-
             $perfil->update([
                 'description'   => $this->description,
             ]);
@@ -204,9 +199,7 @@ class ProfileComponent extends Component
         ]);
         if ($this->user->id) {
             $usuario = User::find($this->user->id);
-
             $perfil = $usuario->profile;
-
             $perfil->update([
                 'birthday'    => $this->birthday,
                 'facebook'    => $this->facebook,
@@ -255,13 +248,11 @@ class ProfileComponent extends Component
             $usuario->update([
                 'status'    => $this->status,
             ]);
-
             if ($this->status == 1) {
                 $valor = "activada";
             } else {
                 $valor = "desactivada";
             }
-            
             session()->flash('message5', 'Cuenta ' . $valor . ' correctamente.');
             $this->clean();
         }

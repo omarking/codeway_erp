@@ -38,7 +38,6 @@
                 <table wire:poll.10000ms id="priorityTable" class="table table-white table-striped table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
                             <th scope="col">Prioridad</th>
                             <th scope="col">Estado</th>
                             <th scope="col">Creado</th>
@@ -49,7 +48,6 @@
                     <tbody>
                         @foreach($priorities as $priority)
                             <tr>
-                                <th scope="row">{{ $priority->id }}</th>
                                 <td>{{ $priority->description }}</td>
                                 <td>
                                     @if ($priority->status == "1")

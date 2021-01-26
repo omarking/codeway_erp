@@ -5,7 +5,7 @@
                 <h3 class="card-title text-uppercase">Posiciones</h3>
             </div>
             <div>
-                <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#createPosition">Agregar Posicion</button>
+                <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#createPosition">Agregar Posición</button>
             </div>
         </div>
         <div class="card-body">
@@ -38,8 +38,7 @@
                 <table wire:poll.10000ms id="positionTable" class="table table-white table-striped table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Posiciones</th>
+                            <th scope="col">Posición</th>
                             <th scope="col">Estado</th>
                             <th scope="col">Creado</th>
                             <th scope="col">Actualizado</th>
@@ -49,7 +48,6 @@
                     <tbody>
                         @foreach($positions as $position)
                             <tr>
-                                <th scope="row">{{ $position->id }}</th>
                                 <td>{{ $position->description }}</td>
                                 <td>
                                     @if ($position->status == "1")
@@ -77,7 +75,7 @@
             @if ($positions->count())
                 <nav class="col col-lg-6 justify-content-start" aria-label="Page navigation example">
                     <ul class="pagination justify-content">
-                        <h6>Mostrando {{ $positions->count() }} registros de {{ $total }} registros totales en la pagina {{ $page }}</h6>
+                        <h6>Mostrando {{ $positions->count() }} registros de {{ $total }} registros totales en la página {{ $page }}</h6>
                     </ul>
                 </nav>
                 <nav class="col col-lg-6 justify-content-end" aria-label="Page navigation example">

@@ -71,12 +71,16 @@ class DepartamentComponent extends Component
 
     public function store()
     {
-        $validateData = $this->validate([
+        $this->validate([
             'name'         => 'required|string|max:200|unique:departaments,name',
             'description'  => 'required|string',
             'responsable'  => 'required|string',
         ]);
-        $departament = Departament::create($validateData);
+        $departament = Departament::create([
+            'name'          => $this->name,
+            'description'   => $this->description,
+            'responsable'   => Auth::user()->name,
+        ]);
         $departament->groups()->sync($this->group);
         session()->flash('message', 'Departamento creado correctamente.');
         $this->clean();
@@ -93,7 +97,6 @@ class DepartamentComponent extends Component
         $this->created_at         = $departament->created_at;
         $this->updated_at         = $departament->updated_at;
         $this->departamento       = $departament;
-
 
         foreach ($departament->groups as $group) {
             $this->departament_group[] = $group->id;
@@ -199,8 +202,7 @@ class DepartamentComponent extends Component
             [
                 'departaments' => Departament::latest('id')
                     ->with('groups')
-                    ->where('id', 'LIKE', "%{$this->search}%")
-                    ->orWhere('name', 'LIKE', "%{$this->search}%")
+                    ->where('name', 'LIKE', "%{$this->search}%")
                     ->orWhere('description', 'LIKE', "%{$this->search}%")
                     ->orWhere('responsable', 'LIKE', "%{$this->search}%")
                     ->paginate($this->perPage)

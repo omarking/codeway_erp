@@ -66,12 +66,16 @@ class PermissionComponent extends Component
 
     public function store()
     {
-        $validateData = $this->validate([
+        $this->validate([
             'name'         => 'required|string|max:100|unique:permissions,name',
             'slug'         => 'required|string|max:100|unique:permissions,slug',
             'description'  => 'required|string',
         ]);
-        Permission::create($validateData);
+        Permission::create([
+            'name'          => $this->name,
+            /* 'slug'          => $this->slug, */
+            'description'   => $this->description,
+        ]);
         session()->flash('message', 'Permiso creado correctamente.');
         $this->clean();
         $this->emit('permissionCreatedEvent');
@@ -172,8 +176,7 @@ class PermissionComponent extends Component
             'livewire.permission.permission-component',
             [
                 'permissions' => Permission::latest('id')
-                    ->where('id', 'LIKE', "%{$this->search}%")
-                    ->orWhere('name', 'LIKE', "%{$this->search}%")
+                    ->where('name', 'LIKE', "%{$this->search}%")
                     ->orWhere('slug', 'LIKE', "%{$this->search}%")
                     ->orWhere('description', 'LIKE', "%{$this->search}%")
                     ->paginate($this->perPage)

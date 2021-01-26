@@ -59,10 +59,12 @@ class StatusComponent extends Component
 
     public function store()
     {
-        $validateData = $this->validate([
+        $this->validate([
             'description' => 'required|max:200|unique:status,description',
         ]);
-        Statu::create($validateData);
+        Statu::create([
+            'description'   => $this->description,
+        ]);
         session()->flash('message', 'Estado creado correctamente.');
         $this->clean();
         $this->emit('statusCreatedEvent');
@@ -158,8 +160,7 @@ class StatusComponent extends Component
             'livewire.status.status-component',
             [
                 'estados' => Statu::latest('id')
-                    ->where('id', 'LIKE', "%{$this->search}%")
-                    ->orWhere('description', 'LIKE', "%{$this->search}%")
+                    ->where('description', 'LIKE', "%{$this->search}%")
                     ->paginate($this->perPage)
             ],
             compact('tareas')

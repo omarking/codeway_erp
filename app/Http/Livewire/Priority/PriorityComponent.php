@@ -59,10 +59,12 @@ class PriorityComponent extends Component
 
     public function store()
     {
-        $validateData = $this->validate([
+        $this->validate([
             'description' => 'required|max:200|unique:priorities,description',
         ]);
-        Priority::create($validateData);
+        Priority::create([
+            'description'   => $this->description,
+        ]);
         session()->flash('message', 'Prioridad creada correctamente.');
         $this->clean();
         $this->emit('priorityCreatedEvent');
@@ -158,8 +160,7 @@ class PriorityComponent extends Component
             'livewire.priority.priority-component',
             [
                 'priorities' => Priority::latest('id')
-                    ->where('id', 'LIKE', "%{$this->search}%")
-                    ->orWhere('description', 'LIKE', "%{$this->search}%")
+                    ->where('description', 'LIKE', "%{$this->search}%")
                     ->paginate($this->perPage)
             ],
             compact('tareas')

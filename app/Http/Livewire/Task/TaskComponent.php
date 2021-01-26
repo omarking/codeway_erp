@@ -110,7 +110,6 @@ class TaskComponent extends Component
         $this->validate([
             'name'          => 'required|string|max:200|unique:tasks,name',
             'description'   => 'required|string|',
-            /* 'temporary'     => 'file|max:10000|mimes:jpeg,png|nullable|mimetypes:video/mp4', */
             'temporary'     => 'file|max:10000|nullable',
             'start'         => 'required|date',
             'end'           => 'required|date',
@@ -120,8 +119,7 @@ class TaskComponent extends Component
             'priority_id'   => 'required',
             'type_id'       => 'required',
         ]);
-
-        if($this->temporary != null){
+        if ($this->temporary != null) {
             if ($this->temporary->getClientOriginalName()) {
                 $nameFile = time() . '_' . $this->temporary->getClientOriginalName();
                 $this->temporary->storePubliclyAs('storage/files', $nameFile, 'public_uploads');
@@ -129,7 +127,6 @@ class TaskComponent extends Component
         } else {
             $nameFile = null;
         }
-
         Task::create([
             'name'          => $this->name,
             'slug'          => Str::slug($this->name, '-'),
@@ -192,7 +189,6 @@ class TaskComponent extends Component
         $this->task_id       = $task->id;
         $this->name          = $task->name;
         $this->description   = $task->description;
-        /* $this->temporary     = $task->file; */
         $this->file          = $task->file;
         $this->start         = $task->start;
         $this->end           = $task->end;
@@ -211,7 +207,6 @@ class TaskComponent extends Component
             'name'          => 'required|string|max:200|unique:tasks,name,' . $this->task_id,
             'description'   => 'required|string',
             'temporary'     => 'file|max:10000|nullable',
-            /* 'file'          => 'image|file|mimes:jpeg,png|max:4096|mimetypes:video/mp4', */
             'start'         => 'required|date',
             'end'           => 'required|date',
             'informer'      => 'required|string',
@@ -220,7 +215,6 @@ class TaskComponent extends Component
             'priority_id'   => 'required',
             'type_id'       => 'required',
         ]);
-
         if ($this->task_id) {
             $task = Task::find($this->task_id);
             $task->update([
@@ -234,15 +228,13 @@ class TaskComponent extends Component
                 'priority_id'   => $this->priority_id,
                 'type_id'       => $this->type_id,
             ]);
-
-            if($this->temporary != null){
+            if ($this->temporary != null) {
                 if ($this->temporary->getClientOriginalName()) {
                     $nameFile = time() . '_' . $this->temporary->getClientOriginalName();
                     $this->temporary->storePubliclyAs('storage/files', $nameFile, 'public_uploads');
                     $task->update(['file'   => $nameFile]);
                 }
             }
-
             session()->flash('message', 'Tarea actualizada correctamente.');
             $this->clean();
             $this->emit('taskUpdatedEvent');
@@ -312,8 +304,7 @@ class TaskComponent extends Component
             [
                 'tasks' => Task::latest('id')
                     ->with('type', 'statu', 'priority')
-                    ->where('id', 'LIKE', "%{$this->search}%")
-                    ->orWhere('name', 'LIKE', "%{$this->search}%")
+                    ->where('name', 'LIKE', "%{$this->search}%")
                     ->orWhere('description', 'LIKE', "%{$this->search}%")
                     ->orWhere('informer', 'LIKE', "%{$this->search}%")
                     ->orWhere('responsable', 'LIKE', "%{$this->search}%")

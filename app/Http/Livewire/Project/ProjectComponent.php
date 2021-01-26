@@ -106,7 +106,6 @@ class ProjectComponent extends Component
             'clas_id'       => 'required',
             'category_id'   => 'required',
         ]);
-
         if ($this->temporary != null) {
             if ($this->temporary->getClientOriginalName()) {
                 $nameFile = time() . '_' . $this->temporary->getClientOriginalName();
@@ -115,7 +114,6 @@ class ProjectComponent extends Component
         } else {
             $nameFile = null;
         }
-
         $project = Project::create([
             'avatar'        => $nameFile,
             'key'           => $this->key,
@@ -126,9 +124,7 @@ class ProjectComponent extends Component
             'clas_id'       => $this->clas_id,
             'category_id'   => $this->category_id,
         ]);
-
         $project->users()->sync($this->user);
-
         session()->flash('message', 'Proyecto creado correctamente.');
         $this->clean();
         $this->emit('projectCreatedEvent');
@@ -202,7 +198,6 @@ class ProjectComponent extends Component
             'clas_id'       => 'required',
             'category_id'   => 'required',
         ]);
-
         if ($this->temporary != null) {
             if ($this->temporary->getClientOriginalName()) {
                 $nameFile = time() . '_' . $this->temporary->getClientOriginalName();
@@ -211,7 +206,6 @@ class ProjectComponent extends Component
         } else {
             $nameFile = $this->avatar;
         }
-
         if ($this->project_id) {
             $project = Project::find($this->project_id);
             $project->update([
@@ -225,9 +219,7 @@ class ProjectComponent extends Component
                 'clas_id'       => $this->clas_id,
                 'category_id'   => $this->category_id,
             ]);
-
             $project->users()->sync($this->user);
-
             session()->flash('message', 'Proyecto actualizado correctamente.');
             $this->clean();
             $this->emit('projectUpdatedEvent');
@@ -236,15 +228,11 @@ class ProjectComponent extends Component
 
     public function limpia()
     {
-        /* $this->reset(['user']); */
-        $this->user = [];
+        $this->reset(['user']);
     }
 
-    /* public function delete(Project $project) */
     public function delete(Project $project)
     {
-        /* $this->name    = Project::where('id', '=', $project)->get(); */
-        /* $project = Project::where('id', '=', $project)->get(); */
         $this->project_id   = $project->id;
         $this->key          = $project->key;
         $this->name         = $project->name;
@@ -306,8 +294,7 @@ class ProjectComponent extends Component
             [
                 'projects' => Project::latest('id')
                     ->with('clas', 'category')
-                    ->where('id', 'LIKE', "%{$this->search}%")
-                    ->orWhere('key', 'LIKE', "%{$this->search}%")
+                    ->where('key', 'LIKE', "%{$this->search}%")
                     ->orWhere('name', 'LIKE', "%{$this->search}%")
                     ->orWhere('description', 'LIKE', "%{$this->search}%")
                     ->orWhere('responsable', 'LIKE', "%{$this->search}%")

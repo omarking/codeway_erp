@@ -59,10 +59,12 @@ class PositionComponent extends Component
 
     public function store()
     {
-        $validateData = $this->validate([
+        $this->validate([
             'description' => 'required|max:200|unique:positions,description',
         ]);
-        Position::create($validateData);
+        Position::create([
+            'description'   => $this->description,
+        ]);
         session()->flash('message', 'Posición creada correctamente.');
         $this->clean();
         $this->emit('positionCreatedEvent');
@@ -155,10 +157,10 @@ class PositionComponent extends Component
 
         return view(
             'livewire.position.position-component',
-            ['positions' => Position::latest('id')
-                ->where('id', 'LIKE', "%{$this->search}%")
-                ->orWhere('description', 'LIKE', "%{$this->search}%")
-                ->paginate($this->perPage)
+            [
+                'positions' => Position::latest('id')
+                    ->where('description', 'LIKE', "%{$this->search}%")
+                    ->paginate($this->perPage)
             ],
             compact('perfiles')
         );

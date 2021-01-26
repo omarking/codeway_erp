@@ -38,9 +38,7 @@
                 <table wire:poll.10000ms id="classTable" class="table table-white table-striped table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
                             <th scope="col">Tarea</th>
-                            {{-- <th scope="col">Descripción</th> --}}
                             <th scope="col">Inicio</th>
                             <th scope="col">Informador</th>
                             <th scope="col">Responsable</th>
@@ -53,9 +51,7 @@
                     <tbody>
                         @foreach($tasks as $task)
                             <tr>
-                                <th scope="row">{{ $task->id }}</th>
                                 <td>{{ $task->name }}</td>
-                                {{-- <td>{{ $task->description }}</td> --}}
                                 <td>{{ $task->start }}</td>
                                 <td>{{ $task->informer }}</td>
                                 <td>{{ $task->responsable }}</td>

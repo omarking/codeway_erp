@@ -5,7 +5,7 @@
                 <h3 class="card-title text-uppercase">Permisos</h3>
             </div>
             {{-- <div>
-                <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#createPermission">Agregar Permiso</button>
+                <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#createPermission_XD">Agregar Permiso</button>
             </div> --}}
         </div>
         <div class="card-body">
@@ -38,8 +38,7 @@
                 <table wire:poll.10000ms id="permissionTable" class="table table-white table-striped table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Permisos</th>
+                            <th scope="col">Permiso</th>
                             <th scope="col">Slug</th>
                             <th scope="col">Descripción</th>
                             <th scope="col">Estado</th>
@@ -51,7 +50,6 @@
                     <tbody>
                         @foreach($permissions as $permiso)
                             <tr>
-                                <th scope="row">{{ $permiso->id }}</th>
                                 <td>{{ $permiso->name }}</td>
                                 <td>{{ $permiso->slug }}</td>
                                 <td>{{ $permiso->description }}</td>

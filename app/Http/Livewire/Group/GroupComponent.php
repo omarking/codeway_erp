@@ -68,12 +68,16 @@ class GroupComponent extends Component
 
     public function store()
     {
-        $validateData = $this->validate([
+        $this->validate([
             'name'         => 'required|string|max:200|unique:groups,name',
             'description'  => 'required|string',
             'responsable'  => 'required|string',
         ]);
-        Group::create($validateData);
+        Group::create([
+            'name'          => $this->name,
+            'description'   => $this->description,
+            'responsable'   => Auth::user()->name,
+        ]);
         session()->flash('message', 'Grupo creado correctamente.');
         $this->clean();
         $this->emit('groupCreatedEvent');
@@ -173,8 +177,7 @@ class GroupComponent extends Component
             'livewire.group.group-component',
             [
                 'groups' => Group::latest('id')
-                    ->where('id', 'LIKE', "%{$this->search}%")
-                    ->orWhere('name', 'LIKE', "%{$this->search}%")
+                    ->where('name', 'LIKE', "%{$this->search}%")
                     ->orWhere('description', 'LIKE', "%{$this->search}%")
                     ->orWhere('responsable', 'LIKE', "%{$this->search}%")
                     ->paginate($this->perPage)

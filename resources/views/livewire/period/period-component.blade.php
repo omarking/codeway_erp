@@ -38,8 +38,7 @@
                 <table wire:poll.10000ms id="periodTable" class="table table-white table-striped table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Periodos</th>
+                            <th scope="col">Periodo</th>
                             <th scope="col">Estado</th>
                             <th scope="col">Creado</th>
                             <th scope="col">Actualizado</th>
@@ -49,7 +48,6 @@
                     <tbody>
                         @foreach($periods as $period)
                             <tr>
-                                <th scope="row">{{ $period->id }}</th>
                                 <td>{{ $period->description }}</td>
                                 <td>
                                     @if ($period->status == "1")

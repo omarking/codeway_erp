@@ -38,8 +38,7 @@
                 <table wire:poll.10000ms id="vacantTable" class="table table-white table-striped table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Vacantes</th>
+                            <th scope="col">Vacante</th>
                             <th scope="col">Descripción</th>
                             <th scope="col">Estado</th>
                             <th scope="col">Creado</th>
@@ -50,7 +49,6 @@
                     <tbody>
                         @foreach($vacants as $vacant)
                             <tr>
-                                <th scope="row">{{ $vacant->id }}</th>
                                 <td>{{ $vacant->name }}</td>
                                 <td>{{ $vacant->description }}</td>
                                 <td>

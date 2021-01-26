@@ -59,10 +59,12 @@ class AbsenceComponent extends Component
 
     public function store()
     {
-        $validateData = $this->validate([
+        $this->validate([
             'description' => 'required|max:200|unique:absences,description',
         ]);
-        Absence::create($validateData);
+        Absence::create([
+            'description'   => $this->description,
+        ]);
         session()->flash('message', 'Ausencia creada correctamente.');
         $this->clean();
         $this->emit('absenceCreatedEvent');
@@ -157,8 +159,7 @@ class AbsenceComponent extends Component
             'livewire.absence.absence-component',
             [
                 'absences' => Absence::latest('id')
-                    ->where('id', 'LIKE', "%{$this->search}%")
-                    ->orWhere('description', 'LIKE', "%{$this->search}%")
+                    ->where('description', 'LIKE', "%{$this->search}%")
                     ->paginate($this->perPage)
             ],
             compact('vacaciones')

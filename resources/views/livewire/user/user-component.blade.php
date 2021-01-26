@@ -40,31 +40,22 @@
                         <tr>
                             <th scope="col">Avatar</th>
                             <th scope="col">Nombre</th>
-                            {{-- <th scope="col">Telefono</th> --}}
                             <th scope="col">Usuario</th>
                             <th scope="col">Email</th>
-                            {{-- <th scope="col">Corporativo</th> --}}
                             <th scope="col">Roles</th>
                             <th scope="col">Departamentos</th>
-                            {{-- <th scope="col">Estado</th> --}}
                             <th scope="colgroup">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($users as $user)
                             <tr>
-                                {{-- <th scope="row">{{ $user->id }}</th> --}}
                                 <th>
                                     <img src="{{ asset('storage/users/' . $user->profile->avatar) }}" width="90px" class="rounded-circle" alt="usuario"{{-- "{{ $user->profile->avatar }}" --}}>
                                 </th>
-                                {{-- <th>
-                                    {{$user->profile->avatar }}
-                                </th> --}}
                                 <td>{{ $user->nameUser }} {{ $user->firstLastname }} {{ $user->secondLastname }}</td>
-                                {{-- <td>{{ $user->phone }}</td> --}}
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->email }}</td>
-                                {{-- <td>{{ $user->corporative }}</td> --}}
                                 <td>
                                     @isset( $user->roles[0]->name )
                                         {{ $user->roles[0]->name }}
@@ -79,13 +70,6 @@
                                         Sin Departamento
                                     @endisset
                                 </td>
-                                {{-- <td>
-                                    @if ($user->status == "1")
-                                        Activo
-                                    @else
-                                        Inactivo
-                                    @endif
-                                </td> --}}
                                 <td>
                                     <div class="btn-group" role="group">
                                         <button type="button" wire:click.prevent="show({{ $user->id }})" class="btn btn-info" data-toggle="modal" data-target="#showUser">Mostrar</button>

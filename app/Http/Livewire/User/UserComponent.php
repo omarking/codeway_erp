@@ -131,17 +131,14 @@ class UserComponent extends Component
         if ($this->role) {
             $user->roles()->sync($this->role);
         }
-
         if ($this->departament) {
             $user->departaments()->sync($this->departament);
         }
-
-        $perfil = Profile::create([
+        Profile::create([
             'user_id' => $user->id,
         ]);
         /* Envio de email */
         /* Mail::to('admin@admin.com')->queue(new MessageReceived($user)); */
-
         session()->flash('message', 'Usuario creado correctamente.');
         $this->clean();
         $this->emit('userCreatedEvent');
@@ -195,7 +192,6 @@ class UserComponent extends Component
             } else {
                 $this->other       = $user->profile->other;
             }
-
             $this->position       = $user->profile->position_id;
         } else {
             $this->user_profile   = "nothing";
@@ -238,7 +234,6 @@ class UserComponent extends Component
         $this->name           = $user->name;
         $this->email          = $user->email;
         $this->corporative    = $user->corporative;
-        /* $this->password       = $user->password; */
         $this->status         = $user->status;
         $this->accion         = "update";
         $this->user           = $user;
@@ -263,7 +258,6 @@ class UserComponent extends Component
             'name'           => 'required|string|max:100|unique:users,name,' . $this->user_id,
             'email'          => 'required|email|max:100|unique:users,email,' . $this->user_id,
             'corporative'    => 'required|email|max:100|unique:users,corporative,' . $this->user_id,
-            /* 'password'       => 'required|string|min:8|max:100', */
             'role'           => 'required',
             'departament'    => 'required',
         ]);
@@ -277,18 +271,14 @@ class UserComponent extends Component
                 'name'            => $this->name,
                 'email'           => $this->email,
                 'corporative'     => $this->corporative,
-                /* 'password'        => Hash::make($this->password), */
                 'status'          => $this->status,
             ]);
-
             if ($this->role) {
                 $user->roles()->sync($this->role);
             }
-
             if ($this->departament) {
                 $user->departaments()->sync($this->departament);
             }
-
             session()->flash('message', 'Usuario actualizado correctamente.');
             $this->clean();
             $this->emit('userUpdatedEvent');
@@ -359,8 +349,7 @@ class UserComponent extends Component
             [
                 'users' => User::latest('id')
                     ->with('roles', 'profile', 'departaments')
-                    ->where('id', 'LIKE', "%{$this->search}%")
-                    ->orWhere('nameUser', 'LIKE', "%{$this->search}%")
+                    ->where('nameUser', 'LIKE', "%{$this->search}%")
                     ->orWhere('firstLastname', 'LIKE', "%{$this->search}%")
                     ->orWhere('secondLastname', 'LIKE', "%{$this->search}%")
                     ->orWhere('phone', 'LIKE', "%{$this->search}%")

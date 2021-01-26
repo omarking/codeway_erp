@@ -32,7 +32,7 @@
                                 <h5>{{ $responsable }}</h5>
                             </div>
                             <div class="form-group">
-                                <label class="text-muted" for="description">Full acceso:</label>
+                                <label class="text-muted" for="description">Acceso total:</label>
                                 @if ($fullAccess == "yes")
                                     <h5>Sí</h5>
                                 @else

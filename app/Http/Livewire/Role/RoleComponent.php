@@ -80,14 +80,20 @@ class RoleComponent extends Component
 
     public function store()
     {
-        $validateData = $this->validate([
+        $this->validate([
             'name'         => 'required|string|max:100|unique:roles,name',
             'slug'         => 'required|string|max:100|unique:roles,slug',
             'description'  => 'required|string',
             'responsable'  => 'required|string',
             'fullAccess'   => 'required|in:yes,no',
         ]);
-        $role = Role::create($validateData);
+        $role = Role::create([
+            'name'          => $this->name,
+            'slug'          => $this->slug,
+            'description'   => $this->description,
+            'responsable'   => $this->responsable,
+            'fullAccess'    => $this->fullAccess,
+        ]);
         $role->permissions()->sync($this->permission);
         session()->flash('message', 'Rol creado correctamente.');
         $this->clean();
@@ -217,8 +223,7 @@ class RoleComponent extends Component
             'livewire.role.role-component',
             [
                 'roles' => Role::latest('id')
-                    ->where('id', 'LIKE', "%{$this->search}%")
-                    ->orWhere('name', 'LIKE', "%{$this->search}%")
+                    ->where('name', 'LIKE', "%{$this->search}%")
                     ->orWhere('slug', 'LIKE', "%{$this->search}%")
                     ->orWhere('description', 'LIKE', "%{$this->search}%")
                     ->orWhere('responsable', 'LIKE', "%{$this->search}%")

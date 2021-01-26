@@ -38,7 +38,6 @@
                 <table wire:poll.10000ms id="absenceTable" class="table table-white table-striped table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
                             <th scope="col">Ausencia</th>
                             <th scope="col">Estado</th>
                             <th scope="col">Creado</th>
@@ -49,7 +48,6 @@
                     <tbody>
                         @foreach($absences as $absence)
                             <tr>
-                                <th scope="row">{{ $absence->id }}</th>
                                 <td>{{ $absence->description }}</td>
                                 <td>
                                     @if ($absence->status == "1")

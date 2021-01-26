@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title_postfix', 'Departamentos')
+@section('title_postfix', 'Vacaciones')
 
 @section('css')
     <link rel="stylesheet" href="/css/admin_custom.css">

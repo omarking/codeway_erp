@@ -38,8 +38,7 @@
                 <table wire:poll.10000ms id="departamentTable" class="table table-white table-striped table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Nombre</th>
+                            <th scope="col">Departamento</th>
                             <th scope="col">Descripción</th>
                             <th scope="col">Estado</th>
                             <th scope="col">Creado</th>
@@ -50,7 +49,6 @@
                     <tbody>
                         @foreach($departaments as $departament)
                             <tr>
-                                <th scope="row">{{ $departament->id }}</th>
                                 <td>{{ $departament->name }}</td>
                                 <td>{{ $departament->description }}</td>
                                 <td>

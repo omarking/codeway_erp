@@ -59,10 +59,12 @@ class PeriodComponent extends Component
 
     public function store()
     {
-        $validateData = $this->validate([
+        $this->validate([
             'description' => 'required|numeric|unique:periods,description',
         ]);
-        Period::create($validateData);
+        Period::create([
+            'description'   => $this->description,
+        ]);
         session()->flash('message', 'Periodo creado correctamente.');
         $this->clean();
         $this->emit('periodCreatedEvent');
@@ -156,8 +158,7 @@ class PeriodComponent extends Component
             'livewire.period.period-component',
             [
                 'periods' => Period::latest('id')
-                    ->where('id', 'LIKE', "%{$this->search}%")
-                    ->orWhere('description', 'LIKE', "%{$this->search}%")
+                    ->where('description', 'LIKE', "%{$this->search}%")
                     ->paginate($this->perPage)
             ],
             compact('vacaciones')

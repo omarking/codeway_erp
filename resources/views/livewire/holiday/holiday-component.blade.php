@@ -54,7 +54,6 @@
                     <tbody>
                         @foreach($holidays as $holiday)
                             <tr>
-                                {{-- <th scope="row">{{ $holiday->id }}</th> --}}
                                 <th>
                                     @isset($holiday->users->id)
                                         {{ $holiday->users->name }}

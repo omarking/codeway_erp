@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <div class="modal-header bg-success">
-                <h5 class="modal-title" id="updateClassModal">MODIFICAR POSICION</h5>
+                <h5 class="modal-title" id="updateClassModal">MODIFICAR POSICIÓN</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -46,7 +46,7 @@
                     <div wire:loading wire:loading.class="bg-white">Procesando datos...</div>
                 </div>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" wire:click.prevent="clean()">Cancelar</button>
-                <button type="button" class="btn btn-success" wire:click.prevent="update()">Actualizar Posicion</button>
+                <button type="button" class="btn btn-success" wire:click.prevent="update()">Actualizar Posición</button>
             </div>
         </div>
     </div>

@@ -179,8 +179,7 @@ class VacantComponent extends Component
             'livewire.vacant.vacant-component',
             [
                 'vacants' => Vacant::latest('id')
-                    ->where('id', 'LIKE', "%{$this->search}%")
-                    ->orWhere('name', 'LIKE', "%{$this->search}%")
+                    ->where('name', 'LIKE', "%{$this->search}%")
                     ->orWhere('description', 'LIKE', "%{$this->search}%")
                     ->paginate($this->perPage)
             ]

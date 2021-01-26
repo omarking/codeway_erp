@@ -25,12 +25,19 @@
 {{-- En esta seccion va algun estilo CSS que queramos agregar --}}
 @section('css')
     <link rel="stylesheet" href="/css/admin_custom.css">
+
+    {{-- <link rel="stylesheet" href="cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
+    <link rel="stylesheet" href="cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"> --}}
 @stop
 {{-- Aqui va un script JS que queramos agregar como un script de un plugin --}}
 @section('js')
-    <script>
+    {{-- <script src="cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
-    </script>
+    <script>
+        toastr.success('Have fun storming the castle!', 'Miracle Max Says')
+        // Display an info toast with no title
+        toastr.info('Are you the 6 fingered man?')
+    </script> --}}
 @stop
 
 {{-- Es la imagen que mostrara cuando aún no termine de cargar completamente la pagina --}}

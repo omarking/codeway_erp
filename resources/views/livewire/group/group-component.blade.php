@@ -38,8 +38,7 @@
                 <table wire:poll.10000ms id="groupTable" class="table table-white table-striped table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Nombre</th>
+                            <th scope="col">Grupo</th>
                             <th scope="col">Descripción</th>
                             <th scope="col">Estado</th>
                             <th scope="col">Creado</th>
@@ -50,7 +49,6 @@
                     <tbody>
                         @foreach($groups as $group)
                             <tr>
-                                <th scope="row">{{ $group->id }}</th>
                                 <td>{{ $group->name }}</td>
                                 <td>{{ $group->description }}</td>
                                 <td>

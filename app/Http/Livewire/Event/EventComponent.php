@@ -145,8 +145,8 @@ class EventComponent extends Component
             'textColor'     => 'required|string|max:100',
         ]);
         if ($this->event_id) {
-            $positions = Event::find($this->event_id);
-            $positions->update([
+            $event = Event::find($this->event_id);
+            $event->update([
                 'title'         => $this->title,
                 'slug'          => Str::slug($this->title, '-'),
                 'description'   => $this->description,
@@ -204,21 +204,21 @@ class EventComponent extends Component
         if ($this->search != '') {
             $this->page = 1;
         }
-        if(isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)){
+        if (isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)) {
             $this->reset(['perPage']);
         }
 
         return view(
             'livewire.event.event-component',
-            ['events' => Event::latest('id')
-                ->where('id', 'LIKE', "%{$this->search}%")
-                ->orWhere('title', 'LIKE', "%{$this->search}%")
-                ->orWhere('description', 'LIKE', "%{$this->search}%")
-                ->orWhere('start', 'LIKE', "%{$this->search}%")
-                ->orWhere('end', 'LIKE', "%{$this->search}%")
-                ->orWhere('color', 'LIKE', "%{$this->search}%")
-                ->orWhere('textColor', 'LIKE', "%{$this->search}%")
-                ->paginate($this->perPage)
+            [
+                'events' => Event::latest('id')
+                    ->where('title', 'LIKE', "%{$this->search}%")
+                    ->orWhere('description', 'LIKE', "%{$this->search}%")
+                    ->orWhere('start', 'LIKE', "%{$this->search}%")
+                    ->orWhere('end', 'LIKE', "%{$this->search}%")
+                    ->orWhere('color', 'LIKE', "%{$this->search}%")
+                    ->orWhere('textColor', 'LIKE', "%{$this->search}%")
+                    ->paginate($this->perPage)
             ]
         );
     }

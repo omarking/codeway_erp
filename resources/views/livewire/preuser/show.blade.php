@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title" id="showClassModal">MOSTRAR USUARIO</h5>
+                <h5 class="modal-title" id="showClassModal">MOSTRAR ASPIRANTE</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -10,7 +10,7 @@
             <div class="modal-body">
                 <form>
                     <div class="form-group">
-                        <label class="text-muted" for="name">Usuario:</label>
+                        <label class="text-muted" for="name">Aspirante:</label>
                         <h5>{{ $name }} {{ $lastname }}</h5>
                     </div>
                     <div class="form-group">

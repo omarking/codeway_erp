@@ -2,13 +2,10 @@
 
 namespace App\Http\Livewire\Profile;
 
-use App\Models\Category;
-use App\Models\Clas;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
-use Livewire\WithPagination;
 
 class MiprojectsComponent extends Component
 {

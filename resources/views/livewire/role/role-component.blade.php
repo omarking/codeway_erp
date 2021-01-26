@@ -38,11 +38,10 @@
                 <table wire:poll.10000ms id="roleTable" class="table table-white table-striped table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Roles</th>
+                            <th scope="col">Rol</th>
                             <th scope="col">Slug</th>
                             <th scope="col">Descrpción</th>
-                            <th scope="col">Full Access</th>
+                            <th scope="col">Acceso total</th>
                             <th scope="col">Estado</th>
                             <th scope="col">Creado</th>
                             <th scope="col">Actualizado</th>
@@ -52,7 +51,6 @@
                     <tbody>
                         @foreach($roles as $rol)
                             <tr>
-                                <th scope="row">{{ $rol->id }}</th>
                                 <td>{{ $rol->name }}</td>
                                 <td>{{ $rol->slug }}</td>
                                 <td>{{ $rol->description }}</td>

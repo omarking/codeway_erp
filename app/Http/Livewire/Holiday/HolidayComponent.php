@@ -284,8 +284,7 @@ class HolidayComponent extends Component
             [
                 'holidays' => Holiday::latest('id')
                     ->with('absence', 'period', 'users')
-                    ->where('id', 'LIKE', "%{$this->search}%")
-                    ->orWhere('days', 'LIKE', "%{$this->search}%")
+                    ->where('days', 'LIKE', "%{$this->search}%")
                     ->orWhere('beginDate', 'LIKE', "%{$this->search}%")
                     ->orWhere('endDate', 'LIKE', "%{$this->search}%")
                     ->orWhere('inProcess', 'LIKE', "%{$this->search}%")

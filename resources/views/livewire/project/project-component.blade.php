@@ -41,7 +41,6 @@
                             <th scope="col">Imagen</th>
                             <th scope="col">Clave</th>
                             <th scope="col">Nombre</th>
-                            {{-- <th scope="col">Descripción</th> --}}
                             <th scope="col">Responsable</th>
                             <th scope="col">Estado</th>
                             <th scope="col">Clase</th>
@@ -55,10 +54,8 @@
                                 <th>
                                     <img width="90%" class="img-fluid" class="rounded-sm" src="{{ asset('storage/projects/' . $project->avatar) }}" alt="{{-- {{ $project->avatar }} --}}">
                                 </th>
-                                {{-- <th scope="row">{{ $project->id }}</th> --}}
                                 <td>{{ $project->key }}</td>
                                 <td><a class="color-bg" href="{{ route('project.show', $project) }}">{{ $project->name }}</a></td>
-                                {{-- <td>{{ $project->description }}</td> --}}
                                 <td>{{ $project->responsable }}</td>
                                 <td>
                                     @if($project->status == 1)

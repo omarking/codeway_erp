@@ -38,7 +38,6 @@
                 <table wire:poll.10000ms id="eventTable" class="table table-white table-striped table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
                             <th scope="col">Titulo</th>
                             <th scope="col">Descripción</th>
                             <th scope="col">Inicio</th>
@@ -54,7 +53,6 @@
                     <tbody>
                         @foreach($events as $event)
                             <tr>
-                                <th scope="row">{{ $event->id }}</th>
                                 <td>{{ $event->title }}</td>
                                 <td>{{ $event->description }}</td>
                                 <td>{{ $event->start }}</td>

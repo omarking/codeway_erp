@@ -59,10 +59,12 @@ class CategoryComponent extends Component
 
     public function store()
     {
-        $validateData = $this->validate([
+        $this->validate([
             'description' => 'required|max:200|unique:categories,description',
         ]);
-        Category::create($validateData);
+        Category::create([
+            'description'   => $this->description,
+        ]);
         session()->flash('message', 'Categoria creada correctamente.');
         $this->clean();
         $this->emit('categoryCreatedEvent');
@@ -155,55 +157,12 @@ class CategoryComponent extends Component
 
         return view(
             'livewire.category.category-component',
-            ['categories' => Category::latest('id')
-                ->where('id', 'LIKE', "%{$this->search}%")
-                ->orWhere('description', 'LIKE', "%{$this->search}%")
-                ->paginate($this->perPage)
+            [
+                'categories' => Category::latest('id')
+                    ->where('description', 'LIKE', "%{$this->search}%")
+                    ->paginate($this->perPage)
             ],
             compact('proyectos')
         );
     }
-
-    /* Codigo útil */
-
-    /* public $contentIsVisible = false;
-
-    public $rules = [
-        'description'  => 'required|string|max:200|unique:categories,description',
-    ];
-
-    protected $messages = [
-        'description.required' => 'La descripción es de ahuevo cabron.',
-        'description.unique' => 'La descripción debe ser unica perro, esa ya esta en uso.',
-    ];
-
-    protected $validationAttributes = [
-        'description' => 'descripción'
-    ];
-
-    public function updated($propertyName)
-    {
-        $this->validateOnly($propertyName);
-    }
-
-    public function save()
-    {
-        $validateData = $this->validate();
-
-        Category::create($validateData);
-
-        session()->flash('message', 'Categoria agregada correctamente XD.');
-
-        $this->clean();
-    }
-    public function toggleContent()
-    {
-        if ($this->contentIsVisible == true) {
-            $this->contentIsVisible == false;
-        } else {
-            $this->contentIsVisible == true;
-        }
-    } */
-
-    /* Hasta aqui termina el código útil */
 }

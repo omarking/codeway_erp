@@ -38,8 +38,7 @@
                 <table wire:poll.10000ms id="categoryTable" class="table table-white table-striped table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Categorias</th>
+                            <th scope="col">Categoria</th>
                             <th scope="col">Estado</th>
                             <th scope="col">Creado</th>
                             <th scope="col">Actualizado</th>
@@ -49,7 +48,6 @@
                     <tbody>
                         @foreach($categories as $category)
                             <tr>
-                                <th scope="row">{{ $category->id }}</th>
                                 <td>{{ $category->description }}</td>
                                 <td>
                                     @if ($category->status == "1")
@@ -98,74 +96,4 @@
     @include('livewire.category.show')
     @include('livewire.category.update')
     @include('livewire.category.delete')
-    {{-- <div class="card">
-        @if (session()->has('message'))
-            <div class="alert alert-success">
-                {{ session('message') }}
-            </div>
-        @endif
-    </div>
-
-    <div class="card" wire:offline.class="bg-red-300">
-        <div class="card-header">
-            <h1 class="card-title">Agregar categoria</h1>
-        </div>
-        <form wire:submit.prevent="save">
-            <div class="card-body">
-                <span wire:dirty wire:target="description">validando...</span>
-                <input wire:dirty.class="border-red-500" wire:model.lazy="description" class="form-control" type="text" wire:model="description">
-                @error('description') <span class="error">{{ $message }}</span> @enderror
-            </div>
-            <div class="card-footer">
-                <button wire:offline.attr="disabled" class="btn btn-success" type="submit">Save</button>
-            </div>
-        </form>
-    </div>
-
-    <div >
-        <div wire:loading wire:loading.class="bg-gray">Procesando datos 1</div>
-        <div wire:loading.flex>Procesando datos 2</div>
-        <div wire:loading.grid>Procesando datos 3</div>
-        <div wire:loading.inline>Procesando datos 4</div>
-        <div wire:loading.table>Procesando datos 5</div>
-    </div>
-
-    <div class="card">
-        <div wire:loading.remove>
-            Esperando a ocultarse...
-        </div>
-    </div> --}}
-
-    {{-- Actualizara el componenete cada 2 seg en el que se agrege este de wire:poll --}}
-    {{-- <div class="card">
-        <div wire:poll.15000ms>
-            Current time: {{ now() }}
-        </div>
-    </div> --}}
-
-    {{-- <div class="card">
-        <button wire:click.prefetch="toggleContent">Ver Contenido</button>
-
-        @if ($contentIsVisible)
-            <span>Algo se debera de mostrar</span>
-        @endif
-    </div> --}}
-
-    {{-- Muestra al usuario si ha pedido la conexion a intenet --}}
-    {{-- <div class="card">
-        <div wire:offline>
-            Conexion a intenet perdida, revisa tu configuración
-        </div>
-    </div>
-
-    <div class="card">
-        <div x-data="{ open: false }">
-            <button @click="open = true">Show More...</button>
-
-            <ul x-show="open" @click.away="open = false">
-                <li><button wire:click="archive">Archive</button></li>
-                <li><button wire:click="delete">Delete</button></li>
-            </ul>
-        </div>
-    </div> --}}
 </div>

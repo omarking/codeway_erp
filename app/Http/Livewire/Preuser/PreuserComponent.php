@@ -70,13 +70,18 @@ class PreuserComponent extends Component
 
     public function store()
     {
-        $validateData = $this->validate([
+        $this->validate([
             'name'         => 'required|string|max:100',
             'lastname'     => 'required|string|max:100',
             'phone'        => 'required|numeric|unique:preusers,phone',
             'email'        => 'required|email|max:100|unique:preusers,email',
         ]);
-        Preuser::create($validateData);
+        Preuser::create([
+            'name'          => $this->name,
+            'lastname'      => $this->lastname,
+            'phone'         => $this->phone,
+            'email'         => $this->email,
+        ]);
         session()->flash('message', 'Usuario creado correctamente.');
         $this->clean();
         $this->emit('preuserCreatedEvent');
@@ -183,8 +188,7 @@ class PreuserComponent extends Component
             'livewire.preuser.preuser-component',
             [
                 'preusers' => Preuser::latest('id')
-                    ->where('id', 'LIKE', "%{$this->search}%")
-                    ->orWhere('name', 'LIKE', "%{$this->search}%")
+                    ->where('name', 'LIKE', "%{$this->search}%")
                     ->orWhere('lastname', 'LIKE', "%{$this->search}%")
                     ->orWhere('phone', 'LIKE', "%{$this->search}%")
                     ->orWhere('email', 'LIKE', "%{$this->search}%")

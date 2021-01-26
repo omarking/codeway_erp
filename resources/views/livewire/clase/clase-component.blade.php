@@ -38,8 +38,7 @@
                 <table wire:poll.10000ms id="classTable" class="table table-white table-striped table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Clases</th>
+                            <th scope="col">Clase</th>
                             <th scope="col">Estado</th>
                             <th scope="col">Creado</th>
                             <th scope="col">Actualizado</th>
@@ -49,7 +48,6 @@
                     <tbody>
                         @foreach($clases as $clase)
                             <tr>
-                                <th scope="row">{{ $clase->id }}</th>
                                 <td>{{ $clase->description }}</td>
                                 <td>
                                     @if ($clase->status == "1")

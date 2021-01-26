@@ -59,10 +59,12 @@ class TypeComponent extends Component
 
     public function store()
     {
-        $validateData = $this->validate([
+        $this->validate([
             'description' => 'required|max:100|unique:types,description',
         ]);
-        Type::create($validateData);
+        Type::create([
+            'description'   => $this->description,
+        ]);
         session()->flash('message', 'Tipo creado correctamente.');
         $this->clean();
         $this->emit('typesCreatedEvent');
@@ -156,11 +158,11 @@ class TypeComponent extends Component
 
         return view(
             'livewire.type.type-component',
-            ['types' => Type::latest('id')
-                ->where('id', 'LIKE', "%{$this->search}%")
-                ->orWhere('description', 'LIKE', "%{$this->search}%")
-                ->orWhere('status', 'LIKE', "%{$this->search}%")
-                ->paginate($this->perPage)
+            [
+                'types' => Type::latest('id')
+                    ->where('description', 'LIKE', "%{$this->search}%")
+                    ->orWhere('status', 'LIKE', "%{$this->search}%")
+                    ->paginate($this->perPage)
             ],
             compact('tareas')
         );

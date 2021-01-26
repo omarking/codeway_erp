@@ -59,10 +59,12 @@ class ClaseComponent extends Component
 
     public function store()
     {
-        $validateData = $this->validate([
+        $this->validate([
             'description' => 'required|max:200|unique:class,description',
         ]);
-        Clas::create($validateData);
+        Clas::create([
+            'description'   => $this->description,
+        ]);
         session()->flash('message', 'Clase creada correctamente.');
         $this->clean();
         $this->emit('classCreatedEvent');
@@ -157,8 +159,7 @@ class ClaseComponent extends Component
             'livewire.clase.clase-component',
             [
                 'clases' => Clas::latest('id')
-                    ->where('id', 'LIKE', "%{$this->search}%")
-                    ->orWhere('description', 'LIKE', "%{$this->search}%")
+                    ->where('description', 'LIKE', "%{$this->search}%")
                     ->paginate($this->perPage)
             ],
             compact('proyectos')

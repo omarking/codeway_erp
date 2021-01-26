@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title_postfix', 'Estado')
+@section('title_postfix', 'Estados')
 
 @section('css')
     <link rel="stylesheet" href="/css/admin_custom.css">
