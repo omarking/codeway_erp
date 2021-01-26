@@ -29,6 +29,7 @@ class Project extends Model
         'avatar',
         'key',
         'name',
+        'slug',
         'description',
         'status',
         'responsable',
@@ -57,7 +58,7 @@ class Project extends Model
     /* Un proyecto pertenece a uno o muchos usuarios */
     public function users()
     {
-        return $this->belongsToMany(Users::class)->withTimestamps();
+        return $this->belongsToMany(User::class)->withTimestamps();
     }
 
     /* Un proyecto tiene muchos comentarios */
@@ -65,4 +66,13 @@ class Project extends Model
     {
         return $this->morphMany(Comment::class, 'commentable'); //commentable_id y commentable_type
     }
+
+    /*
+        Con este metodo estamos mostrando el slug en vez de mostrar el id del permiso
+        esto no permite trabajar con Url's amigables para los usuarios
+    */
+    /* public function getRouteKeyName()
+    {
+        return 'slug';
+    } */
 }

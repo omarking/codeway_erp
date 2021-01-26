@@ -12,4 +12,10 @@ class ProfileController extends Controller
     {
         return view('profile.index');
     }
+
+    /* Retorna la vista donde se vera el departamento del usuario */
+    public function departament(/* User $user */)
+    {
+        return view('profile.departament');
+    }
 }

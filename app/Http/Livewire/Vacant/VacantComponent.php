@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Vacant;
 use App\Models\Vacant;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Str;
 
 class VacantComponent extends Component
 {
@@ -66,12 +67,17 @@ class VacantComponent extends Component
 
     public function store()
     {
-        $validateData = $this->validate([
+        $this->validate([
             'name'         => 'required|string|max:200|unique:vacants,name',
             'description'  => 'required|string',
             'quantity'     => 'required|numeric',
         ]);
-        Vacant::create($validateData);
+        Vacant::create([
+            'name'          => $this->name,
+            'slug'          => Str::slug($this->name, '-'),
+            'description'   => $this->description,
+            'quantity'      => $this->quantity,
+        ]);
         session()->flash('message', 'Vacante creada correctamente.');
         $this->clean();
         $this->emit('vacantCreatedEvent');
@@ -115,6 +121,7 @@ class VacantComponent extends Component
             $vacants = Vacant::find($this->vacant_id);
             $vacants->update([
                 'name'          => $this->name,
+                'slug'          => Str::slug($this->name, '-'),
                 'description'   => $this->description,
                 'quantity'      => $this->quantity,
                 'status'        => $this->status,

@@ -37,6 +37,31 @@
                         <label class="text-muted" for="updated_at">Actualizado:</label>
                         <h5>{{ $updated_at }}</h5>
                     </div>
+                    <div class="form-group">
+                        <label class="text-muted text-uppercase" for="updated_at">Grupos que pertencen a este departamento</label>
+                        <div class="table-responsive">
+                            <table class="table table-white table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Grupo</th>
+                                        <th scope="col">Descripción</th>
+                                        <th scope="col">Responsable</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($groups as $group)
+                                        @if(is_array($departament_group) && in_array("$group->id", $departament_group))
+                                            <tr>
+                                                <td>{{ $group->name }}</td>
+                                                <td>{{ $group->description }}</td>
+                                                <td>{{ $group->responsable }}</td>
+                                            </tr>
+                                        @endif
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">

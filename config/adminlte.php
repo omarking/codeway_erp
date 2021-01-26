@@ -595,6 +595,11 @@ return [
             'url'     => 'profile',
             'icon'    => 'fas fa-fw fa-user-tie',
         ],
+        [
+            'text'    => 'Mi Departamento',
+            'url'     => 'mydepartament',
+            'icon'    => 'fas fa-fw fa-house-user',
+        ],
         ['header' => 'labels'],
         [
             'text'       => 'important',

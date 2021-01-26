@@ -19,6 +19,7 @@ class CreateProjectsTable extends Migration
             $table->string('avatar')->nullable()->default('project.png');
             $table->string('key', 100)->unique();
             $table->string('name', 200)->unique();
+            $table->string('slug')->unique();
             $table->text('description');
             $table->boolean('status')->default('1');
             $table->string('responsable', 100);

@@ -19,7 +19,7 @@ class Departament extends Model
     protected $table = 'departaments';
 
     protected $dates = ['deleted_at'];
-    
+
     /**
      * The attributes that are mass assignable.
      *
@@ -42,7 +42,7 @@ class Departament extends Model
     /* Un departamento pertenece a uno o muchos grupos */
     public function groups()
     {
-        return $this->belongsToMany(Groups::class)->withTimestamps();
+        return $this->belongsToMany(Group::class)->withTimestamps();
     }
 
     /* Un departamento tiene muchos comentarios */

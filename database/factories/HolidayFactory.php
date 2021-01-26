@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Holiday;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 class HolidayFactory extends Factory
 {
@@ -21,7 +22,9 @@ class HolidayFactory extends Factory
      */
     public function definition()
     {
+        $title = $this->faker->sentence(5);
         return [
+            'slug'          => Str::slug($title,'-'),
             'days'          => rand(1, 6),
             'beginDate'     => '2020-01-01',
             'endDate'       => '2021-01-01',

@@ -19,7 +19,7 @@ class Event extends Model
     protected $table = 'events';
 
     protected $dates = ['deleted_at'];
-    
+
     /**
      * The attributes that are mass assignable.
      *
@@ -27,6 +27,7 @@ class Event extends Model
      */
     protected $fillable = [
         'title',
+        'slug',
         'description',
         'start',
         'end',

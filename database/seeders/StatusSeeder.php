@@ -15,15 +15,15 @@ class StatusSeeder extends Seeder
     public function run()
     {
         $status = Statu::create([
-            'description' => 'En proceso',
+            'description' => 'Backlog',
         ]);
 
         $status = Statu::create([
-            'description' => 'Pendiente',
+            'description' => 'Para desarrollo',
         ]);
 
         $status = Statu::create([
-            'description' => 'En desarrollo',
+            'description' => 'En curso',
         ]);
 
         $status = Statu::create([

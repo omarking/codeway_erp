@@ -105,6 +105,22 @@
                             </span>
                         @enderror
                     </div>
+                    <div class="form-group">
+                        <label class="text-muted" for="departament">Departamento:</label>
+                        <select wire:model="departament" class="form-control @error('departament') is-invalid @enderror" name="departament" wire:dirty.class="bg-primary" id="departament">
+                            <option value="">--Seleccione el departamento--</option>
+                            @foreach($departamentss as $departament)
+                                <option value="{{$departament->id}}">
+                                    {{ $departament->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('departament')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">

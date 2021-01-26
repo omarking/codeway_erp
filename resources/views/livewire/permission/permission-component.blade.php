@@ -4,9 +4,9 @@
             <div class="text-xl-left">
                 <h3 class="card-title text-uppercase">Permisos</h3>
             </div>
-            <div>
+            {{-- <div>
                 <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#createPermission">Agregar Permiso</button>
-            </div>
+            </div> --}}
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -68,7 +68,7 @@
                                     <div class="btn-group" role="group">
                                         <button type="button" wire:click.prevent="show({{ $permiso->id }})" class="btn btn-info" data-toggle="modal" data-target="#showPermission">Mostrar</button>
                                         <button type="button" wire:click.prevent="edit({{ $permiso->id }})" class="btn btn-success" data-toggle="modal" data-target="#updatePermission">Editar</button>
-                                        <button type="button" wire:click.prevent="delete({{ $permiso->id }})" class="btn btn-danger" data-toggle="modal" data-target="#deletePermission">Borrar</button>
+                                        {{-- <button type="button" wire:click.prevent="delete({{ $permiso->id }})" class="btn btn-danger" data-toggle="modal" data-target="#deletePermission">Borrar</button> --}}
                                     </div>
                                 </td>
                             </tr>

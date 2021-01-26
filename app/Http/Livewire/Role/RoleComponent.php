@@ -209,19 +209,20 @@ class RoleComponent extends Component
         if ($this->search != '') {
             $this->page = 1;
         }
-        if(isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)){
+        if (isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)) {
             $this->reset(['perPage']);
         }
 
         return view(
             'livewire.role.role-component',
-            ['roles' => Role::latest('id')
-                ->where('id', 'LIKE', "%{$this->search}%")
-                ->orWhere('name', 'LIKE', "%{$this->search}%")
-                ->orWhere('slug', 'LIKE', "%{$this->search}%")
-                ->orWhere('description', 'LIKE', "%{$this->search}%")
-                ->orWhere('responsable', 'LIKE', "%{$this->search}%")
-                ->paginate($this->perPage)
+            [
+                'roles' => Role::latest('id')
+                    ->where('id', 'LIKE', "%{$this->search}%")
+                    ->orWhere('name', 'LIKE', "%{$this->search}%")
+                    ->orWhere('slug', 'LIKE', "%{$this->search}%")
+                    ->orWhere('description', 'LIKE', "%{$this->search}%")
+                    ->orWhere('responsable', 'LIKE', "%{$this->search}%")
+                    ->paginate($this->perPage)
             ],
             compact('permissions')
         );

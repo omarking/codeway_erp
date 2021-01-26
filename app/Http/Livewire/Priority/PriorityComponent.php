@@ -156,10 +156,11 @@ class PriorityComponent extends Component
 
         return view(
             'livewire.priority.priority-component',
-            ['priorities' => Priority::latest('id')
-                ->where('id', 'LIKE', "%{$this->search}%")
-                ->orWhere('description', 'LIKE', "%{$this->search}%")
-                ->paginate($this->perPage)
+            [
+                'priorities' => Priority::latest('id')
+                    ->where('id', 'LIKE', "%{$this->search}%")
+                    ->orWhere('description', 'LIKE', "%{$this->search}%")
+                    ->paginate($this->perPage)
             ],
             compact('tareas')
         );

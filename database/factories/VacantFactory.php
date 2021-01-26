@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Vacant;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 class VacantFactory extends Factory
 {
@@ -21,8 +22,10 @@ class VacantFactory extends Factory
      */
     public function definition()
     {
+        $name = $this->faker->unique()->sentence();
         return [
-            'name'          => $this->faker->unique()->sentence(),
+            'name'          => $name,
+            'slug'          => Str::slug($name,'-'),
             'description'   => $this->faker->text(),
             'quantity'      => rand(1,20),
         ];

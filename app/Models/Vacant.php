@@ -27,6 +27,7 @@ class Vacant extends Model
      */
     protected $fillable = [
         'name',
+        'slug',
         'description',
         'quantity',
         'status',

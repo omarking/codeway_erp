@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Event;
 use App\Models\Event;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Str;
 
 class EventComponent extends Component
 {
@@ -78,7 +79,7 @@ class EventComponent extends Component
 
     public function store()
     {
-        $validateData = $this->validate([
+        $this->validate([
             'title'         => 'required|string|max:200|unique:events,title',
             'description'   => 'required|string',
             'start'         => 'required|date',
@@ -86,7 +87,15 @@ class EventComponent extends Component
             'color'         => 'required|string|max:100',
             'textColor'     => 'required|string|max:100',
         ]);
-        Event::create($validateData);
+        Event::create([
+            'title'         => $this->title,
+            'slug'          => Str::slug($this->title, '-'),
+            'description'   => $this->description,
+            'start'         => $this->start,
+            'end'           => $this->end,
+            'color'         => $this->color,
+            'textColor'     => $this->textColor,
+        ]);
         session()->flash('message', 'Evento creado correctamente.');
         $this->clean();
         $this->emit('eventCreatedEvent');
@@ -139,6 +148,7 @@ class EventComponent extends Component
             $positions = Event::find($this->event_id);
             $positions->update([
                 'title'         => $this->title,
+                'slug'          => Str::slug($this->title, '-'),
                 'description'   => $this->description,
                 'start'         => $this->start,
                 'end'           => $this->end,

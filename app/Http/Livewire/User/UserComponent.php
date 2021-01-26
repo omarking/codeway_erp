@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\User;
 
 use App\Mail\MessageReceived;
+use App\Models\Departament;
 use App\Models\Profile;
 use App\Models\Role;
 use App\Models\User;
@@ -23,7 +24,9 @@ class UserComponent extends Component
 
     public $user_id, $nameUser, $firstLastname, $secondLastname, $phone, $name, $email, $corporative, $password, $status, $created_at, $updated_at, $accion = "store";
 
-    public $search = '', $perPage = '10', $total, $role, $now, $user, $rool;
+    public $search = '', $perPage = '10', $total, $role, $now, $user, $rool, $departament;
+
+    public $user_profile, $avatar, $description, $facebook, $instagram, $github, $website, $other, $position;
 
     public $rules = [
         'nameUser'       => 'required|string|max:100',
@@ -35,6 +38,7 @@ class UserComponent extends Component
         'corporative'    => 'required|email|max:100|unique:users,corporative',
         'password'       => 'required|string|min:8|max:100',
         'role'           => 'required',
+        'departament'    => 'required',
     ];
 
     /* protected $messages = [
@@ -57,6 +61,7 @@ class UserComponent extends Component
         'corporative'    => 'email corporativo',
         'password'       => 'contraseña',
         'role'           => 'rol',
+        'departament'    => 'departamento',
     ];
 
     public function mount()
@@ -80,6 +85,7 @@ class UserComponent extends Component
                 'corporative'    => 'required|email|max:100|unique:users,corporative',
                 'password'       => 'required|string|min:8|max:100',
                 'role'           => 'required',
+                'departament'    => 'required',
             ]);
         } else {
             $this->validateOnly($propertyName, [
@@ -92,6 +98,7 @@ class UserComponent extends Component
                 'corporative'    => 'required|email|max:100|unique:users,corporative,' . $this->user_id,
                 'password'       => 'required|string|min:8|max:100',
                 'role'           => 'required',
+                'departament'    => 'required',
             ]);
         }
     }
@@ -108,6 +115,7 @@ class UserComponent extends Component
             'corporative'    => 'required|email|max:100|unique:users,corporative',
             'password'       => 'required|string|min:8|max:100',
             'role'           => 'required',
+            'departament'    => 'required',
         ]);
         $user = User::create([
             'nameUser'          => $this->nameUser,
@@ -123,6 +131,11 @@ class UserComponent extends Component
         if ($this->role) {
             $user->roles()->sync($this->role);
         }
+
+        if ($this->departament) {
+            $user->departaments()->sync($this->departament);
+        }
+
         $perfil = Profile::create([
             'user_id' => $user->id,
         ]);
@@ -149,10 +162,63 @@ class UserComponent extends Component
         $this->updated_at     = $user->updated_at;
         $this->user           = $user;
 
+        if (isset($user->profile->id)) {
+            $this->user_profile   = $user;
+            $this->avatar         = $user->profile->avatar;
+            $this->description    = $user->profile->description;
+            if ($user->profile->facebook == "") {
+                $this->facebook       = null;
+            } else {
+                $this->facebook       = $user->profile->facebook;
+            }
+
+            if ($user->profile->instagram == "") {
+                $this->instagram       = null;
+            } else {
+                $this->instagram       = $user->profile->instagram;
+            }
+
+            if ($user->profile->github == "") {
+                $this->github       = null;
+            } else {
+                $this->github       = $user->profile->github;
+            }
+
+            if ($user->profile->website == "") {
+                $this->website       = null;
+            } else {
+                $this->website       = $user->profile->website;
+            }
+
+            if ($user->profile->other == "") {
+                $this->other       = null;
+            } else {
+                $this->other       = $user->profile->other;
+            }
+
+            $this->position       = $user->profile->position_id;
+        } else {
+            $this->user_profile   = "nothing";
+            $this->avatar         = "nothing";
+            $this->description    = "nothing";
+            $this->facebook       = null;
+            $this->instagram      = null;
+            $this->github         = null;
+            $this->website        = null;
+            $this->other          = null;
+            $this->position       = "nothing";
+        }
+
         if (isset($user->roles[0]->name)) {
             $this->role  = $user->roles[0]->name;
         } else {
-            $this->role  = "Aún no se asigna un rol";
+            $this->role  = "Aún no se le ha asignado un rol";
+        }
+
+        if (isset($user->departaments[0]->name)) {
+            $this->departament  = $user->departaments[0]->name;
+        } else {
+            $this->departament  = "Aún no se le ha asignado a un departamento";
         }
     }
 
@@ -176,9 +242,14 @@ class UserComponent extends Component
         $this->status         = $user->status;
         $this->accion         = "update";
         $this->user           = $user;
+        $this->user_profile   = $user;
 
         foreach ($user->roles as $role) {
             $this->role = $role->id;
+        }
+
+        foreach ($user->departaments as $departament) {
+            $this->departament = $departament->id;
         }
     }
 
@@ -194,6 +265,7 @@ class UserComponent extends Component
             'corporative'    => 'required|email|max:100|unique:users,corporative,' . $this->user_id,
             /* 'password'       => 'required|string|min:8|max:100', */
             'role'           => 'required',
+            'departament'    => 'required',
         ]);
         if ($this->user_id) {
             $user = User::find($this->user_id);
@@ -208,9 +280,15 @@ class UserComponent extends Component
                 /* 'password'        => Hash::make($this->password), */
                 'status'          => $this->status,
             ]);
+
             if ($this->role) {
                 $user->roles()->sync($this->role);
             }
+
+            if ($this->departament) {
+                $user->departaments()->sync($this->departament);
+            }
+
             session()->flash('message', 'Usuario actualizado correctamente.');
             $this->clean();
             $this->emit('userUpdatedEvent');
@@ -252,6 +330,8 @@ class UserComponent extends Component
             'rool',
             'created_at',
             'updated_at',
+            'user_profile',
+            'departament',
         ]);
         $this->mount();
     }
@@ -265,6 +345,8 @@ class UserComponent extends Component
     {
         $roless = Role::orderBy('name')->get();
 
+        $departamentss = Departament::orderBy('name')->get();
+
         if ($this->search != '') {
             $this->page = 1;
         }
@@ -276,7 +358,7 @@ class UserComponent extends Component
             'livewire.user.user-component',
             [
                 'users' => User::latest('id')
-                    ->with('roles')
+                    ->with('roles', 'profile', 'departaments')
                     ->where('id', 'LIKE', "%{$this->search}%")
                     ->orWhere('nameUser', 'LIKE', "%{$this->search}%")
                     ->orWhere('firstLastname', 'LIKE', "%{$this->search}%")
@@ -287,7 +369,7 @@ class UserComponent extends Component
                     ->orWhere('corporative', 'LIKE', "%{$this->search}%")
                     ->paginate($this->perPage)
             ],
-            compact('roless')
+            compact('roless', 'departamentss')
         );
     }
 }

@@ -18,7 +18,7 @@
                             <div class="col-lg-5">
                                 <label class="text-muted" for="name">Avatar</label>
                                 <div>
-                                    <img class="img-fluid" alt="archivo" src="{{ $temporary->temporaryUrl() }}">
+                                    <img class="img-fluid" alt="usuario" src="{{ $temporary->temporaryUrl() }}">
                                 </div>
                                 <div wire:loading wire:target="temporary">Cargando...</div>
                             </div>
@@ -26,7 +26,7 @@
                             <div class="col-lg-5">
                                 <label class="text-muted" for="name">Avatar</label>
                                 <div>
-                                    <img class="img-fluid" alt="archivo" src="{{ asset($avatar) }}">
+                                    <img class="img-fluid" alt="usuario" src="{{ asset($avatar) }}">
                                 </div>
                                 <div wire:loading wire:target="avatar">Cargando...</div>
                             </div>

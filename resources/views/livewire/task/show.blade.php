@@ -9,23 +9,21 @@
             </div>
             <div class="modal-body">
                 <form>
-                    <div class="row">
-                        <div class="col-lg-5">
-                            <div class="form-group">
-                                <label class="text-muted" for="description">Nombre:</label>
-                                <h5>{{ $name }}</h5>
-                            </div>
-                            <div class="form-group">
-                                <label class="text-muted" for="description">Descripción:</label>
-                                <h5>{{ $description }}</h5>
-                            </div>
-                        </div>
-                        <div class="col-lg-7">
-                            <div class="form-group">
-                                <label class="text-muted" for="description">Archivo:</label>
-                                <img class="img-fluid" src="{{ asset($file) }}" alt="Archivo">
-                            </div>
-                        </div>
+                    <div class="form-group">
+                        <label class="text-muted" for="description">Nombre:</label>
+                        <h5>{{ $name }}</h5>
+                    </div>
+                    <div class="form-group">
+                        <label class="text-muted" for="description">Descripción:</label>
+                        <h5>{{ $description }}</h5>
+                    </div>
+                    <div class="form-group">
+                        <label class="text-muted" for="description">Archivo:</label><br>
+                        @if ($file != null)
+                            <a href="{{ asset('storage/files/' .$file) }}">{{ $file }}</a>
+                        @else
+                            <h5>No hay archivo en esta tarea</h5>
+                        @endif
                     </div>
                     <div class="form-group">
                         <label class="text-muted" for="description">Inicio:</label>

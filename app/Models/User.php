@@ -78,7 +78,15 @@ class User extends Authenticatable
             $role  = "No tiene rol";
         }
 
-        return $role;
+        if (isset($user->departaments[0]->name)) {
+            $departament  = $user->departaments[0]->name;
+        } else {
+            $departament  = "No tiene departamento";
+        }
+
+        $info = strtoupper($departament) . '  -  ' . strtoupper($role);
+        return $info;
+        /* return $departament . '-' . $role; */
     }
 
     /* Función que obtiene la ruta del perfil de un usuario */

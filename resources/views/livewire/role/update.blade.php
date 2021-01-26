@@ -92,7 +92,7 @@
                             <div class="form-group">
                                 <label class="text-muted text-uppercase" for="permisos">Permisos</label>
                                 <div>
-                                    @foreach($permissions as $permission)
+                                    @foreach ($permissions as $permission)
                                         <div class="custom-control custom-checkbox">
                                             <input type="checkbox" class="custom-control-input"
                                                 id="permission_{{$permission->id}}"  value="{{$permission->id}}"
@@ -109,7 +109,7 @@
                                     @endforeach
                                 </div>
                                 <div>
-                                    <button class="btn btn-light" value="reset" wire:click="limpia()">Limpiar</button>
+                                    <label class="btn btn-light" value="reset" wire:click="limpia()">Limpiar</label>
                                 </div>
                             </div>
                         </div>

@@ -9,51 +9,35 @@
             </div>
             <div class="modal-body">
                 <form>
-                    <div class="row">
-                        @if($file)
-                            <div class="col-lg-7 mb-4">
-                        @else
-                            <div class="col-lg-12 mb-4">
-                        @endif
-                            <div class="form-group">
-                                <label class="text-muted" for="name">Nombre:</label>
-                                <input type="text" name="name" wire:dirty.class="bg-success"
-                                    class="form-control @error('name') is-invalid @enderror" wire:model="name">
-                                @error('name')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                            <div class="form-group">
-                                <label class="text-muted" for="description">Descripción:</label>
-                                <textarea class="form-control @error('description') is-invalid @enderror" name="description" wire:model="description" wire:dirty.class="bg-success" rows="3"></textarea>
-                                @error('description')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                            {{-- <div class="form-group">
-                                <label class="text-muted" for="file">Archivo:</label>
-                                <input type="file" name="file" wire:dirty.class="bg-success"
-                                    class="form-control-file @error('file') is-invalid @enderror" wire:model="file">
-                                @error('file')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div> --}}
-                        </div>
-                        @if($file)
-                            <div class="col-lg-5">
-                                <label class="text-muted" for="name">Vista previa:</label>
-                                <div>
-                                    <img class="img-fluid" alt="archivo" src="{{ asset($file) }}">
-                                </div>
-                                <div wire:loading wire:target="file">Cargando...</div>
-                            </div>
-                        @endif
+                    <div class="form-group">
+                        <label class="text-muted" for="name">Nombre:</label>
+                        <input type="text" name="name" wire:dirty.class="bg-success"
+                            class="form-control @error('name') is-invalid @enderror" wire:model="name">
+                        @error('name')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label class="text-muted" for="description">Descripción:</label>
+                        <textarea class="form-control @error('description') is-invalid @enderror" name="description" wire:model="description" wire:dirty.class="bg-success" rows="3"></textarea>
+                        @error('description')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label class="text-muted" for="temporary">Archivo:</label>
+                        <a href="{{ asset('storage/files/' . $file) }}">{{ $file }}</a>
+                        <input type="file" name="temporary" wire:dirty.class="bg-success"
+                            class="form-control-file @error('temporary') is-invalid @enderror" wire:model="temporary">
+                        @error('temporary')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
                     </div>
                     <div class="d-flex justify-content-between mb-auto">
                         <div class="form-group justify-content-start">

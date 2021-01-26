@@ -8,6 +8,7 @@ use App\Models\Period;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Str;
 
 class HolidayComponent extends Component
 {
@@ -100,7 +101,7 @@ class HolidayComponent extends Component
 
     public function store()
     {
-        $validateData = $this->validate([
+        $this->validate([
             'days'          => 'required|numeric|max:100',
             'beginDate'     => 'required|date',
             'endDate'       => 'required|date',
@@ -112,7 +113,20 @@ class HolidayComponent extends Component
             'absence_id'    => 'required',
             'period_id'     => 'required',
         ]);
-        Holiday::create($validateData);
+        $slug = $this->days . ' ' . $this->beginDate . ' ' . $this->endDate;
+        Holiday::create([
+            'slug'         => Str::slug($slug, '-'),
+            'days'         => $this->days,
+            'beginDate'    => $this->beginDate,
+            'endDate'      => $this->endDate,
+            'inProcess'    => $this->inProcess,
+            'taken'        => $this->taken,
+            'available'    => $this->available,
+            'responsable'  => Auth::user()->name,
+            'commentable'  => $this->commentable,
+            'absence_id'   => $this->absence_id,
+            'period_id'    => $this->period_id,
+        ]);
         session()->flash('message', 'Vacación creada correctamente.');
         $this->clean();
         $this->emit('holidayCreatedEvent');
@@ -186,7 +200,9 @@ class HolidayComponent extends Component
         ]);
         if ($this->holiday_id) {
             $holiday = Holiday::find($this->holiday_id);
+            $slug = $this->days . ' ' . $this->beginDate . ' ' . $this->endDate;
             $holiday->update([
+                'slug'         => Str::slug($slug, '-'),
                 'days'         => $this->days,
                 'beginDate'    => $this->beginDate,
                 'endDate'      => $this->endDate,
@@ -267,7 +283,7 @@ class HolidayComponent extends Component
             'livewire.holiday.holiday-component',
             [
                 'holidays' => Holiday::latest('id')
-                    ->with('absence', 'period')
+                    ->with('absence', 'period', 'users')
                     ->where('id', 'LIKE', "%{$this->search}%")
                     ->orWhere('days', 'LIKE', "%{$this->search}%")
                     ->orWhere('beginDate', 'LIKE', "%{$this->search}%")

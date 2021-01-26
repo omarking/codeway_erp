@@ -29,14 +29,12 @@ class DatabaseSeeder extends Seeder
 
             Estos se encargaran de llenar con algunos datos la base de datos
         */
-        Position::factory(10)->create();
-
 
         $this->call(AbsenceSeeder::class);
 
-        $this->call(ClassSeeder::class);
-
         $this->call(CategorySeeder::class);
+
+        $this->call(ClassSeeder::class);
 
         $this->call(DepartamentSeeder::class);
 
@@ -54,17 +52,31 @@ class DatabaseSeeder extends Seeder
 
         $this->call(TypeSeeder::class);
 
+        Position::factory(10)->create();
+
         /*
             Mando llamar a los faker que he creado
 
             Estos se encargaran de poblar mi base de datos
         */
 
-        /* User::factory(49)->create(); */
+        /*
 
-        /* Position::factory(10)->create(); */
+        Estas tres fabricas ejecutarlas solo si se quiren usuarios de prueba, no es recomendable
 
-        /* Profile::factory(50)->create(); */
+        User::factory(49)->create();
+
+        Profile::factory(10)->create();
+
+        Comment::factory(150)->create();
+
+        */
+
+
+        /*
+
+        Estas favricas estan relacionadas con tablas fuertes por lo que pueden tener errores si se modifica las siembras.
+        Position::factory(10)->create();
 
         Holiday::factory(50)->create();
 
@@ -78,8 +90,9 @@ class DatabaseSeeder extends Seeder
 
         Vacant::factory(10)->create();
 
-        /* Comment::factory(150)->create(); */
+        // esta fabrica ya tiene una siembra, asi que solo ejecutar una
+        Priority::factory(200)->create();
 
-        /* Priority::factory(200)->create();*/
+        */
     }
 }

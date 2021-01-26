@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Project;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 class ProjectFactory extends Factory
 {
@@ -21,10 +22,12 @@ class ProjectFactory extends Factory
      */
     public function definition()
     {
+        $name = $this->faker->unique()->sentence;
         return [
             'avatar'        => $this->faker->imageUrl(1024, 1024, 'projects', true,'Faker'),
             'key'           => $this->faker->slug,
-            'name'          => $this->faker->unique()->sentence,
+            'name'          => $name,
+            'slug'          => Str::slug($name,'-'),
             'description'   => $this->faker->text,
             'responsable'   => $this->faker->name,
             'clas_id'       => rand(1, 3),

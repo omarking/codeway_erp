@@ -27,6 +27,7 @@ class Task extends Model
      */
     protected $fillable = [
         'name',
+        'slug',
         'description',
         'file',
         'start',

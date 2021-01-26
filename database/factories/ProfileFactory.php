@@ -32,7 +32,7 @@ class ProfileFactory extends Factory
             'website'       => $this->faker->url,
             'other'         => $this->faker->word,
             'position_id'   => rand(1, 10),
-            'user_id'       => rand(1, 50),
+            'user_id'       => rand(2, 50),
         ];
     }
 }

@@ -38,10 +38,10 @@
                 <table wire:poll.10000ms id="projectTable" class="table table-white table-striped table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
+                            <th scope="col">Imagen</th>
                             <th scope="col">Clave</th>
                             <th scope="col">Nombre</th>
-                            <th scope="col">Descripción</th>
+                            {{-- <th scope="col">Descripción</th> --}}
                             <th scope="col">Responsable</th>
                             <th scope="col">Estado</th>
                             <th scope="col">Clase</th>
@@ -52,10 +52,13 @@
                     <tbody>
                         @foreach($projects as $project)
                             <tr>
-                                <th scope="row">{{ $project->id }}</th>
+                                <th>
+                                    <img width="90%" class="img-fluid" class="rounded-sm" src="{{ asset('storage/projects/' . $project->avatar) }}" alt="{{-- {{ $project->avatar }} --}}">
+                                </th>
+                                {{-- <th scope="row">{{ $project->id }}</th> --}}
                                 <td>{{ $project->key }}</td>
-                                <td><a class="color-bg" href="{{ route('task.show', $project->id) }}">{{ $project->name }}</a></td>
-                                <td>{{ $project->description }}</td>
+                                <td><a class="color-bg" href="{{ route('project.show', $project) }}">{{ $project->name }}</a></td>
+                                {{-- <td>{{ $project->description }}</td> --}}
                                 <td>{{ $project->responsable }}</td>
                                 <td>
                                     @if($project->status == 1)
@@ -80,9 +83,9 @@
                                 </td>
                                 <td>
                                     <div class="btn-group" role="group">
-                                        <button type="button" wire:click.prevent="show({{ $project->id }})" class="btn btn-info" data-toggle="modal" data-target="#showProject">Mostrar</button>
-                                        <button type="button" wire:click.prevent="edit({{ $project->id }})" class="btn btn-success" data-toggle="modal" data-target="#updateProject">Editar</button>
-                                        <button type="button" wire:click.prevent="delete({{ $project->id }})" class="btn btn-danger" data-toggle="modal" data-target="#deleteProject">Borrar</button>
+                                        <button type="button" wire:click.prevent="show({{ $project }})" class="btn btn-info" data-toggle="modal" data-target="#showProject">Mostrar</button>
+                                        <button type="button" wire:click.prevent="edit({{ $project }})" class="btn btn-success" data-toggle="modal" data-target="#updateProject">Editar</button>
+                                        <button type="button" wire:click.prevent="delete({{ $project }})" class="btn btn-danger" data-toggle="modal" data-target="#deleteProject">Borrar</button>
                                     </div>
                                 </td>
                             </tr>

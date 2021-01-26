@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Departament;
 use App\Models\Profile;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -23,6 +24,7 @@ class RolSeeder extends Seeder
         DB::table('role_user')->truncate();
         DB::table('permission_role')->truncate();
         Role::truncate();
+        Departament::truncate();
         DB::statement("SET foreign_key_checks=1");
 
         /* Creamos el usuario administrador */
@@ -59,6 +61,14 @@ class RolSeeder extends Seeder
             'responsable'   => 'Administrador',
         ]);
 
+        $departamentadmin = Departament::create([
+            'name'          => 'Admin',
+            'description'   => 'Departamento que es para el usuario administrador del sistema',
+            'responsable'   => 'Administrador',
+        ]);
+
+
+        /* Sincronizamos el usuario administrador  con su perfil  */
         $profile = Profile::create([
             'description'  => '',
             'birthday'     => null,
@@ -73,5 +83,8 @@ class RolSeeder extends Seeder
 
         /* Sincronizamos el usuario administrador con el rol administrador */
         $useradmin->roles()->sync([$roladmin->id]);
+
+        /* Sincronizamos el usuario administrador con el departamento de administrador */
+        $useradmin->departaments()->sync([$departamentadmin->id]);
     }
 }

@@ -38,7 +38,7 @@
                 <table wire:poll.10000ms id="holidayTable" class="table table-white table-striped table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
+                            <th scope="col">Usuario</th>
                             <th scope="col">Dias</th>
                             <th scope="col">Inicio</th>
                             <th scope="col">Termino</th>
@@ -54,7 +54,14 @@
                     <tbody>
                         @foreach($holidays as $holiday)
                             <tr>
-                                <th scope="row">{{ $holiday->id }}</th>
+                                {{-- <th scope="row">{{ $holiday->id }}</th> --}}
+                                <th>
+                                    @isset($holiday->users->id)
+                                        {{ $holiday->users->name }}
+                                    @else
+                                        No hay usuario
+                                    @endisset
+                                </th>
                                 <td>{{ $holiday->days }}</td>
                                 <td>{{ $holiday->beginDate }}</td>
                                 <td>{{ $holiday->endDate }}</td>

@@ -9,17 +9,23 @@
             </div>
             <div class="modal-body">
                 <form>
-                    {{-- <div class="form-group">
-                        <label class="text-muted" for="avatar">Avatar:</label>
-                        <h5>{{ $avatar }}</h5>
-                    </div> --}}
-                    <div class="form-group">
-                        <label class="text-muted" for="key">Clave:</label>
-                        <h5>{{ $key }}</h5>
-                    </div>
-                    <div class="form-group">
-                        <label class="text-muted" for="name">Nombre:</label>
-                        <h5>{{ $name }}</h5>
+                    <div class="row">
+                        <div class="col-lg-8 col-md-8">
+                            <div class="form-group">
+                                <label class="text-muted" for="key">Clave:</label>
+                                <h5>{{ $key }}</h5>
+                            </div>
+                            <div class="form-group">
+                                <label class="text-muted" for="name">Nombre:</label>
+                                <h5>{{ $name }}</h5>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4">
+                            <div class="form-group">
+                                <label class="text-muted" for="description">Imagen:</label><br>
+                                <img class="img-fluid" src="{{ asset('storage/projects/' . $avatar) }}" alt="Imagen">
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label class="text-muted" for="description">Descripción:</label>
@@ -57,34 +63,29 @@
                         <label class="text-muted" for="updated_at">Actualizado:</label>
                         <h5>{{ $updated_at }}</h5>
                     </div>
-                    {{-- <div class="form-group">
-                        <label class="text-muted text-uppercase" for="permisos">Tareas</label>
+                    <div class="form-group">
+                        <label class="text-muted text-uppercase" for="user">Usuarios</label>
                         <div>
-                            @foreach ($tareas as $tarea)
-                            <h6> {{ $tarea }} </h6>
-                                @if ()
-
-                                @endif
+                            @foreach ($usuarios as $usuario)
                                 <div class="custom-control custom-checkbox">
-                                    <label for="tarea"></label>
                                     <input type="checkbox" disabled class="custom-control-input"
-                                        id="permission_{{ $permission->id }}" wire:model="permission_role"
-                                        value="{{ $permission->id }}"
-                                        @if(is_array($permission_role) && in_array("$permission->id", $permission_role))
+                                        id="user_{{ $usuario->id }}" wire:model="projects_users"
+                                        value="{{ $usuario->id }}"
+                                        @if(is_array($projects_users) && in_array("$usuario->id", $projects_users))
                                             checked
                                         @endif
                                     >
                                     <label class="custom-control-label"
-                                        for="permission_{{ $permission->id }}">
-                                        {{ $permission->id }}
+                                        for="user_{{ $usuario->id }}">
+                                        {{ $usuario->id }}
                                         -
-                                        {{ $permission->name }}
-                                        <em>( {{ $permission->description }} )</em>
+                                        {{ $usuario->nameUser }} {{ $usuario->firstLastname }} {{ $usuario->secondLastname }}
+                                        <em>( {{ $usuario->email }} )</em>
                                     </label>
                                 </div>
                             @endforeach
                         </div>
-                    </div> --}}
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">

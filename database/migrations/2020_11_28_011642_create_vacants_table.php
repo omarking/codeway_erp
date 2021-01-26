@@ -17,6 +17,7 @@ class CreateVacantsTable extends Migration
             $table->id();
 
             $table->string('name', 200)->unique();
+            $table->string('slug')->unique();
             $table->text('description');
             $table->integer('quantity');
             $table->boolean('status')->default('1');

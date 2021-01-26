@@ -255,11 +255,13 @@ class ProfileComponent extends Component
             $usuario->update([
                 'status'    => $this->status,
             ]);
+
             if ($this->status == 1) {
                 $valor = "activada";
             } else {
                 $valor = "desactivada";
             }
+            
             session()->flash('message5', 'Cuenta ' . $valor . ' correctamente.');
             $this->clean();
         }
@@ -269,9 +271,8 @@ class ProfileComponent extends Component
     {
         if ($this->user->id) {
             User::find($this->user->id)->delete();
-            /* session()->flash('message6', 'Cuenta eliminada correctamente.'); */
+            session()->flash('message6', 'Cuenta eliminada correctamente.');
             $this->clean();
-            return redirect()->route('home');
         }
     }
 

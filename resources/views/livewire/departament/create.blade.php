@@ -9,34 +9,66 @@
             </div>
             <div class="modal-body">
                 <form>
-                    <div class="form-group">
-                        <label class="text-muted" for="name">Nombre:</label>
-                        <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
-                                wire:model="name" wire:dirty.class="bg-primary">
-                        @error('name')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label class="text-muted" for="description">Descripción:</label>
-                        <textarea class="form-control @error('description') is-invalid @enderror" name="description" wire:model="description" wire:dirty.class="bg-primary" rows="3"></textarea>
-                        @error('description')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label class="text-muted" for="responsable">Responsable:</label>
-                        <input type="text" name="responsable" class="form-control @error('responsable') is-invalid @enderror"
-                                wire:model="responsable" wire:dirty.class="bg-primary" disabled>
-                        @error('responsable')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="text-muted" for="name">Nombre:</label>
+                                <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
+                                        wire:model="name" wire:dirty.class="bg-primary">
+                                @error('name')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label class="text-muted" for="description">Descripción:</label>
+                                <textarea class="form-control @error('description') is-invalid @enderror" name="description" wire:model="description" wire:dirty.class="bg-primary" rows="3"></textarea>
+                                @error('description')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label class="text-muted" for="responsable">Responsable:</label>
+                                <input type="text" name="responsable" class="form-control @error('responsable') is-invalid @enderror"
+                                        wire:model="responsable" wire:dirty.class="bg-primary" disabled>
+                                @error('responsable')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="text-muted text-uppercase" for="grupo">Grupos</label>
+                                <div>
+                                    @forelse ($groups as $grupo )
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input"
+                                                id="group_{{ $grupo->id }}" wire:model="group"
+                                                value="{{ $grupo->id }}"
+                                                @if(is_array(old('group')) && in_array("$grupo->id", old('group')))
+                                                    checked
+                                                @endif
+                                            >
+                                            <label class="custom-control-label"
+                                                for="group_{{ $grupo->id }}">
+                                                {{ $grupo->id }}
+                                                -
+                                                {{ $grupo->name }}
+                                                <em>( {{ $grupo->description }} )</em>
+                                            </label>
+                                        </div>
+                                    @empty
+                                        <li>No hay grupos registrados</li>
+                                    @endforelse
+                                </div><br>
+                                <a class="btn btn-light justify-center" href="{{ route('group.index') }}" value="reset">Ver Grupos</a>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>

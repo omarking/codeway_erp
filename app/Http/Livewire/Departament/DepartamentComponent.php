@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Departament;
 
 use App\Models\Departament;
+use App\Models\Group;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -18,6 +19,8 @@ class DepartamentComponent extends Component
     public $departament_id, $name, $description, $responsable, $status, $created_at, $updated_at, $accion = "store";
 
     public $search = '', $perPage = '10', $total;
+
+    public $departament_group = [], $group = [], $departamento;
 
     public $rules = [
         'name'         => 'required|string|max:200|unique:departaments,name',
@@ -73,7 +76,8 @@ class DepartamentComponent extends Component
             'description'  => 'required|string',
             'responsable'  => 'required|string',
         ]);
-        Departament::create($validateData);
+        $departament = Departament::create($validateData);
+        $departament->groups()->sync($this->group);
         session()->flash('message', 'Departamento creado correctamente.');
         $this->clean();
         $this->emit('departamentCreatedEvent');
@@ -88,6 +92,12 @@ class DepartamentComponent extends Component
         $this->status             = $departament->status;
         $this->created_at         = $departament->created_at;
         $this->updated_at         = $departament->updated_at;
+        $this->departamento       = $departament;
+
+
+        foreach ($departament->groups as $group) {
+            $this->departament_group[] = $group->id;
+        }
     }
 
     public function close()
@@ -103,6 +113,10 @@ class DepartamentComponent extends Component
         $this->description        = $departament->description;
         $this->status             = $departament->status;
         $this->accion             = "update";
+
+        foreach ($departament->groups as $group) {
+            $this->group[] = $group->id;
+        }
     }
 
     public function update()
@@ -120,10 +134,16 @@ class DepartamentComponent extends Component
                 'responsable'   => Auth::user()->name,
                 'status'        => $this->status,
             ]);
+            $departaments->groups()->sync($this->group);
             session()->flash('message', 'Departamento actualizado correctamente.');
             $this->clean();
             $this->emit('departamentUpdatedEvent');
         }
+    }
+
+    public function limpia()
+    {
+        $this->reset(['group']);
     }
 
     public function delete(Departament $departament)
@@ -151,6 +171,9 @@ class DepartamentComponent extends Component
             'accion',
             'created_at',
             'updated_at',
+            'departament_group',
+            'group',
+            'departamento',
         ]);
         $this->mount();
     }
@@ -162,6 +185,8 @@ class DepartamentComponent extends Component
 
     public function render()
     {
+        $groups = Group::all();
+
         if ($this->search != '') {
             $this->page = 1;
         }
@@ -173,12 +198,14 @@ class DepartamentComponent extends Component
             'livewire.departament.departament-component',
             [
                 'departaments' => Departament::latest('id')
+                    ->with('groups')
                     ->where('id', 'LIKE', "%{$this->search}%")
                     ->orWhere('name', 'LIKE', "%{$this->search}%")
                     ->orWhere('description', 'LIKE', "%{$this->search}%")
                     ->orWhere('responsable', 'LIKE', "%{$this->search}%")
                     ->paginate($this->perPage)
-            ]
+            ],
+            compact('groups')
         );
     }
 }

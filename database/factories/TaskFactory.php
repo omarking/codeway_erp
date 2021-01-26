@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Task;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 class TaskFactory extends Factory
 {
@@ -21,8 +22,10 @@ class TaskFactory extends Factory
      */
     public function definition()
     {
+        $name = $this->faker->sentence(10);
         return [
-            'name'          => $this->faker->sentence(10),
+            'name'          => $name,
+            'slug'          => Str::slug($name),
             'description'   => $this->faker->text,
             'file'          => $this->faker->url,
             'start'         => $this->faker->dateTime(),

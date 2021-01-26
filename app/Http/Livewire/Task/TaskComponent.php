@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
+use Illuminate\Support\Str;
 
 class TaskComponent extends Component
 {
@@ -30,8 +31,8 @@ class TaskComponent extends Component
     public $rules = [
         'name'          => 'required|string|max:200|unique:tasks,name',
         'description'   => 'required|string',
-        'temporary'     => 'image|file|mimes:jpeg,png|max:4096|mimetypes:video/mp4',
-        'file'          => 'image|file|mimes:jpeg,png|max:4096|mimetypes:video/mp4',
+        'temporary'     => 'file|max:10000|mimes:jpeg,png|nullable|mimetypes:video/mp4',
+        'file'          => 'file|max:10000|mimes:jpeg,png|nullable|mimetypes:video/mp4',
         'start'         => 'required|date|after:tomorrow',
         'end'           => 'required|date|after:start',
         'informer'      => 'required|string|',
@@ -79,7 +80,7 @@ class TaskComponent extends Component
             $this->validateOnly($propertyName, [
                 'name'          => 'required|string|max:200|unique:tasks,name',
                 'description'   => 'required|string',
-                'temporary'     => 'image|file|mimes:jpeg,png|max:4096|mimetypes:video/mp4',
+                'temporary'     => 'file|max:10000|nullable',
                 'start'         => 'required|date',
                 'end'           => 'required|date',
                 'informer'      => 'required|string',
@@ -92,8 +93,7 @@ class TaskComponent extends Component
             $this->validateOnly($propertyName, [
                 'name'          => 'required|string|max:200|unique:tasks,name,' . $this->task_id,
                 'description'   => 'required|string',
-                'temporary'     => 'image|file|mimes:jpeg,png|max:4096|mimetypes:video/mp4',
-                'file'          => 'image|file|mimes:jpeg,png|max:4096|mimetypes:video/mp4',
+                'file'          => 'file|max:10000|nullable',
                 'start'         => 'required|date',
                 'end'           => 'required|date',
                 'informer'      => 'required|string',
@@ -110,7 +110,8 @@ class TaskComponent extends Component
         $this->validate([
             'name'          => 'required|string|max:200|unique:tasks,name',
             'description'   => 'required|string|',
-            'temporary'     => 'image|file|mimes:jpeg,png|max:4096|',
+            /* 'temporary'     => 'file|max:10000|mimes:jpeg,png|nullable|mimetypes:video/mp4', */
+            'temporary'     => 'file|max:10000|nullable',
             'start'         => 'required|date',
             'end'           => 'required|date',
             'informer'      => 'required|string',
@@ -119,9 +120,19 @@ class TaskComponent extends Component
             'priority_id'   => 'required',
             'type_id'       => 'required',
         ]);
-        $nameFile = time() . '_' . $this->temporary->getClientOriginalName();
+
+        if($this->temporary != null){
+            if ($this->temporary->getClientOriginalName()) {
+                $nameFile = time() . '_' . $this->temporary->getClientOriginalName();
+                $this->temporary->storePubliclyAs('storage/files', $nameFile, 'public_uploads');
+            }
+        } else {
+            $nameFile = null;
+        }
+
         Task::create([
             'name'          => $this->name,
+            'slug'          => Str::slug($this->name, '-'),
             'description'   => $this->description,
             'file'          => $nameFile,
             'start'         => $this->start,
@@ -132,9 +143,6 @@ class TaskComponent extends Component
             'priority_id'   => $this->priority_id,
             'type_id'       => $this->type_id,
         ]);
-        if ($this->temporary) {
-            $this->temporary->storePubliclyAs('storage/files', $nameFile, 'public_uploads');
-        }
         session()->flash('message', 'Tarea creada correctamente.');
         $this->clean();
         $this->emit('taskCreatedEvent');
@@ -145,7 +153,7 @@ class TaskComponent extends Component
         $this->task_id       = $task->id;
         $this->name          = $task->name;
         $this->description   = $task->description;
-        $this->file          = 'storage/files/' . $task->file;
+        $this->file          = $task->file;
         $this->start         = $task->start;
         $this->end           = $task->end;
         $this->informer      = $task->informer;
@@ -184,7 +192,8 @@ class TaskComponent extends Component
         $this->task_id       = $task->id;
         $this->name          = $task->name;
         $this->description   = $task->description;
-        $this->file          = 'storage/files/' . $task->file;
+        /* $this->temporary     = $task->file; */
+        $this->file          = $task->file;
         $this->start         = $task->start;
         $this->end           = $task->end;
         $this->informer      = $task->informer;
@@ -201,6 +210,7 @@ class TaskComponent extends Component
         $this->validate([
             'name'          => 'required|string|max:200|unique:tasks,name,' . $this->task_id,
             'description'   => 'required|string',
+            'temporary'     => 'file|max:10000|nullable',
             /* 'file'          => 'image|file|mimes:jpeg,png|max:4096|mimetypes:video/mp4', */
             'start'         => 'required|date',
             'end'           => 'required|date',
@@ -210,13 +220,13 @@ class TaskComponent extends Component
             'priority_id'   => 'required',
             'type_id'       => 'required',
         ]);
-        /* $nameFile = time() . '_' . $this->temporary->getClientOriginalName(); */
+
         if ($this->task_id) {
             $task = Task::find($this->task_id);
             $task->update([
                 'name'          => $this->name,
+                'slug'          => Str::slug($this->name, '-'),
                 'description'   => $this->description,
-                /* 'file'          => $nameFile, */
                 'end'           => $this->end,
                 'informer'      => $this->informer,
                 'responsable'   => Auth::user()->name,
@@ -224,9 +234,15 @@ class TaskComponent extends Component
                 'priority_id'   => $this->priority_id,
                 'type_id'       => $this->type_id,
             ]);
-            /* if ($this->temporary) {
-                $this->temporary->storePubliclyAs('storage/files', $nameFile, 'public_uploads');
-            } */
+
+            if($this->temporary != null){
+                if ($this->temporary->getClientOriginalName()) {
+                    $nameFile = time() . '_' . $this->temporary->getClientOriginalName();
+                    $this->temporary->storePubliclyAs('storage/files', $nameFile, 'public_uploads');
+                    $task->update(['file'   => $nameFile]);
+                }
+            }
+
             session()->flash('message', 'Tarea actualizada correctamente.');
             $this->clean();
             $this->emit('taskUpdatedEvent');

@@ -21,13 +21,7 @@
                     </div>
                     <div class="form-group">
                         <label class="text-muted" for="slug">Slug:</label>
-                        <input type="text" name="slug" wire:dirty.class="bg-success"
-                            class="form-control @error('slug') is-invalid @enderror" wire:model="slug">
-                        @error('slug')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
+                        <h5>{{ $slug }}</h5>
                     </div>
                     <div class="form-group">
                         <label class="text-muted" for="description">Descripción:</label>

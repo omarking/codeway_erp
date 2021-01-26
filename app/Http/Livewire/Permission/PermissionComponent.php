@@ -115,7 +115,7 @@ class PermissionComponent extends Component
             $permissions = Permission::find($this->permission_id);
             $permissions->update([
                 'name'          => $this->name,
-                'slug'          => $this->slug,
+                /* 'slug'          => $this->slug, */
                 'description'   => $this->description,
                 'status'        => $this->status,
             ]);

@@ -11,7 +11,7 @@
                 <form>
                     <div class="form-group">
                         <label class="text-muted" for="days">Dias:</label>
-                        <input type="numeric" name="days" class="form-control @error('days') is-invalid @enderror"
+                        <input type="number" name="days" class="form-control @error('days') is-invalid @enderror"
                                 wire:model="days" wire:dirty.class="bg-primary">
                         @error('days')
                             <span class="invalid-feedback" role="alert">
@@ -43,7 +43,7 @@
                     </div>
                     <div class="form-group">
                         <label class="text-muted" for="inProcess">En proceso:</label>
-                        <input type="numeric" name="inProcess" class="form-control @error('inProcess') is-invalid @enderror"
+                        <input type="number" name="inProcess" class="form-control @error('inProcess') is-invalid @enderror"
                                 wire:model="inProcess" wire:dirty.class="bg-primary">
                         @error('inProcess')
                             <span class="invalid-feedback" role="alert">
@@ -53,7 +53,7 @@
                     </div>
                     <div class="form-group">
                         <label class="text-muted" for="taken">Tomadas:</label>
-                        <input type="numeric" name="taken" class="form-control @error('taken') is-invalid @enderror"
+                        <input type="number" name="taken" class="form-control @error('taken') is-invalid @enderror"
                                 wire:model="taken" wire:dirty.class="bg-primary">
                         @error('taken')
                             <span class="invalid-feedback" role="alert">
@@ -63,7 +63,7 @@
                     </div>
                     <div class="form-group">
                         <label class="text-muted" for="available">Viables:</label>
-                        <input type="numeric" name="available" class="form-control @error('available') is-invalid @enderror"
+                        <input type="number" name="available" class="form-control @error('available') is-invalid @enderror"
                                 wire:model="available" wire:dirty.class="bg-primary">
                         @error('available')
                             <span class="invalid-feedback" role="alert">

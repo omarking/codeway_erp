@@ -9,16 +9,33 @@
             </div>
             <div class="modal-body">
                 <form>
-                    {{-- <div class="form-group">
-                        <label class="text-muted" for="avatar">Imagen:</label>
-                        <input type="text" name="avatar" wire:dirty.class="bg-success"
-                            class="form-control @error('avatar') is-invalid @enderror" wire:model="avatar">
-                        @error('avatar')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div> --}}
+                    <div class="row">
+                        <div class="col-lg-8 col-md-8">
+                            <div class="form-group">
+                                <label class="text-muted" for="temporary">Imagen:</label>
+                                <input type="file" name="temporary" class="form-control-file @error('temporary') is-invalid @enderror"
+                                        wire:model="temporary" wire:dirty.class="bg-success" accept="image/png,image/jpeg,">
+                                @error('temporary')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4">
+                            @if ($temporary)
+                                <label class="text-muted" for="name">Vista previa:</label>
+                                <div>
+                                    <img class="img-fluid" alt="archivo" src="{{ $temporary->temporaryUrl() }}">
+                                </div>
+                            @else
+                                <label class="text-muted" for="name">Vista previa:</label>
+                                <div>
+                                    <img class="img-fluid" src="{{ asset('storage/projects/' . $avatar) }}" alt="Imagen">
+                                </div>
+                            @endif
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label class="text-muted" for="key">Clave:</label>
                         <input type="text" name="key" wire:dirty.class="bg-success"
@@ -121,6 +138,29 @@
                                 <strong>{{ $message }}</strong>
                             </span>
                         @enderror
+                    </div>
+                    <div class="form-group">
+                        <label class="text-muted text-uppercase" for="user">Usuarios</label>
+                        <div>
+                            @foreach ($usuarios as $usuario)
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input"
+                                        id="user_{{$usuario->id}}"  value="{{$usuario->id}}"
+                                        name="user[]" wire:model="user"
+                                    >
+                                    <label class="custom-control-label"
+                                        for="user_{{ $usuario->id }}">
+                                        {{ $usuario->id }}
+                                        -
+                                        {{ $usuario->nameUser }} {{ $usuario->firstLastname }} {{ $usuario->secondLastname }}
+                                        <em>( {{ $usuario->email }} )</em>
+                                    </label>
+                                </div>
+                            @endforeach
+                        </div>
+                        <div>
+                            <label class="btn btn-light" value="reset" wire:click="limpia()">Limpiar</label>
+                        </div>
                     </div>
                 </form>
             </div>
