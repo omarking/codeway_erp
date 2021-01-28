@@ -7,6 +7,7 @@ use App\Models\Clas;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -132,6 +133,8 @@ class ProjectComponent extends Component
 
     public function show(Project $project)
     {
+        $created             = new Carbon($project->created_at);
+        $updated             = new Carbon($project->updated_at);
         $this->project_id    = $project->id;
         $this->avatar        = $project->avatar;
         $this->key           = $project->key;
@@ -141,8 +144,10 @@ class ProjectComponent extends Component
         $this->responsable   = $project->responsable;
         $this->clas_id       = $project->clas_id;
         $this->category_id   = $project->category_id;
-        $this->created_at    = $project->created_at;
-        $this->updated_at    = $project->updated_at;
+        $this->created_at    = $created->format('l jS \\of F Y h:i:s A');
+        $this->updated_at    = $updated->format('l jS \\of F Y h:i:s A');
+        /* $this->created_at    = $project->created_at;
+        $this->updated_at    = $project->updated_at; */
 
         if (isset($project->clas->description)) {
             $this->clase   = $project->clas->description;

@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Group;
 
 use App\Models\Group;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -85,13 +86,17 @@ class GroupComponent extends Component
 
     public function show(Group $group)
     {
+        $created            = new Carbon($group->created_at);
+        $updated            = new Carbon($group->updated_at);
         $this->group_id     = $group->id;
         $this->name         = $group->name;
         $this->description  = $group->description;
         $this->responsable  = $group->responsable;
         $this->status       = $group->status;
-        $this->created_at   = $group->created_at;
-        $this->updated_at   = $group->updated_at;
+        $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
+        $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
+        /* $this->created_at   = $group->created_at;
+        $this->updated_at   = $group->updated_at; */
     }
 
     public function close()

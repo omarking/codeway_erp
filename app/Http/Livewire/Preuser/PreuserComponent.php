@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Preuser;
 
 use App\Models\Preuser;
+use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -89,14 +90,18 @@ class PreuserComponent extends Component
 
     public function show(Preuser $preuser)
     {
+        $created                = new Carbon($preuser->created_at);
+        $updated                = new Carbon($preuser->updated_at);
         $this->preuser_id       = $preuser->id;
         $this->name             = $preuser->name;
         $this->lastname         = $preuser->lastname;
         $this->phone            = $preuser->phone;
         $this->email            = $preuser->email;
         $this->status           = $preuser->status;
-        $this->created_at       = $preuser->created_at;
-        $this->updated_at       = $preuser->updated_at;
+        $this->created_at       = $created->format('l jS \\of F Y h:i:s A');
+        $this->updated_at       = $updated->format('l jS \\of F Y h:i:s A');
+        /* $this->created_at       = $preuser->created_at;
+        $this->updated_at       = $preuser->updated_at; */
     }
 
     public function close()

@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Permission;
 
 use App\Models\Permission;
+use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -83,13 +84,17 @@ class PermissionComponent extends Component
 
     public function show(Permission $permission)
     {
+        $created                = new Carbon($permission->created_at);
+        $updated                = new Carbon($permission->updated_at);
         $this->permission_id    = $permission->id;
         $this->name             = $permission->name;
         $this->slug             = $permission->slug;
         $this->description      = $permission->description;
         $this->status           = $permission->status;
-        $this->created_at       = $permission->created_at;
-        $this->updated_at       = $permission->updated_at;
+        $this->created_at       = $created->format('l jS \\of F Y h:i:s A');
+        $this->updated_at       = $updated->format('l jS \\of F Y h:i:s A');
+        /* $this->created_at       = $permission->created_at;
+        $this->updated_at       = $permission->updated_at; */
     }
 
     public function close()

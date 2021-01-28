@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Position;
 
 use App\Models\Position;
 use App\Models\Profile;
+use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -72,11 +73,15 @@ class PositionComponent extends Component
 
     public function show(Position $position)
     {
+        $created            = new Carbon($position->created_at);
+        $updated            = new Carbon($position->updated_at);
         $this->position_id  = $position->id;
         $this->description  = $position->description;
         $this->status       = $position->status;
-        $this->created_at   = $position->created_at;
-        $this->updated_at   = $position->updated_at;
+        $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
+        $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
+        /* $this->created_at   = $position->created_at;
+        $this->updated_at   = $position->updated_at; */
         $this->position     = $position;
     }
 

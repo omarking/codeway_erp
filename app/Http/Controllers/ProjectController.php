@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
@@ -45,7 +46,22 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        return view('project.show', compact('project'));
+        $existe = false;
+        $proyectos = Project::with('users')->where('id', '=', $project->id)->get();
+
+        foreach ($proyectos as $proyecto) {
+            foreach ($proyecto->users as $user) {
+                if ($user->name == Auth::user()->name) {
+                    $existe = true;
+                }
+            }
+        }
+
+        if ($existe) {
+            return view('project.show', compact('project', 'proyecto'));
+        } else {
+            return abort(403, "Accion no autorizada");
+        }
     }
 
     /**

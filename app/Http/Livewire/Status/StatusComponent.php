@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Status;
 
 use App\Models\Statu;
 use App\Models\Task;
+use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -72,11 +73,15 @@ class StatusComponent extends Component
 
     public function show(Statu $status)
     {
+        $created            = new Carbon($status->created_at);
+        $updated            = new Carbon($status->updated_at);
         $this->status_id    = $status->id;
         $this->description  = $status->description;
         $this->status       = $status->status;
-        $this->created_at   = $status->created_at;
-        $this->updated_at   = $status->updated_at;
+        $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
+        $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
+        /* $this->created_at   = $status->created_at;
+        $this->updated_at   = $status->updated_at; */
         $this->statu        = $status;
     }
 

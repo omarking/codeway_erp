@@ -13,9 +13,7 @@
                 <link class="fas fa-fw fa-home" rel="icon">
                 <a class="text-uppercase" href="{{ route('home') }}">Codeway</a>
                 /
-                <link class="fas fa-fw fa-project-diagram" rel="icon">
-                <a class="text-uppercase" href="{{ route('project.index') }}">Proyectos</a>
-                /
+                <img width="3%" class="img-circule" src="{{ asset('storage/projects/' . $project->avatar) }}" alt="{{ $project->avatar }}">
                 <a class="text-uppercase" href="{{ route('project.show', $project->id) }}">{{ $project->name}}</a>
             </h3>
         </div>
@@ -23,12 +21,32 @@
 @endsection
 
 @section('content')
+
     <div>
-        aqui estarán las tareas de este proyecto
-        {{-- @livewire('project.project-component') --}}
+        @livewire('profile.mytask-component', ['project' => $project])
     </div>
+
 @endsection
 
 @section('js')
+    {{-- <script>
+        $('body_scroll').scrollspy({ target: '#navbar-example' })
+    </script> --}}
+    <script>
+        window.livewire.on('taskCreatedEvent', ()=>{
+            $('#createTask').modal('hide');
+        })
 
+        window.livewire.on('taskUpdatedEvent', ()=>{
+            $('#updateTask').modal('hide');
+        })
+
+        /* window.livewire.on('projectShowEvent', ()=>{
+            $('#showProject').modal('hide');
+        })
+
+        window.livewire.on('projectDeletedEvent', ()=>{
+            $('#deleteProject').modal('hide');
+        }) */
+    </script>
 @endsection

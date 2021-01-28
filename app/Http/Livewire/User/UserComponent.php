@@ -146,6 +146,8 @@ class UserComponent extends Component
 
     public function show(User $user)
     {
+        $created              = new Carbon($user->created_at);
+        $updated              = new Carbon($user->updated_at);
         $this->user_id        = $user->id;
         $this->nameUser       = $user->nameUser;
         $this->firstLastname  = $user->firstLastname;
@@ -155,8 +157,10 @@ class UserComponent extends Component
         $this->email          = $user->email;
         $this->corporative    = $user->corporative;
         $this->status         = $user->status;
-        $this->created_at     = $user->created_at;
-        $this->updated_at     = $user->updated_at;
+        $this->created_at     = $created->format('l jS \\of F Y h:i:s A');
+        $this->updated_at     = $updated->format('l jS \\of F Y h:i:s A');
+        /* $this->created_at     = $user->created_at;
+        $this->updated_at     = $user->updated_at; */
         $this->user           = $user;
 
         if (isset($user->profile->id)) {

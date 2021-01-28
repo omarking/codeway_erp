@@ -325,7 +325,7 @@
                                         checked
                                     @endif
                                 >
-                                <label class="custom-control-label" for="statusType1">Activo</label>
+                                <label class="custom-control-label text-muted" for="statusType1">Activo</label>
                             </div>
                             <div class="custom-control custom-radio custom-control-inline">
                                 <input type="radio" id="statusType0" wire:model="status" name="status" class="custom-control-input" value="0"
@@ -333,7 +333,7 @@
                                         checked
                                     @endif
                                 >
-                                <label class="custom-control-label" for="statusType0">Inactivo</label>
+                                <label class="custom-control-label text-muted" for="statusType0">Inactivo</label>
                                 <hr>
                             </div>
                         </div>
@@ -366,7 +366,9 @@
                             <label class="text-muted" for="color">Esto eliminara tus datos e información</label>
                             <label class="text-muted" for="color">No sera posible volver a recuperar tu cuenta ni datos</label><br>
                             <h4 class="text-danger">¿Seguro que quieres eliminar tu cuenta?</h4>
-                            <button class="btn btn-danger btn-lg" wire:click.prevent="deleteAcount()">Eliminar</button>
+                            <div class="col-lg-3 col-md-4 col-sm-4">
+                                <button class="btn btn-danger btn-block" wire:click.prevent="deleteAcount()">Eliminar</button>
+                            </div>
                         </div>
                     </div>
                 </div>

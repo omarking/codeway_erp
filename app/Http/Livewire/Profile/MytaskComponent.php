@@ -1,33 +1,31 @@
 <?php
 
-namespace App\Http\Livewire\Task;
+namespace App\Http\Livewire\Profile;
 
 use App\Models\Priority;
+use Livewire\Component;
+use App\Models\Project;
 use App\Models\Statu;
 use App\Models\Task;
 use App\Models\Type;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Livewire\Component;
-use Livewire\WithFileUploads;
-use Livewire\WithPagination;
 use Illuminate\Support\Str;
+use Livewire\WithFileUploads;
+use Illuminate\Support\Carbon;
 
-class TaskComponent extends Component
+class MytaskComponent extends Component
 {
-    use WithPagination;
-
     use WithFileUploads;
 
-    public $page = 1;
+    public $search = '', $perPage = '10', $page = 1;
 
-    protected $paginationTheme = 'bootstrap';
+    public $proyecto, $tareas, $tasks, $usuario;
+
+    public $estados;
 
     public $task_id, $name, $description, $file, $start, $end, $informer, $responsable, $created_at, $updated_at, $accion = "store";
 
-    public $estado, $tipo, $prioridad, $statu_id, $priority_id, $type_id;
-
-    public $search = '', $perPage = '10', $total, $temporary;
+    public $estado, $tipo, $prioridad, $statu_id, $priority_id, $type_id, $temporary;
 
     public $rules = [
         'name'          => 'required|string|max:200|unique:tasks,name',
@@ -41,16 +39,6 @@ class TaskComponent extends Component
         'statu_id'      => 'required',
         'priority_id'   => 'required',
         'type_id'       => 'required',
-    ];
-
-    /* protected $messages = [
-        'temporary.required' => 'La descripción es requerida.',
-        'temporary.unique' => 'La descripción ya esta en uso.',
-    ]; */
-
-    protected $queryString = [
-        'search'  => ['except' => ''],
-        'perPage' => ['except' => '10'],
     ];
 
     protected $validationAttributes = [
@@ -67,9 +55,39 @@ class TaskComponent extends Component
         'type_id'       => 'tipo',
     ];
 
-    public function mount()
+    public function mount(Project $project)
     {
-        $this->total = count(Task::all());
+        $this->proyecto = $project;
+        $this->tareas = Project::with('tasks', 'users')->where('id', '=', $project->id)->get();
+        $this->estados = Statu::where('status', '=', 1)->get();
+        $this->tasks = Task::all();
+
+        foreach ($this->tareas as $tarea) {
+            foreach ($tarea->tasks as $task) {
+                $this->name = $task->name;
+                $this->start = $task->start;
+                $this->end = $task->end;
+                $this->informer = $task->informer;
+                $this->responsable = $task->responsable;
+            }
+        }
+
+        /* @foreach ($tareas as $tarea)
+            @foreach ($tarea->tasks as $task)
+                @if ($estado->id == $task->statu_id)
+                    <div wire:click.prevent="edit({{ $task->id }})" data-toggle="modal" data-target="#updateTask">
+                        <h5 class="font-italic"> {{ $task->name }} </h5>
+                        <h6> {{ $task->start }} </h6>
+                        <h6> {{ $task->end }} </h6>
+                        <h6> {{ $task->informer }} </h6>
+                        <h6> {{ $task->responsable}} </h6>
+                    </div>
+                    <hr>
+                @endif
+            @endforeach
+        @endforeach */
+
+        $this->usuario = Auth::user()->name;
         $this->responsable = Auth::user()->name;
         $this->resetErrorBag();
         $this->resetValidation();
@@ -128,7 +146,7 @@ class TaskComponent extends Component
         } else {
             $nameFile = null;
         }
-        Task::create([
+        $task = Task::create([
             'name'          => $this->name,
             'slug'          => Str::slug($this->name, '-'),
             'description'   => $this->description,
@@ -141,46 +159,10 @@ class TaskComponent extends Component
             'priority_id'   => $this->priority_id,
             'type_id'       => $this->type_id,
         ]);
+        $task->projects()->sync($this->proyecto->id);
         session()->flash('message', 'Tarea creada correctamente.');
         $this->clean();
         $this->emit('taskCreatedEvent');
-    }
-
-    public function show(Task $task)
-    {
-        $created             = new Carbon($task->created_at);
-        $updated             = new Carbon($task->updated_at);
-        $this->task_id       = $task->id;
-        $this->name          = $task->name;
-        $this->description   = $task->description;
-        $this->file          = $task->file;
-        $this->start         = $task->start;
-        $this->end           = $task->end;
-        $this->informer      = $task->informer;
-        $this->responsable   = $task->responsable;
-        $this->statu_id      = $task->statu_id;
-        $this->priority_id   = $task->priority_id;
-        $this->type_id       = $task->type_id;
-        $this->created_at    = $created->format('l jS \\of F Y h:i:s A');
-        $this->updated_at    = $updated->format('l jS \\of F Y h:i:s A');
-        /* $this->created_at    = $task->created_at;
-        $this->updated_at    = $task->updated_at; */
-
-        if (isset($task->statu->description)) {
-            $this->estado   = $task->statu->description;
-        } else {
-            $this->estado   = "Sin estado";
-        }
-        if (isset($task->type->description)) {
-            $this->tipo     = $task->type->description;
-        } else {
-            $this->tipo     = "Sin tipo";
-        }
-        if (isset($task->priority->description)) {
-            $this->prioridad = $task->priority->description;
-        } else {
-            $this->prioridad = "Sin prioridad";
-        }
     }
 
     public function close()
@@ -191,13 +173,18 @@ class TaskComponent extends Component
 
     public function edit(Task $task)
     {
+        /* $date                = new Carbon($task->start); */
+
         $this->task_id       = $task->id;
         $this->name          = $task->name;
         $this->description   = $task->description;
         $this->file          = $task->file;
-        $this->start         = $task->start;
+        /* $this->start         = $task->start; */
+        $start               = new Carbon($task->start);
+        $this->start         = $start->toFormattedDateString();
         $this->end           = $task->end;
         $this->informer      = $task->informer;
+        $this->responsable   = $task->responsable;
         $this->statu_id      = $task->statu_id;
         $this->priority_id   = $task->priority_id;
         $this->type_id       = $task->type_id;
@@ -283,7 +270,9 @@ class TaskComponent extends Component
             'tipo',
             'prioridad',
         ]);
-        $this->mount();
+        $this->responsable = Auth::user()->name;
+        $this->resetErrorBag();
+        $this->resetValidation();
     }
 
     public function clear()
@@ -304,8 +293,9 @@ class TaskComponent extends Component
             $this->reset(['perPage']);
         }
 
+
         return view(
-            'livewire.task.task-component',
+            'livewire.profile.mytask-component',
             [
                 'tasks' => Task::latest('id')
                     ->with('type', 'statu', 'priority')

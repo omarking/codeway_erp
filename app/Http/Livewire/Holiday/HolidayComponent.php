@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Holiday;
 use App\Models\Absence;
 use App\Models\Holiday;
 use App\Models\Period;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -134,6 +135,8 @@ class HolidayComponent extends Component
 
     public function show(Holiday $holiday)
     {
+        $created              = new Carbon($holiday->created_at);
+        $updated              = new Carbon($holiday->updated_at);
         $this->holiday_id     = $holiday->id;
         $this->days           = $holiday->days;
         $this->beginDate      = $holiday->beginDate;
@@ -145,8 +148,10 @@ class HolidayComponent extends Component
         $this->commentable    = $holiday->commentable;
         $this->absence_id     = $holiday->absence_id;
         $this->period_id      = $holiday->period_id;
-        $this->created_at     = $holiday->created_at;
-        $this->updated_at     = $holiday->updated_at;
+        $this->created_at     = $created->format('l jS \\of F Y h:i:s A');
+        $this->updated_at     = $updated->format('l jS \\of F Y h:i:s A');
+        /* $this->created_at     = $holiday->created_at;
+        $this->updated_at     = $holiday->updated_at; */
 
         if (isset($holiday->absence->description)) {
             $this->ausencia   = $holiday->absence->description;

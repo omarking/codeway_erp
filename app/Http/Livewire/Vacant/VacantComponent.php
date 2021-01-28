@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Vacant;
 
 use App\Models\Vacant;
+use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Str;
@@ -85,13 +86,17 @@ class VacantComponent extends Component
 
     public function show(Vacant $vacant)
     {
+        $created            = new Carbon($vacant->created_at);
+        $updated            = new Carbon($vacant->updated_at);
         $this->vacant_id    = $vacant->id;
         $this->name         = $vacant->name;
         $this->description  = $vacant->description;
         $this->quantity     = $vacant->quantity;
         $this->status       = $vacant->status;
-        $this->created_at   = $vacant->created_at;
-        $this->updated_at   = $vacant->updated_at;
+        $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
+        $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
+        /* $this->created_at   = $vacant->created_at;
+        $this->updated_at   = $vacant->updated_at; */
     }
 
     public function close()

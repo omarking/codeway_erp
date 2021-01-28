@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Clase;
 
 use App\Models\Clas;
 use App\Models\Project;
+use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -72,11 +73,15 @@ class ClaseComponent extends Component
 
     public function show(Clas $clase)
     {
+        $created            = new Carbon($clase->created_at);
+        $updated            = new Carbon($clase->updated_at);
         $this->class_id     = $clase->id;
         $this->description  = $clase->description;
         $this->status       = $clase->status;
-        $this->created_at   = $clase->created_at;
-        $this->updated_at   = $clase->updated_at;
+        $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
+        $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
+        /* $this->created_at   = $clase->created_at;
+        $this->updated_at   = $clase->updated_at; */
         $this->clase        = $clase;
     }
 

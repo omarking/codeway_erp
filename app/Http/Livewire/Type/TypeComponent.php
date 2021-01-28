@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Type;
 
 use App\Models\Task;
 use App\Models\Type;
+use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -72,11 +73,15 @@ class TypeComponent extends Component
 
     public function show(Type $type)
     {
+        $created            = new Carbon($type->created_at);
+        $updated            = new Carbon($type->updated_at);
         $this->type_id      = $type->id;
         $this->description  = $type->description;
         $this->status       = $type->status;
-        $this->created_at   = $type->created_at;
-        $this->updated_at   = $type->updated_at;
+        $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
+        $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
+        /* $this->created_at   = $type->created_at;
+        $this->updated_at   = $type->updated_at; */
         $this->$type        = $type;
     }
 

@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Absence;
 
 use App\Models\Absence;
 use App\Models\Holiday;
+use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -72,11 +73,15 @@ class AbsenceComponent extends Component
 
     public function show(Absence $absence)
     {
+        $created            = new Carbon($absence->created_at);
+        $updated            = new Carbon($absence->updated_at);
         $this->absence_id   = $absence->id;
         $this->description  = $absence->description;
         $this->status       = $absence->status;
-        $this->created_at   = $absence->created_at;
-        $this->updated_at   = $absence->updated_at;
+        /* $this->created_at   = $absence->created_at;
+        $this->updated_at   = $absence->updated_at; */
+        $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
+        $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
         $this->absence      = $absence;
     }
 

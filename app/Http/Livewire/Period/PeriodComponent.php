@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Period;
 
 use App\Models\Holiday;
 use App\Models\Period;
+use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -72,11 +73,15 @@ class PeriodComponent extends Component
 
     public function show(Period $period)
     {
+        $created            = new Carbon($period->created_at);
+        $updated            = new Carbon($period->updated_at);
         $this->period_id    = $period->id;
         $this->description  = $period->description;
         $this->status       = $period->status;
-        $this->created_at   = $period->created_at;
-        $this->updated_at   = $period->updated_at;
+        $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
+        $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
+        /* $this->created_at   = $period->created_at;
+        $this->updated_at   = $period->updated_at; */
         $this->period       = $period;
     }
 

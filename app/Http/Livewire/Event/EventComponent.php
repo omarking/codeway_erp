@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Event;
 
 use App\Models\Event;
+use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Str;
@@ -101,18 +102,22 @@ class EventComponent extends Component
         $this->emit('eventCreatedEvent');
     }
 
-    public function show(Event $position)
+    public function show(Event $event)
     {
-        $this->event_id     = $position->id;
-        $this->title        = $position->title;
-        $this->description  = $position->description;
-        $this->start        = $position->start;
-        $this->end          = $position->end;
-        $this->color        = $position->color;
-        $this->textColor    = $position->textColor;
-        $this->status       = $position->status;
-        $this->created_at   = $position->created_at;
-        $this->updated_at   = $position->updated_at;
+        $created            = new Carbon($event->created_at);
+        $updated            = new Carbon($event->updated_at);
+        $this->event_id     = $event->id;
+        $this->title        = $event->title;
+        $this->description  = $event->description;
+        $this->start        = $event->start;
+        $this->end          = $event->end;
+        $this->color        = $event->color;
+        $this->textColor    = $event->textColor;
+        $this->status       = $event->status;
+        $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
+        $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
+        /* $this->created_at   = $event->created_at;
+        $this->updated_at   = $event->updated_at; */
     }
 
     public function close()
@@ -121,16 +126,16 @@ class EventComponent extends Component
         $this->emit('eventShowEvent');
     }
 
-    public function edit(Event $position)
+    public function edit(Event $event)
     {
-        $this->event_id     = $position->id;
-        $this->title        = $position->title;
-        $this->description  = $position->description;
-        $this->start        = $position->start;
-        $this->end          = $position->end;
-        $this->color        = $position->color;
-        $this->textColor    = $position->textColor;
-        $this->status       = $position->status;
+        $this->event_id     = $event->id;
+        $this->title        = $event->title;
+        $this->description  = $event->description;
+        $this->start        = $event->start;
+        $this->end          = $event->end;
+        $this->color        = $event->color;
+        $this->textColor    = $event->textColor;
+        $this->status       = $event->status;
         $this->accion       = "update";
     }
 
@@ -162,10 +167,10 @@ class EventComponent extends Component
         }
     }
 
-    public function delete(Event $position)
+    public function delete(Event $event)
     {
-        $this->event_id     = $position->id;
-        $this->title        = $position->title;
+        $this->event_id     = $event->id;
+        $this->title        = $event->title;
     }
 
     public function destroy()

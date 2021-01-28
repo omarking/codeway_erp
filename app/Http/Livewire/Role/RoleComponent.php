@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Role;
 
 use App\Models\Permission;
 use App\Models\Role;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -102,6 +103,8 @@ class RoleComponent extends Component
 
     public function show(Role $role)
     {
+        $created            = new Carbon($role->created_at);
+        $updated            = new Carbon($role->updated_at);
         $this->role_id      = $role->id;
         $this->name         = $role->name;
         $this->slug         = $role->slug;
@@ -109,8 +112,10 @@ class RoleComponent extends Component
         $this->responsable  = $role->responsable;
         $this->fullAccess   = $role->fullAccess;
         $this->status       = $role->status;
-        $this->created_at   = $role->created_at;
-        $this->updated_at   = $role->updated_at;
+        $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
+        $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
+        /* $this->created_at   = $role->created_at;
+        $this->updated_at   = $role->updated_at; */
 
         foreach ($role->permissions as $permission) {
             $this->permission_role[] = $permission->id;

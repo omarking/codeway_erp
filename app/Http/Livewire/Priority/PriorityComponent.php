@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Priority;
 
 use App\Models\Priority;
 use App\Models\Task;
+use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -72,11 +73,15 @@ class PriorityComponent extends Component
 
     public function show(Priority $priority)
     {
+        $created            = new Carbon($priority->created_at);
+        $updated            = new Carbon($priority->updated_at);
         $this->priority_id  = $priority->id;
         $this->description  = $priority->description;
         $this->status       = $priority->status;
-        $this->created_at   = $priority->created_at;
-        $this->updated_at   = $priority->updated_at;
+        $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
+        $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
+        /* $this->created_at   = $priority->created_at;
+        $this->updated_at   = $priority->updated_at; */
         $this->$priority    = $priority;
     }
 

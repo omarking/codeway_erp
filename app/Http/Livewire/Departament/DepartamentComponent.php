@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Departament;
 
 use App\Models\Departament;
 use App\Models\Group;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -89,13 +90,17 @@ class DepartamentComponent extends Component
 
     public function show(Departament $departament)
     {
+        $created                  = new Carbon($departament->created_at);
+        $updated                  = new Carbon($departament->updated_at);
         $this->departament_id     = $departament->id;
         $this->name               = $departament->name;
         $this->description        = $departament->description;
         $this->responsable        = $departament->responsable;
         $this->status             = $departament->status;
-        $this->created_at         = $departament->created_at;
-        $this->updated_at         = $departament->updated_at;
+        $this->created_at         = $created->format('l jS \\of F Y h:i:s A');
+        $this->updated_at         = $updated->format('l jS \\of F Y h:i:s A');
+        /* $this->created_at         = $departament->created_at;
+        $this->updated_at         = $departament->updated_at; */
         $this->departamento       = $departament;
 
         foreach ($departament->groups as $group) {

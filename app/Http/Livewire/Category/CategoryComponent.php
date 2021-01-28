@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Category;
 
 use App\Models\Category;
 use App\Models\Project;
+use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -72,11 +73,15 @@ class CategoryComponent extends Component
 
     public function show(Category $categories)
     {
+        $created            = new Carbon($categories->created_at);
+        $updated            = new Carbon($categories->updated_at);
         $this->category_id  = $categories->id;
         $this->description  = $categories->description;
         $this->status       = $categories->status;
-        $this->created_at   = $categories->created_at;
-        $this->updated_at   = $categories->updated_at;
+        $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
+        $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
+        /* $this->created_at   = $categories->created_at;
+        $this->updated_at   = $categories->updated_at; */
         $this->category     = $categories;
     }
 

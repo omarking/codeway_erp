@@ -56,6 +56,7 @@
                                         Inactivo
                                     @endif
                                 </td>
+                                {{-- <td>{{ $absence->created_at->toFormattedDateString() }}</td> --}}
                                 <td>{{ $absence->created_at->diffForHumans() }}</td>
                                 <td>{{ $absence->updated_at->diffForHumans() }}</td>
                                 <td>
