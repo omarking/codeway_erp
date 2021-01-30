@@ -40,6 +40,7 @@
                         <tr>
                             <th scope="col">Departamento</th>
                             <th scope="col">Descripción</th>
+                            <th scope="col">Responsable</th>
                             <th scope="col">Estado</th>
                             <th scope="col">Creado</th>
                             <th scope="col">Actualizado</th>
@@ -51,6 +52,7 @@
                             <tr>
                                 <td>{{ $departament->name }}</td>
                                 <td>{{ $departament->description }}</td>
+                                <td>{{ $departament->responsable }}</td>
                                 <td>
                                     @if ($departament->status == "1")
                                         Activa

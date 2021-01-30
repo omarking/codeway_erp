@@ -26,7 +26,7 @@ class ProjectComponent extends Component
 
     public $project_id, $avatar, $key, $name, $description, $status, $responsable, $created_at, $updated_at, $accion = "store";
 
-    public $clase, $categoria, $clas_id, $category_id, $temporary;
+    public $clase, $categoria, $clas_id, $category_id, $temporary, $usuarios;
 
     public $search = '', $perPage = '10', $total, $projects_task;
 
@@ -66,7 +66,7 @@ class ProjectComponent extends Component
     public function mount()
     {
         $this->total = count(Project::all());
-        $this->responsable = Auth::user()->name;
+        $this->usuarios = User::where('status', '=', 1)->get();
         $this->resetErrorBag();
         $this->resetValidation();
     }
@@ -121,7 +121,7 @@ class ProjectComponent extends Component
             'name'          => $this->name,
             'slug'          => Str::slug($this->name, '-'),
             'description'   => $this->description,
-            'responsable'   => Auth::user()->name,
+            'responsable'   => $this->responsable,
             'clas_id'       => $this->clas_id,
             'category_id'   => $this->category_id,
         ]);
@@ -220,7 +220,7 @@ class ProjectComponent extends Component
                 'slug'          => Str::slug($this->name, '-'),
                 'description'   => $this->description,
                 'status'        => $this->status,
-                'responsable'   => Auth::user()->name,
+                'responsable'   => $this->responsable,
                 'clas_id'       => $this->clas_id,
                 'category_id'   => $this->category_id,
             ]);

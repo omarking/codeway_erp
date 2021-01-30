@@ -15,15 +15,11 @@ class StatusSeeder extends Seeder
     public function run()
     {
         $status = Statu::create([
-            'description' => 'Backlog',
+            'description' => 'Creada',
         ]);
 
         $status = Statu::create([
-            'description' => 'Para desarrollo',
-        ]);
-
-        $status = Statu::create([
-            'description' => 'En curso',
+            'description' => 'Desarrollo',
         ]);
 
         $status = Statu::create([
@@ -31,7 +27,7 @@ class StatusSeeder extends Seeder
         ]);
 
         $status = Statu::create([
-            'description' => 'Cancelada',
+            'description' => 'Pendiente',
         ]);
     }
 }

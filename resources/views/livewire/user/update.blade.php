@@ -153,6 +153,30 @@
                             </span>
                         @enderror
                     </div>
+                    @isset ($depa)
+                        <div class="form-group">
+                            <label class="text-muted" for="group">Grupo:</label>
+                            <select wire:model="group" class="form-control @error('group') is-invalid @enderror" name="group" wire:dirty.class="bg-success">
+                                <option value="">--Seleccione el grupo--</option>
+                                @foreach($grupos->groups as $group)
+                                    <option value="{{ $group->id }}"
+                                        @isset($group->name)
+                                            @if($group->name)
+                                                selected
+                                            @endif
+                                        @endisset
+                                        >
+                                        {{ $group->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('group')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                    @endisset
                 </form>
             </div>
             <div class="modal-footer">

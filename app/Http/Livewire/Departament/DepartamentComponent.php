@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Departament;
 
 use App\Models\Departament;
 use App\Models\Group;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -19,7 +20,7 @@ class DepartamentComponent extends Component
 
     public $departament_id, $name, $description, $responsable, $status, $created_at, $updated_at, $accion = "store";
 
-    public $search = '', $perPage = '10', $total;
+    public $search = '', $perPage = '10', $total, $usuarios;
 
     public $departament_group = [], $group = [], $departamento;
 
@@ -47,8 +48,8 @@ class DepartamentComponent extends Component
 
     public function mount()
     {
-        $this->total = count(Departament::all());
-        $this->responsable = Auth::user()->name;
+        $this->total        = count(Departament::all());
+        $this->usuarios     = User::where('status', '=', 1)->get();
         $this->resetErrorBag();
         $this->resetValidation();
     }
@@ -80,7 +81,7 @@ class DepartamentComponent extends Component
         $departament = Departament::create([
             'name'          => $this->name,
             'description'   => $this->description,
-            'responsable'   => Auth::user()->name,
+            'responsable'   => $this->responsable,
         ]);
         $departament->groups()->sync($this->group);
         session()->flash('message', 'Departamento creado correctamente.');
@@ -119,6 +120,7 @@ class DepartamentComponent extends Component
         $this->departament_id     = $departament->id;
         $this->name               = $departament->name;
         $this->description        = $departament->description;
+        $this->responsable        = $departament->responsable;
         $this->status             = $departament->status;
         $this->accion             = "update";
 
@@ -139,7 +141,7 @@ class DepartamentComponent extends Component
             $departaments->update([
                 'name'          => $this->name,
                 'description'   => $this->description,
-                'responsable'   => Auth::user()->name,
+                'responsable'   => $this->responsable,
                 'status'        => $this->status,
             ]);
             $departaments->groups()->sync($this->group);

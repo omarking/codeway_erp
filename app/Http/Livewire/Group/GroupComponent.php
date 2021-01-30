@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Group;
 
 use App\Models\Group;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -18,7 +19,7 @@ class GroupComponent extends Component
 
     public $group_id, $name, $description, $responsable, $status, $created_at, $updated_at, $accion = "store";
 
-    public $search = '', $perPage = '10', $total;
+    public $search = '', $perPage = '10', $total, $usuarios;
 
     public $rules = [
         'name'         => 'required|string|max:200|unique:groups,name',
@@ -44,8 +45,8 @@ class GroupComponent extends Component
 
     public function mount()
     {
-        $this->total = count(Group::all());
-        $this->responsable = Auth::user()->name;
+        $this->total        = count(Group::all());
+        $this->usuarios     = User::where('status', '=', 1)->get();
         $this->resetErrorBag();
         $this->resetValidation();
     }
@@ -77,7 +78,7 @@ class GroupComponent extends Component
         Group::create([
             'name'          => $this->name,
             'description'   => $this->description,
-            'responsable'   => Auth::user()->name,
+            'responsable'   => $this->responsable,
         ]);
         session()->flash('message', 'Grupo creado correctamente.');
         $this->clean();
@@ -110,6 +111,7 @@ class GroupComponent extends Component
         $this->group_id     = $group->id;
         $this->name         = $group->name;
         $this->description  = $group->description;
+        $this->responsable  = $group->responsable;
         $this->status       = $group->status;
         $this->accion       = "update";
     }
@@ -126,7 +128,7 @@ class GroupComponent extends Component
             $groups->update([
                 'name'          => $this->name,
                 'description'   => $this->description,
-                'responsable'   => Auth::user()->name,
+                'responsable'   => $this->responsable,
                 'status'        => $this->status,
             ]);
             session()->flash('message', 'Grupo actualizado correctamente.');

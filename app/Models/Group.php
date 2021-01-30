@@ -19,7 +19,7 @@ class Group extends Model
     protected $table = 'groups';
 
     protected $dates = ['deleted_at'];
-    
+
     /**
      * The attributes that are mass assignable.
      *
@@ -36,6 +36,12 @@ class Group extends Model
     public function departaments()
     {
         return $this->belongsToMany(Departament::class)->withTimestamps();
+    }
+
+    /* Un usuario pertenece a uno o muchos usuario */
+    public function users()
+    {
+        return $this->belongsToMany(User::class)->withTimestamps();
     }
 
     /* Un grupo tiene muchos comentarios */

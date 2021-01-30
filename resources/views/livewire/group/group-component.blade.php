@@ -40,6 +40,7 @@
                         <tr>
                             <th scope="col">Grupo</th>
                             <th scope="col">Descripción</th>
+                            <th scope="col">Responsable</th>
                             <th scope="col">Estado</th>
                             <th scope="col">Creado</th>
                             <th scope="col">Actualizado</th>
@@ -51,6 +52,7 @@
                             <tr>
                                 <td>{{ $group->name }}</td>
                                 <td>{{ $group->description }}</td>
+                                <td>{{ $group->responsable }}</td>
                                 <td>
                                     @if ($group->status == "1")
                                         Activa

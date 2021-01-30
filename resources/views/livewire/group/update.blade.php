@@ -30,8 +30,20 @@
                     </div>
                     <div class="form-group">
                         <label class="text-muted" for="responsable">Responsable:</label>
-                        <input type="text" name="responsable" wire:dirty.class="bg-success" disabled
-                            class="form-control @error('responsable') is-invalid @enderror" wire:model="responsable">
+                        <select wire:model="responsable" class="form-control @error('responsable') is-invalid @enderror"  name="responsable" wire:dirty.class="bg-success">
+                            <option value="">--Seleccione el Responsable--</option>
+                            @foreach($usuarios as $usuario)
+                                <option  value="{{ $usuario->name }}"
+                                    @isset( $usuario->name )
+                                        @if( $usuario->name )
+                                            selected
+                                        @endif
+                                    @endisset
+                                    >
+                                    {{ $usuario->name }}
+                                </option>
+                            @endforeach
+                        </select>
                         @error('responsable')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>

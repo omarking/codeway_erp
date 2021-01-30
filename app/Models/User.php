@@ -144,4 +144,10 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Event::class)->withTimestamps();
     }
+
+    /* Un usuario pertenece a uno o muchos grupos */
+    public function groups()
+    {
+        return $this->belongsToMany(Group::class)->withTimestamps();
+    }
 }

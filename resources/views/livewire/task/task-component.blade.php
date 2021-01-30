@@ -1,12 +1,8 @@
 <div>
     <div class="card">
         <div class="card-header bg-secondary">
-            <div class="text-xl-left">
-                <h3 class="card-title text-uppercase">Tareas</h3>
-            </div>
-            <div>
-                <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#createTask">Agregar Tarea</button>
-            </div>
+            <h4 class="card-title text-uppercase text-lg-left">Tareas</h4>
+            <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#createTask">Agregar Tarea</button>
         </div>
         <div class="card-body">
             <div class="table-responsive">

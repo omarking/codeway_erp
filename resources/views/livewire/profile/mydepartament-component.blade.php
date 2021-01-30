@@ -3,17 +3,21 @@
         <div class="col lg-8 .col-md-8 .col-sm-4">
             <div class="card">
                 <div class="card-header bg-secondary">
-                    <h4 class="text-uppercase">
-                        @isset($departament->id)
-                            Departamento de {{ $departament->name }}
-                        @else
-                            Aun no eres asignado a un departamento
-                        @endisset
-                    </h4>
+                        <h4 class="text-uppercase">
+                            @isset($departament->id)
+                                <div wire:click="$emitTo('comment.comment-component', 'veamos')">
+                                    Departamento de {{ $departament->name }}
+                                </div>
+                            @else
+                                Aun no eres asignado a un departamento
+                            @endisset
+                        </h4>
                 </div>
                 <div class="card-body">
                     @isset($departament->id)
-                        <h5> {{ $departament->description }} </h5>
+                        <div wire:click.prevent="send({{ $departament->id }})">
+                            <h5> {{ $departament->description }} </h5>
+                        </div>
                     @else
                         <h5>Espera a que se te asigne a un departamento, por lo mientras tomate un cafe</h5>
                     @endisset
@@ -26,8 +30,36 @@
                     @endisset
                 </div>
             </div>
-            <label class="text-muted text-uppercase">Grupos en este Departamento</label>
-            <div>
+            <div class="card">
+                <div class="card-header bg-secondary">
+                    <h4 class="text-uppercase">
+                        @isset($group->id)
+                            <div wire:click.prevent="send({{ $group->id }})">
+                                Grupo de {{ $group->name }}
+                            </div>
+                        @else
+                            Aun no eres asignado a un grupo
+                        @endisset
+                    </h4>
+                </div>
+                <div class="card-body">
+                    @isset($group->id)
+                        <div wire:click.prevent="send({{ $group->id }})">
+                            <h5> {{ $group->description }} </h5>
+                        </div>
+                    @else
+                        <h5>Espera a que se te asigne a un grupo, por lo mientras tomate un cafe</h5>
+                    @endisset
+                </div>
+                <div class="card-footer">
+                    @isset($group->id)
+                        <h6> {{ $group->responsable }} </h6>
+                    @else
+                        <h6>- - - - -</h6>
+                    @endisset
+                </div>
+            </div>
+            {{-- <div>
                 @isset($grupos)
                     @forelse ($grupos->groups as $group)
                         <div class="card">
@@ -58,12 +90,16 @@
                 @else
                     No hay grupos en este Departamento
                 @endisset
-            </div>
+            </div> --}}
         </div>
         <div class="col lg-4 .col-md-4 .col-sm-4">
             <div class="card">
-                <div class="card-body">
+                <div wire:poll.100ms class="card-body">
                     Mensajes
+                    {{ $component }}
+                    @isset($component)
+                        @livewire('comment.comment-component', ['component' => $component])
+                    @endisset
                 </div>
             </div>
         </div>

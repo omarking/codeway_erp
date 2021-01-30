@@ -15,7 +15,7 @@ class MiprojectsComponent extends Component
     {
         $this->user = Auth::user();
 
-        $this->usuario   = User::with('projects')->where('id', '=', $this->user->id)->get();
+        $this->usuario   = User::with('projects', 'departaments', 'groups')->where('id', '=', $this->user->id)->get();
 
         $this->proyectos = Project::with('users')->get();
     }

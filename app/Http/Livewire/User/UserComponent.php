@@ -4,6 +4,7 @@ namespace App\Http\Livewire\User;
 
 use App\Mail\MessageReceived;
 use App\Models\Departament;
+use App\Models\Group;
 use App\Models\Profile;
 use App\Models\Role;
 use App\Models\User;
@@ -24,7 +25,7 @@ class UserComponent extends Component
 
     public $user_id, $nameUser, $firstLastname, $secondLastname, $phone, $name, $email, $corporative, $password, $status, $created_at, $updated_at, $accion = "store";
 
-    public $search = '', $perPage = '10', $total, $role, $now, $user, $rool, $departament;
+    public $search = '', $perPage = '10', $total, $role, $now, $user, $rool, $departament, $group, $depa, $grupos;
 
     public $user_profile, $avatar, $description, $facebook, $instagram, $github, $website, $other, $position;
 
@@ -39,6 +40,7 @@ class UserComponent extends Component
         'password'       => 'required|string|min:8|max:100',
         'role'           => 'required',
         'departament'    => 'required',
+        'group'          => 'required',
     ];
 
     /* protected $messages = [
@@ -62,6 +64,7 @@ class UserComponent extends Component
         'password'       => 'contraseña',
         'role'           => 'rol',
         'departament'    => 'departamento',
+        'group'          => 'grupo',
     ];
 
     public function mount()
@@ -86,6 +89,7 @@ class UserComponent extends Component
                 'password'       => 'required|string|min:8|max:100',
                 'role'           => 'required',
                 'departament'    => 'required',
+                'group'          => 'required',
             ]);
         } else {
             $this->validateOnly($propertyName, [
@@ -99,6 +103,7 @@ class UserComponent extends Component
                 'password'       => 'required|string|min:8|max:100',
                 'role'           => 'required',
                 'departament'    => 'required',
+                'group'          => 'required',
             ]);
         }
     }
@@ -116,6 +121,7 @@ class UserComponent extends Component
             'password'       => 'required|string|min:8|max:100',
             'role'           => 'required',
             'departament'    => 'required',
+            'group'          => 'required',
         ]);
         $user = User::create([
             'nameUser'          => $this->nameUser,
@@ -133,6 +139,9 @@ class UserComponent extends Component
         }
         if ($this->departament) {
             $user->departaments()->sync($this->departament);
+        }
+        if ($this->group) {
+            $user->groups()->sync($this->group);
         }
         Profile::create([
             'user_id' => $user->id,
@@ -220,6 +229,12 @@ class UserComponent extends Component
         } else {
             $this->departament  = "Aún no se le ha asignado a un departamento";
         }
+
+        if (isset($user->groups[0]->name)) {
+            $this->group  = $user->groups[0]->name;
+        } else {
+            $this->group  = "Aún no se le ha asignado a un grupo";
+        }
     }
 
     public function close()
@@ -250,6 +265,10 @@ class UserComponent extends Component
         foreach ($user->departaments as $departament) {
             $this->departament = $departament->id;
         }
+
+        foreach ($user->groups as $group) {
+            $this->group = $group->id;
+        }
     }
 
     public function update()
@@ -264,6 +283,7 @@ class UserComponent extends Component
             'corporative'    => 'required|email|max:100|unique:users,corporative,' . $this->user_id,
             'role'           => 'required',
             'departament'    => 'required',
+            'group'          => 'required',
         ]);
         if ($this->user_id) {
             $user = User::find($this->user_id);
@@ -282,6 +302,9 @@ class UserComponent extends Component
             }
             if ($this->departament) {
                 $user->departaments()->sync($this->departament);
+            }
+            if ($this->group) {
+                $user->groups()->sync($this->group);
             }
             session()->flash('message', 'Usuario actualizado correctamente.');
             $this->clean();
@@ -326,6 +349,8 @@ class UserComponent extends Component
             'updated_at',
             'user_profile',
             'departament',
+            'group',
+            'depa',
         ]);
         $this->mount();
     }
@@ -337,9 +362,20 @@ class UserComponent extends Component
 
     public function render()
     {
-        $roless = Role::orderBy('name')->get();
+        $roless         = Role::orderBy('name')->get();
 
-        $departamentss = Departament::orderBy('name')->get();
+        $departamentss  = Departament::orderBy('name')->get();
+
+        $groupss        = Group::orderBy('name')->get();
+
+        $this->depa = $this->departament;
+
+        if ($this->depa) {
+            $departamentos = Departament::with('groups')->where('id', '=', $this->depa)->get();
+            foreach ($departamentos as $departamento) {
+                $this->grupos = $departamento;
+            }
+        }
 
         if ($this->search != '') {
             $this->page = 1;
@@ -352,7 +388,7 @@ class UserComponent extends Component
             'livewire.user.user-component',
             [
                 'users' => User::latest('id')
-                    ->with('roles', 'profile', 'departaments')
+                    ->with('roles', 'profile', 'departaments', 'groups')
                     ->where('nameUser', 'LIKE', "%{$this->search}%")
                     ->orWhere('firstLastname', 'LIKE', "%{$this->search}%")
                     ->orWhere('secondLastname', 'LIKE', "%{$this->search}%")
@@ -362,7 +398,7 @@ class UserComponent extends Component
                     ->orWhere('corporative', 'LIKE', "%{$this->search}%")
                     ->paginate($this->perPage)
             ],
-            compact('roless', 'departamentss')
+            compact('roless', 'departamentss', 'groupss')
         );
     }
 }

@@ -48,6 +48,10 @@
                                 <h5>{{ $departament }}</h5>
                             </div>
                             <div class="form-group">
+                                <label class="text-muted" for="group">Grupo</label>
+                                <h5>{{ $group }}</h5>
+                            </div>
+                            <div class="form-group">
                                 <label class="text-muted" for="created_at">Creado:</label>
                                 <h5>{{ $created_at }}</h5>
                             </div>

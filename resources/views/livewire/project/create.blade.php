@@ -62,6 +62,22 @@
                     </div>
                     <div class="form-group">
                         <label class="text-muted" for="responsable">Responsable:</label>
+                        <select wire:model="responsable" class="form-control @error('responsable') is-invalid @enderror" name="responsable" wire:dirty.class="bg-primary" id="departament">
+                            <option value="">--Seleccione el responsable--</option>
+                            @foreach($usuarios as $usuario)
+                                <option value="{{$usuario->name}}">
+                                    {{ $usuario->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('responsable')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                   {{--  <div class="form-group">
+                        <label class="text-muted" for="responsable">Responsable:</label>
                         <input type="text" name="responsable" class="form-control @error('responsable') is-invalid @enderror"
                                 wire:model="responsable" wire:dirty.class="bg-primary" disabled>
                         @error('responsable')
@@ -69,7 +85,7 @@
                                 <strong>{{ $message }}</strong>
                             </span>
                         @enderror
-                    </div>
+                    </div> --}}
                     <div class="form-group">
                         <label class="text-muted" for="clas_id">Clase:</label>
                         <select wire:model="clas_id" class="form-control @error('clas_id') is-invalid @enderror" name="clas_id" wire:dirty.class="bg-primary">
@@ -131,7 +147,7 @@
                                         {{ $usuario->id }}
                                         -
                                         {{ $usuario->nameUser }} {{ $usuario->firstLastname }} {{ $usuario->secondLastname }}
-                                        <em>( {{ $usuario->email }} )</em>
+                                        <em>( {{ $usuario->name }} )</em>
                                     </label>
                                 </div>
                             @empty
