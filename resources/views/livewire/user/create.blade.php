@@ -126,15 +126,17 @@
                             <label class="text-muted" for="group">Grupo:</label>
                             <select wire:model="group" class="form-control @error('group') is-invalid @enderror" name="group" wire:dirty.class="bg-primary" id="group">
                                 <option value="">--Seleccione el grupo--</option>
-                                @forelse($grupos->groups as $group)
-                                    <option value="{{$group->id}}">
-                                        {{ $group->name }}
-                                    </option>
-                                @empty
-                                    <option value="">
-                                        no hay grupos en este departamento
-                                    </option>
-                                @endforelse
+                                @isset($grupos)
+                                    @forelse($grupos->groups as $group)
+                                        <option value="{{$group->id}}">
+                                            {{ $group->name }}
+                                        </option>
+                                    @empty
+                                        <option value="">
+                                            no hay grupos en este departamento
+                                        </option>
+                                    @endforelse
+                                @endisset
                             </select>
                             @error('group')
                                 <span class="invalid-feedback" role="alert">

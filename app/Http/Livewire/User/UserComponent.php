@@ -372,8 +372,10 @@ class UserComponent extends Component
 
         if ($this->depa) {
             $departamentos = Departament::with('groups')->where('id', '=', $this->depa)->get();
-            foreach ($departamentos as $departamento) {
+            if(isset($departamentos)){
+                foreach ($departamentos as $departamento) {
                 $this->grupos = $departamento;
+            }
             }
         }
 
