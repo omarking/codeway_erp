@@ -7,29 +7,23 @@ use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class VacantComponent extends Component
 {
     use WithPagination;
 
-    public $page = 1;
-
     protected $paginationTheme = 'bootstrap';
 
     public $vacant_id, $name, $description, $quantity, $status, $created_at, $updated_at, $accion = "store";
 
-    public $search = '', $perPage = '10', $total;
+    public $search = '', $perPage = '10', $page = 1, $total;
 
     public $rules = [
         'name'         => 'required|string|max:200|unique:vacants,name',
         'description'  => 'required|string',
         'quantity'     => 'required|numeric',
     ];
-
-    /* protected $messages = [
-        'description.required' => 'La descripción es requerida.',
-        'description.unique' => 'La descripción ya esta en uso.',
-    ]; */
 
     protected $queryString = [
         'search'  => ['except' => ''],
@@ -73,13 +67,26 @@ class VacantComponent extends Component
             'description'  => 'required|string',
             'quantity'     => 'required|numeric',
         ]);
-        Vacant::create([
-            'name'          => $this->name,
-            'slug'          => Str::slug($this->name, '-'),
-            'description'   => $this->description,
-            'quantity'      => $this->quantity,
+        $status  = 'success';
+        $content = 'Se agrego correctamente la vacante';
+        try {
+            DB::beginTransaction();
+            Vacant::create([
+                'name'          => $this->name,
+                'slug'          => Str::slug($this->name, '-'),
+                'description'   => $this->description,
+                'quantity'      => $this->quantity,
+            ]);
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            $status  = 'error';
+            $content = 'Ocurrio un error al agregar la vacante';
+        }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
         ]);
-        session()->flash('message', 'Vacante creada correctamente.');
         $this->clean();
         $this->emit('vacantCreatedEvent');
     }
@@ -95,8 +102,6 @@ class VacantComponent extends Component
         $this->status       = $vacant->status;
         $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
         $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
-        /* $this->created_at   = $vacant->created_at;
-        $this->updated_at   = $vacant->updated_at; */
     }
 
     public function close()
@@ -122,19 +127,32 @@ class VacantComponent extends Component
             'description'  => 'required|string',
             'quantity'     => 'required|numeric',
         ]);
-        if ($this->vacant_id) {
-            $vacants = Vacant::find($this->vacant_id);
-            $vacants->update([
-                'name'          => $this->name,
-                'slug'          => Str::slug($this->name, '-'),
-                'description'   => $this->description,
-                'quantity'      => $this->quantity,
-                'status'        => $this->status,
-            ]);
-            session()->flash('message', 'Vacante actualizada correctamente.');
-            $this->clean();
-            $this->emit('vacantUpdatedEvent');
+        $status  = 'success';
+        $content = 'Se actualizo correctamente la vacante';
+        try {
+            DB::beginTransaction();
+            if ($this->vacant_id) {
+                $vacants = Vacant::find($this->vacant_id);
+                $vacants->update([
+                    'name'          => $this->name,
+                    'slug'          => Str::slug($this->name, '-'),
+                    'description'   => $this->description,
+                    'quantity'      => $this->quantity,
+                    'status'        => $this->status,
+                ]);
+            }
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            $status  = 'error';
+            $content = 'Ocurrio un error al actualizar la vacante';
         }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
+        $this->clean();
+        $this->emit('vacantUpdatedEvent');
     }
 
     public function delete(Vacant $vacant)
@@ -145,8 +163,21 @@ class VacantComponent extends Component
 
     public function destroy()
     {
-        Vacant::find($this->vacant_id)->delete();
-        session()->flash('message', 'Vacante eliminada correctamente.');
+        $status  = 'success';
+        $content = 'Se elimino correctamente la vacante';
+        try {
+            DB::beginTransaction();
+            Vacant::find($this->vacant_id)->delete();
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            $status  = 'error';
+            $content = 'Ocurrio un error al eliminar la vacante';
+        }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
         $this->clean();
         $this->emit('vacantDeletedEvent');
     }

@@ -7,27 +7,21 @@ use App\Models\Task;
 use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\DB;
 
 class PriorityComponent extends Component
 {
     use WithPagination;
 
-    public $page = 1;
-
     protected $paginationTheme = 'bootstrap';
 
     public $priority_id, $description, $status, $created_at, $updated_at, $accion = "store";
 
-    public $search = '', $perPage = '10', $total, $task, $priority;
+    public $search = '', $perPage = '10', $page = 1, $total, $task, $priority;
 
     public $rules = [
         'description'  => 'required|string|max:200|unique:priorities,description',
     ];
-
-    /* protected $messages = [
-        'description.required' => 'La descripción es requerida.',
-        'description.unique' => 'La descripción ya esta en uso.',
-    ]; */
 
     protected $queryString = [
         'search'  => ['except' => ''],
@@ -63,10 +57,23 @@ class PriorityComponent extends Component
         $this->validate([
             'description' => 'required|max:200|unique:priorities,description',
         ]);
-        Priority::create([
-            'description'   => $this->description,
+        $status  = 'success';
+        $content = 'Se agrego correctamente la prioridad';
+        try {
+            DB::beginTransaction();
+            Priority::create([
+                'description'   => $this->description,
+            ]);
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            $status  = 'error';
+            $content = 'Ocurrio un error al agregar la prioridad';
+        }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
         ]);
-        session()->flash('message', 'Prioridad creada correctamente.');
         $this->clean();
         $this->emit('priorityCreatedEvent');
     }
@@ -80,8 +87,6 @@ class PriorityComponent extends Component
         $this->status       = $priority->status;
         $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
         $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
-        /* $this->created_at   = $priority->created_at;
-        $this->updated_at   = $priority->updated_at; */
         $this->$priority    = $priority;
     }
 
@@ -104,16 +109,29 @@ class PriorityComponent extends Component
         $this->validate([
             'description' => 'required|max:200|unique:priorities,description,' . $this->priority_id,
         ]);
-        if ($this->priority_id) {
-            $priority = Priority::find($this->priority_id);
-            $priority->update([
-                'description'   => $this->description,
-                'status'        => $this->status,
-            ]);
-            session()->flash('message', 'Prioridad actualizada correctamente.');
-            $this->clean();
-            $this->emit('priorityUpdatedEvent');
+        $status  = 'success';
+        $content = 'Se actualizo correctamente la prioridad';
+        try {
+            DB::beginTransaction();
+            if ($this->priority_id) {
+                $priority = Priority::find($this->priority_id);
+                $priority->update([
+                    'description'   => $this->description,
+                    'status'        => $this->status,
+                ]);
+            }
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            $status  = 'error';
+            $content = 'Ocurrio un error al actualizar la prioridad';
         }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
+        $this->clean();
+        $this->emit('priorityUpdatedEvent');
     }
 
     public function delete(Priority $priority)
@@ -124,8 +142,21 @@ class PriorityComponent extends Component
 
     public function destroy()
     {
-        Priority::find($this->priority_id)->delete();
-        session()->flash('message', 'Prioridad eliminada correctamente.');
+        $status  = 'success';
+        $content = 'Se elimino correctamente la prioridad';
+        try {
+            DB::beginTransaction();
+            Priority::find($this->priority_id)->delete();
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            $status  = 'error';
+            $content = 'Ocurrio un error al eliminar la prioridad';
+        }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
         $this->clean();
         $this->emit('priorityDeletedEvent');
     }

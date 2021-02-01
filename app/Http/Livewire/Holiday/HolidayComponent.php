@@ -10,12 +10,11 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class HolidayComponent extends Component
 {
     use WithPagination;
-
-    public $page = 1;
 
     protected $paginationTheme = 'bootstrap';
 
@@ -23,7 +22,7 @@ class HolidayComponent extends Component
 
     public $ausencia, $periodo, $absence_id, $period_id;
 
-    public $search = '', $perPage = '10', $total;
+    public $search = '', $perPage = '10', $page = 1, $total;
 
     public $rules = [
         'days'          => 'required|numeric|max:100',
@@ -37,11 +36,6 @@ class HolidayComponent extends Component
         'absence_id'    => 'required',
         'period_id'     => 'required',
     ];
-
-    /* protected $messages = [
-        'description.required' => 'La descripción es requerida.',
-        'description.unique' => 'La descripción ya esta en uso.',
-    ]; */
 
     protected $queryString = [
         'search'  => ['except' => ''],
@@ -114,21 +108,34 @@ class HolidayComponent extends Component
             'absence_id'    => 'required',
             'period_id'     => 'required',
         ]);
-        $slug = $this->days . ' ' . $this->beginDate . ' ' . $this->endDate;
-        Holiday::create([
-            'slug'         => Str::slug($slug, '-'),
-            'days'         => $this->days,
-            'beginDate'    => $this->beginDate,
-            'endDate'      => $this->endDate,
-            'inProcess'    => $this->inProcess,
-            'taken'        => $this->taken,
-            'available'    => $this->available,
-            'responsable'  => Auth::user()->name,
-            'commentable'  => $this->commentable,
-            'absence_id'   => $this->absence_id,
-            'period_id'    => $this->period_id,
+        $status = 'success';
+        $content = 'Se agrego correctamente la vacación';
+        try {
+            DB::beginTransaction();
+            $slug = $this->days . ' ' . $this->beginDate . ' ' . $this->endDate;
+            Holiday::create([
+                'slug'         => Str::slug($slug, '-'),
+                'days'         => $this->days,
+                'beginDate'    => $this->beginDate,
+                'endDate'      => $this->endDate,
+                'inProcess'    => $this->inProcess,
+                'taken'        => $this->taken,
+                'available'    => $this->available,
+                'responsable'  => Auth::user()->name,
+                'commentable'  => $this->commentable,
+                'absence_id'   => $this->absence_id,
+                'period_id'    => $this->period_id,
+            ]);
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $status = 'error';
+            $content = 'Ocurrio un error al agregar la vacación';
+        }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
         ]);
-        session()->flash('message', 'Vacación creada correctamente.');
         $this->clean();
         $this->emit('holidayCreatedEvent');
     }
@@ -150,8 +157,6 @@ class HolidayComponent extends Component
         $this->period_id      = $holiday->period_id;
         $this->created_at     = $created->format('l jS \\of F Y h:i:s A');
         $this->updated_at     = $updated->format('l jS \\of F Y h:i:s A');
-        /* $this->created_at     = $holiday->created_at;
-        $this->updated_at     = $holiday->updated_at; */
 
         if (isset($holiday->absence->description)) {
             $this->ausencia   = $holiday->absence->description;
@@ -203,26 +208,39 @@ class HolidayComponent extends Component
             'absence_id'    => 'required',
             'period_id'     => 'required',
         ]);
-        if ($this->holiday_id) {
-            $holiday = Holiday::find($this->holiday_id);
-            $slug = $this->days . ' ' . $this->beginDate . ' ' . $this->endDate;
-            $holiday->update([
-                'slug'         => Str::slug($slug, '-'),
-                'days'         => $this->days,
-                'beginDate'    => $this->beginDate,
-                'endDate'      => $this->endDate,
-                'inProcess'    => $this->inProcess,
-                'taken'        => $this->taken,
-                'available'    => $this->available,
-                'responsable'  => Auth::user()->name,
-                'commentable'  => $this->commentable,
-                'absence_id'   => $this->absence_id,
-                'period_id'    => $this->period_id,
-            ]);
-            session()->flash('message', 'Vacación actualizada correctamente.');
-            $this->clean();
-            $this->emit('holidayUpdatedEvent');
+        $status = 'success';
+        $content = 'Se actualizo correctamente la vacación';
+        try {
+            DB::beginTransaction();
+            if ($this->holiday_id) {
+                $holiday = Holiday::find($this->holiday_id);
+                $slug = $this->days . ' ' . $this->beginDate . ' ' . $this->endDate;
+                $holiday->update([
+                    'slug'         => Str::slug($slug, '-'),
+                    'days'         => $this->days,
+                    'beginDate'    => $this->beginDate,
+                    'endDate'      => $this->endDate,
+                    'inProcess'    => $this->inProcess,
+                    'taken'        => $this->taken,
+                    'available'    => $this->available,
+                    'responsable'  => Auth::user()->name,
+                    'commentable'  => $this->commentable,
+                    'absence_id'   => $this->absence_id,
+                    'period_id'    => $this->period_id,
+                ]);
+            }
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $status = 'error';
+            $content = 'Ocurrio un error al actualizar la vacación';
         }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
+        $this->clean();
+        $this->emit('holidayUpdatedEvent');
     }
 
     public function delete(Holiday $holiday)
@@ -238,8 +256,21 @@ class HolidayComponent extends Component
 
     public function destroy()
     {
-        Holiday::find($this->holiday_id)->delete();
-        session()->flash('message', 'Vacación eliminada correctamente.');
+        $status = 'success';
+        $content = 'Se elimino correctamente la vacación';
+        try {
+            DB::beginTransaction();
+            Holiday::find($this->holiday_id)->delete();
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $status = 'error';
+            $content = 'Ocurrio un error al eliminar la vacación';
+        }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
         $this->clean();
         $this->emit('holidayDeletedEvent');
     }

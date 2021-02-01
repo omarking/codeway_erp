@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title_postfix', 'Preusuario')
+@section('title_postfix', 'Aspirantes')
 
 @section('css')
     <link rel="stylesheet" href="/css/admin_custom.css">

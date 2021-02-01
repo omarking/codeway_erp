@@ -6,21 +6,19 @@ use App\Models\Departament;
 use App\Models\Group;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\DB;
 
 class DepartamentComponent extends Component
 {
     use WithPagination;
 
-    public $page = 1;
-
     protected $paginationTheme = 'bootstrap';
 
     public $departament_id, $name, $description, $responsable, $status, $created_at, $updated_at, $accion = "store";
 
-    public $search = '', $perPage = '10', $total, $usuarios;
+    public $search = '', $perPage = '10', $page = 1, $total, $usuarios;
 
     public $departament_group = [], $group = [], $departamento;
 
@@ -29,11 +27,6 @@ class DepartamentComponent extends Component
         'description'  => 'required|string',
         'responsable'  => 'required|string',
     ];
-
-    /* protected $messages = [
-        'description.required' => 'La descripción es requerida.',
-        'description.unique' => 'La descripción ya esta en uso.',
-    ]; */
 
     protected $queryString = [
         'search'  => ['except' => ''],
@@ -48,8 +41,8 @@ class DepartamentComponent extends Component
 
     public function mount()
     {
-        $this->total        = count(Departament::all());
-        $this->usuarios     = User::where('status', '=', 1)->get();
+        $this->total     = count(Departament::all());
+        $this->usuarios  = User::where('status', '=', 1)->get();
         $this->resetErrorBag();
         $this->resetValidation();
     }
@@ -78,13 +71,26 @@ class DepartamentComponent extends Component
             'description'  => 'required|string',
             'responsable'  => 'required|string',
         ]);
-        $departament = Departament::create([
-            'name'          => $this->name,
-            'description'   => $this->description,
-            'responsable'   => $this->responsable,
+        $status = 'success';
+        $content = 'Se agrego correctamente el departamento';
+        try {
+            DB::beginTransaction();
+            $departament = Departament::create([
+                'name'          => $this->name,
+                'description'   => $this->description,
+                'responsable'   => $this->responsable,
+            ]);
+            $departament->groups()->sync($this->group);
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $status = 'error';
+            $content = 'Ocurrio un error al agregar el departamento';
+        }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
         ]);
-        $departament->groups()->sync($this->group);
-        session()->flash('message', 'Departamento creado correctamente.');
         $this->clean();
         $this->emit('departamentCreatedEvent');
     }
@@ -100,8 +106,6 @@ class DepartamentComponent extends Component
         $this->status             = $departament->status;
         $this->created_at         = $created->format('l jS \\of F Y h:i:s A');
         $this->updated_at         = $updated->format('l jS \\of F Y h:i:s A');
-        /* $this->created_at         = $departament->created_at;
-        $this->updated_at         = $departament->updated_at; */
         $this->departamento       = $departament;
 
         foreach ($departament->groups as $group) {
@@ -136,19 +140,32 @@ class DepartamentComponent extends Component
             'description'  => 'required|string',
             'responsable'  => 'required|string',
         ]);
-        if ($this->departament_id) {
-            $departaments = Departament::find($this->departament_id);
-            $departaments->update([
-                'name'          => $this->name,
-                'description'   => $this->description,
-                'responsable'   => $this->responsable,
-                'status'        => $this->status,
-            ]);
-            $departaments->groups()->sync($this->group);
-            session()->flash('message', 'Departamento actualizado correctamente.');
-            $this->clean();
-            $this->emit('departamentUpdatedEvent');
+        $status = 'success';
+        $content = 'Se actualizo correctamente el departamento';
+        try {
+            DB::beginTransaction();
+            if ($this->departament_id) {
+                $departaments = Departament::find($this->departament_id);
+                $departaments->update([
+                    'name'          => $this->name,
+                    'description'   => $this->description,
+                    'responsable'   => $this->responsable,
+                    'status'        => $this->status,
+                ]);
+                $departaments->groups()->sync($this->group);
+            }
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $status = 'error';
+            $content = 'Ocurrio un error al actualizar el departamento';
         }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
+        $this->clean();
+        $this->emit('departamentUpdatedEvent');
     }
 
     public function limpia()
@@ -164,8 +181,21 @@ class DepartamentComponent extends Component
 
     public function destroy()
     {
-        Departament::find($this->departament_id)->delete();
-        session()->flash('message', 'Departamento eliminado correctamente.');
+        $status = 'success';
+        $content = 'Se elimino correctamente el departamento';
+        try {
+            DB::beginTransaction();
+            Departament::find($this->departament_id)->delete();
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $status = 'error';
+            $content = 'Ocurrio un error al eliminar el departamento';
+        }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
         $this->clean();
         $this->emit('departamentDeletedEvent');
     }

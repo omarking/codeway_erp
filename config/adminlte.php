@@ -491,7 +491,9 @@ return [
                     'icon'  => 'fas fa-fw fa-project-diagram',
                 ],
                 [
+                    /* Gate::authorize('haveaccess', 'category.index'), */
                     'text'  => 'Categorias',
+                    /* 'can'   => 'category.index', */
                     'url'   => 'category',
                     'icon'  => 'fas fa-fw fa-boxes',
                 ],
@@ -720,6 +722,21 @@ return [
                     'type' => 'js',
                     'asset' => false,
                     'location' => '//cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js',
+                ],
+            ],
+        ],
+        'Toastr' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css',
                 ],
             ],
         ],

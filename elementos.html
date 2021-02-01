@@ -25,3 +25,22 @@
 
 <!-- Le da un espaciado al texto -->
 <p class="text-monospace">This is in monospace</p>
+
+
+<!--
+    Señores buenos días, una pregunta.
+tengo 3 querys de las siguiente forma:
+
+$query1 = Model1::query()->select('id','name','insurance_information');
+$query2 = Model2::query()->select('id','name','insurance_information');
+$query3 = Model3::query()->select('id','name','json_schema');
+
+luego realizo 'union':
+ $query3 = $query3->unionAll($query1)
+                                ->unionAll($query2 );
+
+y efectivamente me trae todos los registros de los modelos, pero el problema es que se cruzan los valores los valores de los campos.
+
+por ejemplo los registros del Modelo1 ($query1)  muestra la propiedad 'json_schema' pero 'json_schema' solo es para el $query3
+también he notado que si no tienen la misma cantidad de campos seleccionados cada query (->select()) da error, entonces como podría evitar que se cruzan los valores ? 🤔
+ -->

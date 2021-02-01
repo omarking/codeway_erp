@@ -7,27 +7,21 @@ use App\Models\Task;
 use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\DB;
 
 class StatusComponent extends Component
 {
     use WithPagination;
 
-    public $page = 1;
-
     protected $paginationTheme = 'bootstrap';
 
     public $status_id, $description, $status, $created_at, $updated_at, $accion = "store";
 
-    public $search = '', $perPage = '10', $total, $task, $statu;
+    public $search = '', $perPage = '10', $page = 1, $total, $task, $statu;
 
     public $rules = [
         'description'  => 'required|string|max:200|unique:status,description',
     ];
-
-    /* protected $messages = [
-        'description.required' => 'La descripción es requerida.',
-        'description.unique' => 'La descripción ya esta en uso.',
-    ]; */
 
     protected $queryString = [
         'search'  => ['except' => ''],
@@ -63,10 +57,23 @@ class StatusComponent extends Component
         $this->validate([
             'description' => 'required|max:200|unique:status,description',
         ]);
-        Statu::create([
-            'description'   => $this->description,
+        $status  = 'success';
+        $content = 'Se agrego correctamente el estado';
+        try {
+            DB::beginTransaction();
+            Statu::create([
+                'description'   => $this->description,
+            ]);
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            $status  = 'error';
+            $content = 'Ocurrio un error al agregar el estado';
+        }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
         ]);
-        session()->flash('message', 'Estado creado correctamente.');
         $this->clean();
         $this->emit('statusCreatedEvent');
     }
@@ -80,8 +87,6 @@ class StatusComponent extends Component
         $this->status       = $status->status;
         $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
         $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
-        /* $this->created_at   = $status->created_at;
-        $this->updated_at   = $status->updated_at; */
         $this->statu        = $status;
     }
 
@@ -104,16 +109,29 @@ class StatusComponent extends Component
         $this->validate([
             'description' => 'required|max:200|unique:status,description,' . $this->status_id,
         ]);
-        if ($this->status_id) {
-            $clase = Statu::find($this->status_id);
-            $clase->update([
-                'description'   => $this->description,
-                'status'        => $this->status,
-            ]);
-            session()->flash('message', 'Estado actualizado correctamente.');
-            $this->clean();
-            $this->emit('statusUpdatedEvent');
+        $status  = 'success';
+        $content = 'Se actualizo correctamente el estado';
+        try {
+            DB::beginTransaction();
+            if ($this->status_id) {
+                $clase = Statu::find($this->status_id);
+                $clase->update([
+                    'description'   => $this->description,
+                    'status'        => $this->status,
+                ]);
+            }
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            $status  = 'error';
+            $content = 'Ocurrio un error al actualizar el estado';
         }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
+        $this->clean();
+        $this->emit('statusUpdatedEvent');
     }
 
     public function delete(Statu $status)
@@ -124,8 +142,21 @@ class StatusComponent extends Component
 
     public function destroy()
     {
-        Statu::find($this->status_id)->delete();
-        session()->flash('message', 'Estado eliminado correctamente.');
+        $status  = 'success';
+        $content = 'Se elimino correctamente el estado';
+        try {
+            DB::beginTransaction();
+            Statu::find($this->status_id)->delete();
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            $status  = 'error';
+            $content = 'Ocurrio un error al eliminar el estado';
+        }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
         $this->clean();
         $this->emit('statusDeletedEvent');
     }

@@ -14,18 +14,17 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\DB;
 
 class UserComponent extends Component
 {
     use WithPagination;
 
-    public $page = 1;
-
     protected $paginationTheme = 'bootstrap';
 
     public $user_id, $nameUser, $firstLastname, $secondLastname, $phone, $name, $email, $corporative, $password, $status, $created_at, $updated_at, $accion = "store";
 
-    public $search = '', $perPage = '10', $total, $role, $now, $user, $rool, $departament, $group, $depa, $grupos;
+    public $search = '', $perPage = '10', $page = 1, $total, $role, $now, $user, $rool, $departament, $group, $depa, $grupos;
 
     public $user_profile, $avatar, $description, $facebook, $instagram, $github, $website, $other, $position;
 
@@ -42,11 +41,6 @@ class UserComponent extends Component
         'departament'    => 'required',
         'group'          => 'required',
     ];
-
-    /* protected $messages = [
-        'description.required' => 'La descripción es requerida.',
-        'description.unique' => 'La descripción ya esta en uso.',
-    ]; */
 
     protected $queryString = [
         'search'  => ['except' => ''],
@@ -123,32 +117,45 @@ class UserComponent extends Component
             'departament'    => 'required',
             'group'          => 'required',
         ]);
-        $user = User::create([
-            'nameUser'          => $this->nameUser,
-            'firstLastname'     => $this->firstLastname,
-            'secondLastname'    => $this->secondLastname,
-            'phone'             => $this->phone,
-            'name'              => $this->name,
-            'email'             => $this->email,
-            'corporative'       => $this->corporative,
-            'password'          => Hash::make($this->password),
-            'email_verified_at' => $this->now,
+        $status  = 'success';
+        $content = 'Se agrego correctamente el usuario';
+        try {
+            DB::beginTransaction();
+            $user = User::create([
+                'nameUser'          => $this->nameUser,
+                'firstLastname'     => $this->firstLastname,
+                'secondLastname'    => $this->secondLastname,
+                'phone'             => $this->phone,
+                'name'              => $this->name,
+                'email'             => $this->email,
+                'corporative'       => $this->corporative,
+                'password'          => Hash::make($this->password),
+                'email_verified_at' => $this->now,
+            ]);
+            if ($this->role) {
+                $user->roles()->sync($this->role);
+            }
+            if ($this->departament) {
+                $user->departaments()->sync($this->departament);
+            }
+            if ($this->group) {
+                $user->groups()->sync($this->group);
+            }
+            Profile::create([
+                'user_id' => $user->id,
+            ]);
+            /* Envio de email */
+            /* Mail::to('admin@admin.com')->queue(new MessageReceived($user)); */
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            $status  = 'error';
+            $content = 'Ocurrio un error al agregar el usuario';
+        }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
         ]);
-        if ($this->role) {
-            $user->roles()->sync($this->role);
-        }
-        if ($this->departament) {
-            $user->departaments()->sync($this->departament);
-        }
-        if ($this->group) {
-            $user->groups()->sync($this->group);
-        }
-        Profile::create([
-            'user_id' => $user->id,
-        ]);
-        /* Envio de email */
-        /* Mail::to('admin@admin.com')->queue(new MessageReceived($user)); */
-        session()->flash('message', 'Usuario creado correctamente.');
         $this->clean();
         $this->emit('userCreatedEvent');
     }
@@ -168,8 +175,6 @@ class UserComponent extends Component
         $this->status         = $user->status;
         $this->created_at     = $created->format('l jS \\of F Y h:i:s A');
         $this->updated_at     = $updated->format('l jS \\of F Y h:i:s A');
-        /* $this->created_at     = $user->created_at;
-        $this->updated_at     = $user->updated_at; */
         $this->user           = $user;
 
         if (isset($user->profile->id)) {
@@ -285,31 +290,44 @@ class UserComponent extends Component
             'departament'    => 'required',
             'group'          => 'required',
         ]);
-        if ($this->user_id) {
-            $user = User::find($this->user_id);
-            $user->update([
-                'nameUser'        => $this->nameUser,
-                'firstLastname'   => $this->firstLastname,
-                'secondLastname'  => $this->secondLastname,
-                'phone'           => $this->phone,
-                'name'            => $this->name,
-                'email'           => $this->email,
-                'corporative'     => $this->corporative,
-                'status'          => $this->status,
-            ]);
-            if ($this->role) {
-                $user->roles()->sync($this->role);
+        $status  = 'success';
+        $content = 'Se actualizo correctamente el usuario';
+        try {
+            DB::beginTransaction();
+            if ($this->user_id) {
+                $user = User::find($this->user_id);
+                $user->update([
+                    'nameUser'        => $this->nameUser,
+                    'firstLastname'   => $this->firstLastname,
+                    'secondLastname'  => $this->secondLastname,
+                    'phone'           => $this->phone,
+                    'name'            => $this->name,
+                    'email'           => $this->email,
+                    'corporative'     => $this->corporative,
+                    'status'          => $this->status,
+                ]);
+                if ($this->role) {
+                    $user->roles()->sync($this->role);
+                }
+                if ($this->departament) {
+                    $user->departaments()->sync($this->departament);
+                }
+                if ($this->group) {
+                    $user->groups()->sync($this->group);
+                }
             }
-            if ($this->departament) {
-                $user->departaments()->sync($this->departament);
-            }
-            if ($this->group) {
-                $user->groups()->sync($this->group);
-            }
-            session()->flash('message', 'Usuario actualizado correctamente.');
-            $this->clean();
-            $this->emit('userUpdatedEvent');
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            $status  = 'error';
+            $content = 'Ocurrio un error al actualizar el usuario';
         }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
+        $this->clean();
+        $this->emit('userUpdatedEvent');
     }
 
     public function delete(User $user)
@@ -322,8 +340,21 @@ class UserComponent extends Component
 
     public function destroy()
     {
-        User::find($this->user_id)->delete();
-        session()->flash('message', 'Usuario eliminado correctamente.');
+        $status  = 'success';
+        $content = 'Se elimino correctamente el usuario';
+        try {
+            DB::beginTransaction();
+            User::find($this->user_id)->delete();
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            $status  = 'error';
+            $content = 'Ocurrio un error al eliminar el usuario';
+        }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
         $this->clean();
         $this->emit('userDeletedEvent');
     }
@@ -372,10 +403,10 @@ class UserComponent extends Component
 
         if ($this->depa) {
             $departamentos = Departament::with('groups')->where('id', '=', $this->depa)->get();
-            if(isset($departamentos)){
+            if (isset($departamentos)) {
                 foreach ($departamentos as $departamento) {
-                $this->grupos = $departamento;
-            }
+                    $this->grupos = $departamento;
+                }
             }
         }
 

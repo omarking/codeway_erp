@@ -7,27 +7,21 @@ use App\Models\Profile;
 use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\DB;
 
 class PositionComponent extends Component
 {
     use WithPagination;
 
-    public $page = 1;
-
     protected $paginationTheme = 'bootstrap';
 
     public $position_id, $description, $status, $created_at, $updated_at, $accion = "store";
 
-    public $search = '', $perPage = '10', $total, $position;
+    public $search = '', $perPage = '10', $page = 1, $total, $position;
 
     public $rules = [
         'description'  => 'required|string|max:200|unique:positions,description',
     ];
-
-    /* protected $messages = [
-        'description.required' => 'La descripción es requerida.',
-        'description.unique' => 'La descripción ya esta en uso.',
-    ]; */
 
     protected $queryString = [
         'search'  => ['except' => ''],
@@ -63,10 +57,23 @@ class PositionComponent extends Component
         $this->validate([
             'description' => 'required|max:200|unique:positions,description',
         ]);
-        Position::create([
-            'description'   => $this->description,
+        $status  = 'success';
+        $content = 'Se agrego correctamente la posicion';
+        try {
+            DB::beginTransaction();
+            Position::create([
+                'description'   => $this->description,
+            ]);
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $status  = 'error';
+            $content = 'Ocurrio un error al agregar la posicion';
+        }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
         ]);
-        session()->flash('message', 'Posición creada correctamente.');
         $this->clean();
         $this->emit('positionCreatedEvent');
     }
@@ -80,8 +87,6 @@ class PositionComponent extends Component
         $this->status       = $position->status;
         $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
         $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
-        /* $this->created_at   = $position->created_at;
-        $this->updated_at   = $position->updated_at; */
         $this->position     = $position;
     }
 
@@ -104,16 +109,29 @@ class PositionComponent extends Component
         $this->validate([
             'description' => 'required|max:200|unique:positions,description,' . $this->position_id,
         ]);
-        if ($this->position_id) {
-            $positions = Position::find($this->position_id);
-            $positions->update([
-                'description'   => $this->description,
-                'status'        => $this->status,
-            ]);
-            session()->flash('message', 'Posición actualizada correctamente.');
-            $this->clean();
-            $this->emit('positionUpdatedEvent');
+        $status  = 'success';
+        $content = 'Se actualizo correctamente la posicion';
+        try {
+            DB::beginTransaction();
+            if ($this->position_id) {
+                $positions = Position::find($this->position_id);
+                $positions->update([
+                    'description'   => $this->description,
+                    'status'        => $this->status,
+                ]);
+            }
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $status  = 'error';
+            $content = 'Ocurrio un error al actualizar la posicion';
         }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
+        $this->clean();
+        $this->emit('positionUpdatedEvent');
     }
 
     public function delete(Position $position)
@@ -125,8 +143,21 @@ class PositionComponent extends Component
 
     public function destroy()
     {
-        Position::find($this->position_id)->delete();
-        session()->flash('message', 'Posición eliminada correctamente.');
+        $status  = 'success';
+        $content = 'Se elimino correctamente la posicion';
+        try {
+            DB::beginTransaction();
+            Position::find($this->position_id)->delete();
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $status  = 'error';
+            $content = 'Ocurrio un error al eliminar la posicion';
+        }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
         $this->clean();
         $this->emit('positionDeletedEvent');
     }

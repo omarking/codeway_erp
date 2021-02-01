@@ -7,27 +7,22 @@ use App\Models\Project;
 use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\DB;
 
 class ClaseComponent extends Component
 {
     use WithPagination;
 
-    public $page = 1;
-
     protected $paginationTheme = 'bootstrap';
 
     public $class_id, $description, $status, $created_at, $updated_at, $accion = "store";
 
-    public $search = '', $perPage = '10', $total, $clase;
+    public $search = '', $perPage = '10', $page = 1, $total, $clase;
 
     public $rules = [
         'description'  => 'required|string|max:200|unique:class,description',
     ];
 
-    /* protected $messages = [
-        'description.required' => 'La descripción es requerida.',
-        'description.unique' => 'La descripción ya esta en uso.',
-    ]; */
 
     protected $queryString = [
         'search'  => ['except' => ''],
@@ -63,10 +58,23 @@ class ClaseComponent extends Component
         $this->validate([
             'description' => 'required|max:200|unique:class,description',
         ]);
-        Clas::create([
-            'description'   => $this->description,
+        $status = 'success';
+        $content = 'Se agrego correctamente la clase';
+        try {
+            DB::beginTransaction();
+            Clas::create([
+                'description'   => $this->description,
+            ]);
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $status = 'error';
+            $content = 'Ocurrio un error al agregar la clase';
+        }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
         ]);
-        session()->flash('message', 'Clase creada correctamente.');
         $this->clean();
         $this->emit('classCreatedEvent');
     }
@@ -80,8 +88,6 @@ class ClaseComponent extends Component
         $this->status       = $clase->status;
         $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
         $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
-        /* $this->created_at   = $clase->created_at;
-        $this->updated_at   = $clase->updated_at; */
         $this->clase        = $clase;
     }
 
@@ -104,16 +110,29 @@ class ClaseComponent extends Component
         $this->validate([
             'description' => 'required|max:200|unique:class,description,' . $this->class_id,
         ]);
-        if ($this->class_id) {
-            $clase = Clas::find($this->class_id);
-            $clase->update([
-                'description'   => $this->description,
-                'status'        => $this->status,
-            ]);
-            session()->flash('message', 'Clase actualizada correctamente.');
-            $this->clean();
-            $this->emit('classUpdatedEvent');
+        $status = 'success';
+        $content = 'Se actualizo correctamente la clase';
+        try {
+            DB::beginTransaction();
+            if ($this->class_id) {
+                $clase = Clas::find($this->class_id);
+                $clase->update([
+                    'description'   => $this->description,
+                    'status'        => $this->status,
+                ]);
+            }
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $status = 'error';
+            $content = 'Ocurrio un error al actualizar la clase';
         }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
+        $this->clean();
+        $this->emit('classUpdatedEvent');
     }
 
     public function delete(Clas $clase)
@@ -124,8 +143,21 @@ class ClaseComponent extends Component
 
     public function destroy()
     {
-        Clas::find($this->class_id)->delete();
-        session()->flash('message', 'Clase eliminada correctamente.');
+        $status = 'success';
+        $content = 'Se elimino correctamente la clase';
+        try {
+            DB::beginTransaction();
+            Clas::find($this->class_id)->delete();
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $status = 'error';
+            $content = 'Ocurrio un error al eliminar la clase';
+        }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
         $this->clean();
         $this->emit('classDeletedEvent');
     }

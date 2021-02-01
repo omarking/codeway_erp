@@ -8,18 +8,17 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\DB;
 
 class RoleComponent extends Component
 {
     use WithPagination;
 
-    public $page = 1;
-
     protected $paginationTheme = 'bootstrap';
 
     public $role_id, $name, $slug, $description, $fullAccess, $responsable, $status, $created_at, $updated_at, $accion = "store";
 
-    public $search = '', $perPage = '10', $total;
+    public $search = '', $perPage = '10', $page = 1, $total;
 
     public $permission = [], $permission_role = [];
 
@@ -30,11 +29,6 @@ class RoleComponent extends Component
         'resposanble'  => 'required|string',
         'fullAccess'   => 'required|in:yes,no',
     ];
-
-    /* protected $messages = [
-        'description.required' => 'La descripción es requerida.',
-        'description.unique' => 'La descripción ya esta en uso.',
-    ]; */
 
     protected $queryString = [
         'search'  => ['except' => ''],
@@ -88,15 +82,28 @@ class RoleComponent extends Component
             'responsable'  => 'required|string',
             'fullAccess'   => 'required|in:yes,no',
         ]);
-        $role = Role::create([
-            'name'          => $this->name,
-            'slug'          => $this->slug,
-            'description'   => $this->description,
-            'responsable'   => $this->responsable,
-            'fullAccess'    => $this->fullAccess,
+        $status  = 'success';
+        $content = 'Se agrego correctamente el rol';
+        try {
+            DB::beginTransaction();
+            $role = Role::create([
+                'name'          => $this->name,
+                'slug'          => $this->slug,
+                'description'   => $this->description,
+                'responsable'   => $this->responsable,
+                'fullAccess'    => $this->fullAccess,
+            ]);
+            $role->permissions()->sync($this->permission);
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            $status  = 'error';
+            $content = 'Ocurrio un error al agregar el rol';
+        }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
         ]);
-        $role->permissions()->sync($this->permission);
-        session()->flash('message', 'Rol creado correctamente.');
         $this->clean();
         $this->emit('roleCreatedEvent');
     }
@@ -114,8 +121,6 @@ class RoleComponent extends Component
         $this->status       = $role->status;
         $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
         $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
-        /* $this->created_at   = $role->created_at;
-        $this->updated_at   = $role->updated_at; */
 
         foreach ($role->permissions as $permission) {
             $this->permission_role[] = $permission->id;
@@ -153,21 +158,34 @@ class RoleComponent extends Component
             'responsable'  => 'required|string',
             'fullAccess'   => 'required|in:yes,no',
         ]);
-        if ($this->role_id) {
-            $role = Role::find($this->role_id);
-            $role->update([
-                'name'          => $this->name,
-                'slug'          => $this->slug,
-                'description'   => $this->description,
-                'responsable'   => $this->responsable,
-                'fullAccess'    => $this->fullAccess,
-                'status'        => $this->status,
-            ]);
-            $role->permissions()->sync($this->permission);
-            session()->flash('message', 'Rol actualizado correctamente.');
-            $this->clean();
-            $this->emit('roleUpdatedEvent');
+        $status  = 'success';
+        $content = 'Se actualizo correctamente el rol';
+        try {
+            DB::beginTransaction();
+            if ($this->role_id) {
+                $role = Role::find($this->role_id);
+                $role->update([
+                    'name'          => $this->name,
+                    'slug'          => $this->slug,
+                    'description'   => $this->description,
+                    'responsable'   => $this->responsable,
+                    'fullAccess'    => $this->fullAccess,
+                    'status'        => $this->status,
+                ]);
+                $role->permissions()->sync($this->permission);
+            }
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            $status  = 'error';
+            $content = 'Ocurrio un error al actualizar el rol';
         }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
+        $this->clean();
+        $this->emit('roleUpdatedEvent');
     }
 
     public function limpia()
@@ -183,8 +201,21 @@ class RoleComponent extends Component
 
     public function destroy()
     {
-        Role::find($this->role_id)->delete();
-        session()->flash('message', 'Rol eliminado correctamente.');
+        $status  = 'success';
+        $content = 'Se elimino correctamente el rol';
+        try {
+            DB::beginTransaction();
+            Role::find($this->role_id)->delete();
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            $status  = 'error';
+            $content = 'Ocurrio un error al eliminar el rol';
+        }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
         $this->clean();
         $this->emit('roleDeletedEvent');
     }

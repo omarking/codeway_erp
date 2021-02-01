@@ -5,18 +5,13 @@
                 <h3 class="card-title text-uppercase">Categorias</h3>
             </div>
             <div>
-                <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#createCategory">Agregar Categoria</button>
+                @can('haveaccess', 'category.create')
+                    <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#createCategory">Agregar Categoria</button>
+                @endcan
             </div>
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <div class="card">
-                    @if (session()->has('message'))
-                        <div class="alert alert-success">
-                            {{ session('message') }}
-                        </div>
-                    @endif
-                </div>
                 <div class="form-group d-flex justify-content-between">
                     <div class="col-md-auto col-lg-9">
                         <input type="text" class="form-control" placeholder="Buscar" wire:model="search" wire:dirty.class="bg-secondary">
@@ -60,9 +55,15 @@
                                 <td>{{ $category->updated_at->diffForHumans() }}</td>
                                 <td>
                                     <div class="btn-group" role="group">
-                                        <button type="button" wire:click.prevent="show({{ $category->id }})" class="btn btn-info" data-toggle="modal" data-target="#showCategory">Mostrar</button>
-                                        <button type="button" wire:click.prevent="edit({{ $category->id }})" class="btn btn-success" data-toggle="modal" data-target="#updateCategory">Editar</button>
-                                        <button type="button" wire:click.prevent="delete({{ $category->id }})" class="btn btn-danger" data-toggle="modal" data-target="#deleteCategory">Borrar</button>
+                                        @can('haveaccess', 'category.show')
+                                            <button type="button" wire:click.prevent="show({{ $category->id }})" class="btn btn-info" data-toggle="modal" data-target="#showCategory">Mostrar</button>
+                                        @endcan
+                                        @can('haveaccess', 'category.edit')
+                                            <button type="button" wire:click.prevent="edit({{ $category->id }})" class="btn btn-success" data-toggle="modal" data-target="#updateCategory">Editar</button>
+                                        @endcan
+                                        @can('haveaccess', 'category.destroy')
+                                            <button type="button" wire:click.prevent="delete({{ $category->id }})" class="btn btn-danger" data-toggle="modal" data-target="#deleteCategory">Borrar</button>
+                                        @endcan
                                     </div>
                                 </td>
                             </tr>
@@ -92,6 +93,7 @@
             @endif
         </div>
     </div>
+    @include('custom.message')
     @include('livewire.category.create')
     @include('livewire.category.show')
     @include('livewire.category.update')

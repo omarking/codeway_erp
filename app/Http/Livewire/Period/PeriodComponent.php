@@ -7,27 +7,21 @@ use App\Models\Period;
 use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\DB;
 
 class PeriodComponent extends Component
 {
     use WithPagination;
 
-    public $page = 1;
-
     protected $paginationTheme = 'bootstrap';
 
     public $period_id, $description, $status, $created_at, $updated_at, $accion = "store";
 
-    public $search = '', $perPage = '10', $total, $period;
+    public $search = '', $perPage = '10', $page = 1, $total, $period;
 
     public $rules = [
         'description'  => 'required|numeric|unique:periods,description',
     ];
-
-    /* protected $messages = [
-        'description.required' => 'La descripción es requerida.',
-        'description.unique' => 'La descripción ya esta en uso.',
-    ]; */
 
     protected $queryString = [
         'search'  => ['except' => ''],
@@ -63,10 +57,23 @@ class PeriodComponent extends Component
         $this->validate([
             'description' => 'required|numeric|unique:periods,description',
         ]);
-        Period::create([
-            'description'   => $this->description,
+        $status  = 'success';
+        $content = 'Se agrego correctamente el periodo';
+        try {
+            DB::beginTransaction();
+            Period::create([
+                'description'   => $this->description,
+            ]);
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $status  = 'error';
+            $content = 'Ocurrio un error al agregar el periodo';
+        }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
         ]);
-        session()->flash('message', 'Periodo creado correctamente.');
         $this->clean();
         $this->emit('periodCreatedEvent');
     }
@@ -80,8 +87,6 @@ class PeriodComponent extends Component
         $this->status       = $period->status;
         $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
         $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
-        /* $this->created_at   = $period->created_at;
-        $this->updated_at   = $period->updated_at; */
         $this->period       = $period;
     }
 
@@ -104,16 +109,29 @@ class PeriodComponent extends Component
         $this->validate([
             'description' => 'required|numeric|unique:periods,description,' . $this->period_id,
         ]);
-        if ($this->period_id) {
-            $periods = Period::find($this->period_id);
-            $periods->update([
-                'description'   => $this->description,
-                'status'        => $this->status,
-            ]);
-            session()->flash('message', 'Periodo actualizado correctamente.');
+        $status  = 'success';
+        $content = 'Se actualizo correctamente el periodo';
+        try {
+            DB::beginTransaction();
+            if ($this->period_id) {
+                $periods = Period::find($this->period_id);
+                $periods->update([
+                    'description'   => $this->description,
+                    'status'        => $this->status,
+                ]);
+            }
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $status  = 'error';
+            $content = 'Ocurrio un error al actualizar el periodo';
+        }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
             $this->clean();
             $this->emit('periodUpdatedEvent');
-        }
     }
 
     public function delete(Period $period)
@@ -124,8 +142,21 @@ class PeriodComponent extends Component
 
     public function destroy()
     {
-        Period::find($this->period_id)->delete();
-        session()->flash('message', 'Periodo eliminado correctamente.');
+        $status  = 'success';
+        $content = 'Se elimino correctamente el periodo';
+        try {
+            DB::beginTransaction();
+            Period::find($this->period_id)->delete();
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $status  = 'error';
+            $content = 'Ocurrio un error al eliminar el periodo';
+        }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
         $this->clean();
         $this->emit('periodDeletedEvent');
     }

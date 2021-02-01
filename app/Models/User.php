@@ -127,12 +127,6 @@ class User extends Authenticatable
         return $this->belongsToMany(Departament::class)->withTimestamps();
     }
 
-    /* Un usuario pertenece a uno o muchos roles */
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class)->withTimestamps();
-    }
-
     /* Un usuario le pertencen una o muchas vaciones*/
     public function holidays()
     {
@@ -149,5 +143,27 @@ class User extends Authenticatable
     public function groups()
     {
         return $this->belongsToMany(Group::class)->withTimestamps();
+    }
+
+    /* Un usuario pertenece a uno o muchos roles */
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class)->withTimestamps();
+    }
+
+    //Funcion que verifica si el usuario tiene o no permiso que se le asigne
+    public function havePermission($permiso)
+    {
+        foreach ($this->roles as $role) {
+            if ($role['fullAccess'] == "yes") {
+                return true;
+            }
+            foreach ($role->permissions as $perm) {
+                if ($perm->slug == $permiso) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

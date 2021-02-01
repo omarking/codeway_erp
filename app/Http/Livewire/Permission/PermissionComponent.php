@@ -6,29 +6,23 @@ use App\Models\Permission;
 use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\DB;
 
 class PermissionComponent extends Component
 {
     use WithPagination;
 
-    public $page = 1;
-
     protected $paginationTheme = 'bootstrap';
 
     public $permission_id, $name, $description, $slug, $status, $created_at, $updated_at, $accion = "store";
 
-    public $search = '', $perPage = '10', $total;
+    public $search = '', $perPage = '10', $page = 1, $total;
 
     public $rules = [
         'name'         => 'required|string|max:100|unique:permissions,name',
         'slug'         => 'required|string|max:100|unique:permissions,slug',
         'description'  => 'required|string',
     ];
-
-    /* protected $messages = [
-        'description.required' => 'La descripción es requerida.',
-        'description.unique' => 'La descripción ya esta en uso.',
-    ]; */
 
     protected $queryString = [
         'search'  => ['except' => ''],
@@ -72,12 +66,25 @@ class PermissionComponent extends Component
             'slug'         => 'required|string|max:100|unique:permissions,slug',
             'description'  => 'required|string',
         ]);
-        Permission::create([
-            'name'          => $this->name,
-            /* 'slug'          => $this->slug, */
-            'description'   => $this->description,
+        $status  = 'success';
+        $content = 'Se agrego correctamente el permiso';
+        try {
+            DB::beginTransaction();
+            Permission::create([
+                'name'          => $this->name,
+                /* 'slug'          => $this->slug, */
+                'description'   => $this->description,
+            ]);
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $status  = 'error';
+            $content = 'Ocurrio un error al agregar el permiso';
+        }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
         ]);
-        session()->flash('message', 'Permiso creado correctamente.');
         $this->clean();
         $this->emit('permissionCreatedEvent');
     }
@@ -93,8 +100,6 @@ class PermissionComponent extends Component
         $this->status           = $permission->status;
         $this->created_at       = $created->format('l jS \\of F Y h:i:s A');
         $this->updated_at       = $updated->format('l jS \\of F Y h:i:s A');
-        /* $this->created_at       = $permission->created_at;
-        $this->updated_at       = $permission->updated_at; */
     }
 
     public function close()
@@ -120,18 +125,31 @@ class PermissionComponent extends Component
             'slug'         => 'required|string|max:100|unique:permissions,slug,' . $this->permission_id,
             'description'  => 'required|string',
         ]);
-        if ($this->permission_id) {
-            $permissions = Permission::find($this->permission_id);
-            $permissions->update([
-                'name'          => $this->name,
-                /* 'slug'          => $this->slug, */
-                'description'   => $this->description,
-                'status'        => $this->status,
-            ]);
-            session()->flash('message', 'Permiso actualizado correctamente.');
+        $status  = 'success';
+        $content = 'Se actualizo correctamente el permiso';
+        try {
+            DB::beginTransaction();
+            if ($this->permission_id) {
+                $permissions = Permission::find($this->permission_id);
+                $permissions->update([
+                    'name'          => $this->name,
+                    /* 'slug'          => $this->slug, */
+                    'description'   => $this->description,
+                    'status'        => $this->status,
+                ]);
+            }
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $status  = 'error';
+            $content = 'Ocurrio un error al actualizar el permiso';
+        }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
             $this->clean();
             $this->emit('permissionUpdatedEvent');
-        }
     }
 
     public function delete(Permission $permissions)
@@ -142,8 +160,21 @@ class PermissionComponent extends Component
 
     public function destroy()
     {
-        Permission::find($this->permission_id)->delete();
-        session()->flash('message', 'Permiso eliminado correctamente.');
+        $status  = 'success';
+        $content = 'Se elimino correctamente el permiso';
+        try {
+            DB::beginTransaction();
+            Permission::find($this->permission_id)->delete();
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $status  = 'error';
+            $content = 'Ocurrio un error al eliminar el permiso';
+        }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
         $this->clean();
         $this->emit('permissionDeletedEvent');
     }

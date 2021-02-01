@@ -5,6 +5,8 @@ namespace App\Http\Livewire\Category;
 use App\Models\Category;
 use App\Models\Project;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -12,22 +14,15 @@ class CategoryComponent extends Component
 {
     use WithPagination;
 
-    public $page = 1;
-
     protected $paginationTheme = 'bootstrap';
 
     public $category_id, $description, $status, $created_at, $updated_at, $accion = "store";
 
-    public $search = '', $perPage = '10', $total, $category;
+    public $search = '', $perPage = '10', $total, $category, $page = 1;
 
     public $rules = [
         'description'  => 'required|string|max:200|unique:categories,description',
     ];
-
-    /* protected $messages = [
-        'description.required' => 'La descripción es requerida.',
-        'description.unique' => 'La descripción ya esta en uso.',
-    ]; */
 
     protected $queryString = [
         'search'  => ['except' => ''],
@@ -60,19 +55,36 @@ class CategoryComponent extends Component
 
     public function store()
     {
+        Gate::authorize('haveaccess', 'category.create');
+
         $this->validate([
             'description' => 'required|max:200|unique:categories,description',
         ]);
-        Category::create([
-            'description'   => $this->description,
+        $status = 'success';
+        $content = 'Se agrego correctamente la categoria';
+        try {
+            DB::beginTransaction();
+            Category::create([
+                'description'   => $this->description,
+            ]);
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $status = 'error';
+            $content = 'Ocurrio un error al agregar la categoria';
+        }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
         ]);
-        session()->flash('message', 'Categoria creada correctamente.');
         $this->clean();
         $this->emit('categoryCreatedEvent');
     }
 
     public function show(Category $categories)
     {
+        Gate::authorize('haveaccess', 'category.show');
+
         $created            = new Carbon($categories->created_at);
         $updated            = new Carbon($categories->updated_at);
         $this->category_id  = $categories->id;
@@ -80,8 +92,6 @@ class CategoryComponent extends Component
         $this->status       = $categories->status;
         $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
         $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
-        /* $this->created_at   = $categories->created_at;
-        $this->updated_at   = $categories->updated_at; */
         $this->category     = $categories;
     }
 
@@ -93,6 +103,8 @@ class CategoryComponent extends Component
 
     public function edit(Category $categories)
     {
+        Gate::authorize('haveaccess', 'category.edit');
+
         $this->category_id  = $categories->id;
         $this->description  = $categories->description;
         $this->status       = $categories->status;
@@ -101,31 +113,63 @@ class CategoryComponent extends Component
 
     public function update()
     {
+        Gate::authorize('haveaccess', 'category.edit');
+
         $this->validate([
             'description' => 'required|max:200|unique:categories,description,' . $this->category_id,
         ]);
-        if ($this->category_id) {
-            $clase = Category::find($this->category_id);
-            $clase->update([
-                'description'   => $this->description,
-                'status'        => $this->status,
-            ]);
-            session()->flash('message', 'Categoria actualizada correctamente.');
-            $this->clean();
-            $this->emit('categoryUpdatedEvent');
+        $status = 'success';
+        $content = 'Se actualizo correctamente la categoria';
+        try {
+            DB::beginTransaction();
+            if ($this->category_id) {
+                $clase = Category::find($this->category_id);
+                $clase->update([
+                    'description'   => $this->description,
+                    'status'        => $this->status,
+                ]);
+            }
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $status = 'error';
+            $content = 'Ocurrio un error al actualizar la categoria';
         }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
+        $this->clean();
+        $this->emit('categoryUpdatedEvent');
     }
 
     public function delete(Category $categories)
     {
+        Gate::authorize('haveaccess', 'category.destroy');
+
         $this->category_id  = $categories->id;
         $this->description  = $categories->description;
     }
 
     public function destroy()
     {
-        Category::find($this->category_id)->delete();
-        session()->flash('message', 'Categoria eliminada correctamente.');
+        Gate::authorize('haveaccess', 'category.destroy');
+
+        $status = 'success';
+        $content = 'Se elimino correctamente la categoria';
+        try {
+            DB::beginTransaction();
+            Category::find($this->category_id)->delete();
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $status = 'error';
+            $content = 'Ocurrio un error al eliminar la categoria';
+        }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
         $this->clean();
         $this->emit('categoryDeletedEvent');
     }

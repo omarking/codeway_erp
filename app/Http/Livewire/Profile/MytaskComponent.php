@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class MytaskComponent extends Component
 {
@@ -64,11 +65,11 @@ class MytaskComponent extends Component
 
         foreach ($this->tareas as $tarea) {
             foreach ($tarea->tasks as $task) {
-                $this->name = $task->name;
+                /* $this->name = $task->name;
                 $this->start = $task->start;
                 $this->end = $task->end;
                 $this->informer = $task->informer;
-                $this->responsable = $task->responsable;
+                $this->responsable = $task->responsable; */
             }
         }
 
@@ -138,29 +139,42 @@ class MytaskComponent extends Component
             'priority_id'   => 'required',
             'type_id'       => 'required',
         ]);
-        if ($this->temporary != null) {
-            if ($this->temporary->getClientOriginalName()) {
-                $nameFile = time() . '_' . $this->temporary->getClientOriginalName();
-                $this->temporary->storePubliclyAs('storage/files', $nameFile, 'public_uploads');
+        $status  = 'success';
+        $content = 'Se agrego correctamente la tarea';
+        try {
+            DB::beginTransaction();
+            if ($this->temporary != null) {
+                if ($this->temporary->getClientOriginalName()) {
+                    $nameFile = time() . '_' . $this->temporary->getClientOriginalName();
+                    $this->temporary->storePubliclyAs('storage/files', $nameFile, 'public_uploads');
+                }
+            } else {
+                $nameFile = null;
             }
-        } else {
-            $nameFile = null;
+            $task = Task::create([
+                'name'          => $this->name,
+                'slug'          => Str::slug($this->name, '-'),
+                'description'   => $this->description,
+                'file'          => $nameFile,
+                'start'         => $this->start,
+                'end'           => $this->end,
+                'informer'      => $this->informer,
+                'responsable'   => Auth::user()->name,
+                'statu_id'      => $this->statu_id,
+                'priority_id'   => $this->priority_id,
+                'type_id'       => $this->type_id,
+            ]);
+            $task->projects()->sync($this->proyecto->id);
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            $status  = 'error';
+            $content = 'Ocurrio un error al agregar la tarea';
         }
-        $task = Task::create([
-            'name'          => $this->name,
-            'slug'          => Str::slug($this->name, '-'),
-            'description'   => $this->description,
-            'file'          => $nameFile,
-            'start'         => $this->start,
-            'end'           => $this->end,
-            'informer'      => $this->informer,
-            'responsable'   => Auth::user()->name,
-            'statu_id'      => $this->statu_id,
-            'priority_id'   => $this->priority_id,
-            'type_id'       => $this->type_id,
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
         ]);
-        $task->projects()->sync($this->proyecto->id);
-        session()->flash('message', 'Tarea creada correctamente.');
         $this->clean();
         $this->emit('taskCreatedEvent');
     }
@@ -173,8 +187,6 @@ class MytaskComponent extends Component
 
     public function edit(Task $task)
     {
-        /* $date                = new Carbon($task->start); */
-
         $this->task_id       = $task->id;
         $this->name          = $task->name;
         $this->description   = $task->description;
@@ -207,30 +219,43 @@ class MytaskComponent extends Component
             'priority_id'   => 'required',
             'type_id'       => 'required',
         ]);
-        if ($this->task_id) {
-            $task = Task::find($this->task_id);
-            $task->update([
-                'name'          => $this->name,
-                'slug'          => Str::slug($this->name, '-'),
-                'description'   => $this->description,
-                'end'           => $this->end,
-                'informer'      => $this->informer,
-                'responsable'   => Auth::user()->name,
-                'statu_id'      => $this->statu_id,
-                'priority_id'   => $this->priority_id,
-                'type_id'       => $this->type_id,
-            ]);
-            if ($this->temporary != null) {
-                if ($this->temporary->getClientOriginalName()) {
-                    $nameFile = time() . '_' . $this->temporary->getClientOriginalName();
-                    $this->temporary->storePubliclyAs('storage/files', $nameFile, 'public_uploads');
-                    $task->update(['file'   => $nameFile]);
+        $status  = 'success';
+        $content = 'Se actualizo correctamente la tarea';
+        try {
+            DB::beginTransaction();
+            if ($this->task_id) {
+                $task = Task::find($this->task_id);
+                $task->update([
+                    'name'          => $this->name,
+                    'slug'          => Str::slug($this->name, '-'),
+                    'description'   => $this->description,
+                    'end'           => $this->end,
+                    'informer'      => $this->informer,
+                    'responsable'   => Auth::user()->name,
+                    'statu_id'      => $this->statu_id,
+                    'priority_id'   => $this->priority_id,
+                    'type_id'       => $this->type_id,
+                ]);
+                if ($this->temporary != null) {
+                    if ($this->temporary->getClientOriginalName()) {
+                        $nameFile = time() . '_' . $this->temporary->getClientOriginalName();
+                        $this->temporary->storePubliclyAs('storage/files', $nameFile, 'public_uploads');
+                        $task->update(['file'   => $nameFile]);
+                    }
                 }
             }
-            session()->flash('message', 'Tarea actualizada correctamente.');
-            $this->clean();
-            $this->emit('taskUpdatedEvent');
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            $status  = 'error';
+            $content = 'Ocurrio un error al actualizar la tarea';
         }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
+        $this->clean();
+        $this->emit('taskUpdatedEvent');
     }
 
     public function delete(Task $task)
@@ -241,8 +266,21 @@ class MytaskComponent extends Component
 
     public function destroy()
     {
-        Task::find($this->task_id)->delete();
-        session()->flash('message', 'Tarea eliminada correctamente.');
+        $status  = 'success';
+        $content = 'Se elimino correctamente la tarea';
+        try {
+            DB::beginTransaction();
+            Task::find($this->task_id)->delete();
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            $status  = 'error';
+            $content = 'Ocurrio un error al eliminar la tarea';
+        }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
         /* Storage::delete('file.jpg'); */
         $this->clean();
         $this->emit('taskDeletedEvent');
@@ -292,7 +330,6 @@ class MytaskComponent extends Component
         if (isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)) {
             $this->reset(['perPage']);
         }
-
 
         return view(
             'livewire.profile.mytask-component',

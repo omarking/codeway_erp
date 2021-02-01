@@ -12,6 +12,7 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class TaskComponent extends Component
 {
@@ -19,15 +20,13 @@ class TaskComponent extends Component
 
     use WithFileUploads;
 
-    public $page = 1;
-
     protected $paginationTheme = 'bootstrap';
 
     public $task_id, $name, $description, $file, $start, $end, $informer, $responsable, $created_at, $updated_at, $accion = "store";
 
     public $estado, $tipo, $prioridad, $statu_id, $priority_id, $type_id;
 
-    public $search = '', $perPage = '10', $total, $temporary;
+    public $search = '', $perPage = '10', $page = 1, $total, $temporary;
 
     public $rules = [
         'name'          => 'required|string|max:200|unique:tasks,name',
@@ -42,11 +41,6 @@ class TaskComponent extends Component
         'priority_id'   => 'required',
         'type_id'       => 'required',
     ];
-
-    /* protected $messages = [
-        'temporary.required' => 'La descripción es requerida.',
-        'temporary.unique' => 'La descripción ya esta en uso.',
-    ]; */
 
     protected $queryString = [
         'search'  => ['except' => ''],
@@ -120,28 +114,41 @@ class TaskComponent extends Component
             'priority_id'   => 'required',
             'type_id'       => 'required',
         ]);
-        if ($this->temporary != null) {
-            if ($this->temporary->getClientOriginalName()) {
-                $nameFile = time() . '_' . $this->temporary->getClientOriginalName();
-                $this->temporary->storePubliclyAs('storage/files', $nameFile, 'public_uploads');
+        $status  = 'success';
+        $content = 'Se agrego correctamente la tarea';
+        try {
+            DB::beginTransaction();
+            if ($this->temporary != null) {
+                if ($this->temporary->getClientOriginalName()) {
+                    $nameFile = time() . '_' . $this->temporary->getClientOriginalName();
+                    $this->temporary->storePubliclyAs('storage/files', $nameFile, 'public_uploads');
+                }
+            } else {
+                $nameFile = null;
             }
-        } else {
-            $nameFile = null;
+            Task::create([
+                'name'          => $this->name,
+                'slug'          => Str::slug($this->name, '-'),
+                'description'   => $this->description,
+                'file'          => $nameFile,
+                'start'         => $this->start,
+                'end'           => $this->end,
+                'informer'      => $this->informer,
+                'responsable'   => Auth::user()->name,
+                'statu_id'      => $this->statu_id,
+                'priority_id'   => $this->priority_id,
+                'type_id'       => $this->type_id,
+            ]);
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            $status  = 'error';
+            $content = 'Ocurrio un error al agregar la tarea';
         }
-        Task::create([
-            'name'          => $this->name,
-            'slug'          => Str::slug($this->name, '-'),
-            'description'   => $this->description,
-            'file'          => $nameFile,
-            'start'         => $this->start,
-            'end'           => $this->end,
-            'informer'      => $this->informer,
-            'responsable'   => Auth::user()->name,
-            'statu_id'      => $this->statu_id,
-            'priority_id'   => $this->priority_id,
-            'type_id'       => $this->type_id,
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
         ]);
-        session()->flash('message', 'Tarea creada correctamente.');
         $this->clean();
         $this->emit('taskCreatedEvent');
     }
@@ -163,8 +170,6 @@ class TaskComponent extends Component
         $this->type_id       = $task->type_id;
         $this->created_at    = $created->format('l jS \\of F Y h:i:s A');
         $this->updated_at    = $updated->format('l jS \\of F Y h:i:s A');
-        /* $this->created_at    = $task->created_at;
-        $this->updated_at    = $task->updated_at; */
 
         if (isset($task->statu->description)) {
             $this->estado   = $task->statu->description;
@@ -220,30 +225,43 @@ class TaskComponent extends Component
             'priority_id'   => 'required',
             'type_id'       => 'required',
         ]);
-        if ($this->task_id) {
-            $task = Task::find($this->task_id);
-            $task->update([
-                'name'          => $this->name,
-                'slug'          => Str::slug($this->name, '-'),
-                'description'   => $this->description,
-                'end'           => $this->end,
-                'informer'      => $this->informer,
-                'responsable'   => Auth::user()->name,
-                'statu_id'      => $this->statu_id,
-                'priority_id'   => $this->priority_id,
-                'type_id'       => $this->type_id,
-            ]);
-            if ($this->temporary != null) {
-                if ($this->temporary->getClientOriginalName()) {
-                    $nameFile = time() . '_' . $this->temporary->getClientOriginalName();
-                    $this->temporary->storePubliclyAs('storage/files', $nameFile, 'public_uploads');
-                    $task->update(['file'   => $nameFile]);
+        $status  = 'success';
+        $content = 'Se actualizo correctamente la tarea';
+        try {
+            DB::beginTransaction();
+            if ($this->task_id) {
+                $task = Task::find($this->task_id);
+                $task->update([
+                    'name'          => $this->name,
+                    'slug'          => Str::slug($this->name, '-'),
+                    'description'   => $this->description,
+                    'end'           => $this->end,
+                    'informer'      => $this->informer,
+                    'responsable'   => Auth::user()->name,
+                    'statu_id'      => $this->statu_id,
+                    'priority_id'   => $this->priority_id,
+                    'type_id'       => $this->type_id,
+                ]);
+                if ($this->temporary != null) {
+                    if ($this->temporary->getClientOriginalName()) {
+                        $nameFile = time() . '_' . $this->temporary->getClientOriginalName();
+                        $this->temporary->storePubliclyAs('storage/files', $nameFile, 'public_uploads');
+                        $task->update(['file'   => $nameFile]);
+                    }
                 }
             }
-            session()->flash('message', 'Tarea actualizada correctamente.');
-            $this->clean();
-            $this->emit('taskUpdatedEvent');
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            $status  = 'error';
+            $content = 'Ocurrio un error al actualizar la tarea';
         }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
+        $this->clean();
+        $this->emit('taskUpdatedEvent');
     }
 
     public function delete(Task $task)
@@ -254,8 +272,21 @@ class TaskComponent extends Component
 
     public function destroy()
     {
-        Task::find($this->task_id)->delete();
-        session()->flash('message', 'Tarea eliminada correctamente.');
+        $status  = 'success';
+        $content = 'Se elimino correctamente la tarea';
+        try {
+            DB::beginTransaction();
+            Task::find($this->task_id)->delete();
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            $status  = 'error';
+            $content = 'Ocurrio un error al eliminar la tarea';
+        }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
         /* Storage::delete('file.jpg'); */
         $this->clean();
         $this->emit('taskDeletedEvent');

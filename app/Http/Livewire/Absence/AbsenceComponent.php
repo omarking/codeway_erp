@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Absence;
 use App\Models\Absence;
 use App\Models\Holiday;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -12,22 +13,15 @@ class AbsenceComponent extends Component
 {
     use WithPagination;
 
-    public $page = 1;
-
     protected $paginationTheme = 'bootstrap';
 
     public $absence_id, $description, $status, $created_at, $updated_at, $accion = "store";
 
-    public $search = '', $perPage = '10', $total, $absence;
+    public $search = '', $perPage = '10', $total, $absence, $page = 1;
 
     public $rules = [
         'description'  => 'required|string|max:200|unique:absences,description',
     ];
-
-    /* protected $messages = [
-        'description.required' => 'La descripción es requerida.',
-        'description.unique' => 'La descripción ya esta en uso.',
-    ]; */
 
     protected $queryString = [
         'search'  => ['except' => ''],
@@ -63,10 +57,25 @@ class AbsenceComponent extends Component
         $this->validate([
             'description' => 'required|max:200|unique:absences,description',
         ]);
-        Absence::create([
-            'description'   => $this->description,
+
+        $status = 'success';
+        $content = 'Se agrego correctamente la ausencia';
+
+        try {
+            DB::beginTransaction();
+            Absence::create([
+                'description'   => $this->description,
+            ]);
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $status = 'error';
+            $content = 'Ocurrio un error al agregar la ausencia';
+        }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
         ]);
-        session()->flash('message', 'Ausencia creada correctamente.');
         $this->clean();
         $this->emit('absenceCreatedEvent');
     }
@@ -78,8 +87,6 @@ class AbsenceComponent extends Component
         $this->absence_id   = $absence->id;
         $this->description  = $absence->description;
         $this->status       = $absence->status;
-        /* $this->created_at   = $absence->created_at;
-        $this->updated_at   = $absence->updated_at; */
         $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
         $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
         $this->absence      = $absence;
@@ -104,16 +111,29 @@ class AbsenceComponent extends Component
         $this->validate([
             'description' => 'required|max:200|unique:absences,description,' . $this->absence_id,
         ]);
-        if ($this->absence_id) {
-            $absence = Absence::find($this->absence_id);
-            $absence->update([
-                'description'   => $this->description,
-                'status'        => $this->status,
-            ]);
-            session()->flash('message', 'Ausencia actualizada correctamente.');
-            $this->clean();
-            $this->emit('absenceUpdatedEvent');
+        $status = 'success';
+        $content = 'Se actualizo correctamente la ausencia';
+        try {
+            DB::beginTransaction();
+            if ($this->absence_id) {
+                $absence = Absence::find($this->absence_id);
+                $absence->update([
+                    'description'   => $this->description,
+                    'status'        => $this->status,
+                ]);
+            }
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $status = 'error';
+            $content = 'Ocurrio un error al actualizar la ausencia';
         }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
+        $this->clean();
+        $this->emit('absenceUpdatedEvent');
     }
 
     public function delete(Absence $absence)
@@ -124,8 +144,21 @@ class AbsenceComponent extends Component
 
     public function destroy()
     {
-        Absence::find($this->absence_id)->delete();
-        session()->flash('message', 'Ausencia eliminada correctamente.');
+        $status = 'success';
+        $content = 'Se elimino correctamente la ausencia';
+        try {
+            DB::beginTransaction();
+            Absence::find($this->absence_id)->delete();
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $status = 'error';
+            $content = 'Ocurrio un error al eliminar la ausencia';
+        }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
         $this->clean();
         $this->emit('absenceDeletedEvent');
     }

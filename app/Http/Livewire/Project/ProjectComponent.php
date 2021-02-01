@@ -13,6 +13,7 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class ProjectComponent extends Component
 {
@@ -20,15 +21,13 @@ class ProjectComponent extends Component
 
     use WithFileUploads;
 
-    public $page = 1;
-
     protected $paginationTheme = 'bootstrap';
 
     public $project_id, $avatar, $key, $name, $description, $status, $responsable, $created_at, $updated_at, $accion = "store";
 
     public $clase, $categoria, $clas_id, $category_id, $temporary, $usuarios;
 
-    public $search = '', $perPage = '10', $total, $projects_task;
+    public $search = '', $perPage = '10', $page = 1, $total, $projects_task;
 
     public $user = [], $projects_users = [], $message;
 
@@ -41,11 +40,6 @@ class ProjectComponent extends Component
         'clas_id'       => 'required',
         'category_id'   => 'required',
     ];
-
-    /* protected $messages = [
-        'description.required' => 'La descripción es requerida.',
-        'description.unique' => 'La descripción ya esta en uso.',
-    ]; */
 
     protected $queryString = [
         'search'  => ['except' => ''],
@@ -107,26 +101,39 @@ class ProjectComponent extends Component
             'clas_id'       => 'required',
             'category_id'   => 'required',
         ]);
-        if ($this->temporary != null) {
-            if ($this->temporary->getClientOriginalName()) {
-                $nameFile = time() . '_' . $this->temporary->getClientOriginalName();
-                $this->temporary->storePubliclyAs('storage/projects', $nameFile, 'public_uploads');
+        $status  = 'success';
+        $content = 'Se agrego correctamente el proyecto';
+        try {
+            DB::beginTransaction();
+            if ($this->temporary != null) {
+                if ($this->temporary->getClientOriginalName()) {
+                    $nameFile = time() . '_' . $this->temporary->getClientOriginalName();
+                    $this->temporary->storePubliclyAs('storage/projects', $nameFile, 'public_uploads');
+                }
+            } else {
+                $nameFile = null;
             }
-        } else {
-            $nameFile = null;
+            $project = Project::create([
+                'avatar'        => $nameFile,
+                'key'           => $this->key,
+                'name'          => $this->name,
+                'slug'          => Str::slug($this->name, '-'),
+                'description'   => $this->description,
+                'responsable'   => $this->responsable,
+                'clas_id'       => $this->clas_id,
+                'category_id'   => $this->category_id,
+            ]);
+            $project->users()->sync($this->user);
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            $status  = 'error';
+            $content = 'Ocurrio un error al agregar el proyecto';
         }
-        $project = Project::create([
-            'avatar'        => $nameFile,
-            'key'           => $this->key,
-            'name'          => $this->name,
-            'slug'          => Str::slug($this->name, '-'),
-            'description'   => $this->description,
-            'responsable'   => $this->responsable,
-            'clas_id'       => $this->clas_id,
-            'category_id'   => $this->category_id,
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
         ]);
-        $project->users()->sync($this->user);
-        session()->flash('message', 'Proyecto creado correctamente.');
         $this->clean();
         $this->emit('projectCreatedEvent');
     }
@@ -146,8 +153,6 @@ class ProjectComponent extends Component
         $this->category_id   = $project->category_id;
         $this->created_at    = $created->format('l jS \\of F Y h:i:s A');
         $this->updated_at    = $updated->format('l jS \\of F Y h:i:s A');
-        /* $this->created_at    = $project->created_at;
-        $this->updated_at    = $project->updated_at; */
 
         if (isset($project->clas->description)) {
             $this->clase   = $project->clas->description;
@@ -203,32 +208,45 @@ class ProjectComponent extends Component
             'clas_id'       => 'required',
             'category_id'   => 'required',
         ]);
-        if ($this->temporary != null) {
-            if ($this->temporary->getClientOriginalName()) {
-                $nameFile = time() . '_' . $this->temporary->getClientOriginalName();
-                $this->temporary->storePubliclyAs('storage/projects', $nameFile, 'public_uploads');
+        $status  = 'success';
+        $content = 'Se actualizo correctamente el proyecto';
+        try {
+            DB::beginTransaction();
+            if ($this->temporary != null) {
+                if ($this->temporary->getClientOriginalName()) {
+                    $nameFile = time() . '_' . $this->temporary->getClientOriginalName();
+                    $this->temporary->storePubliclyAs('storage/projects', $nameFile, 'public_uploads');
+                }
+            } else {
+                $nameFile = $this->avatar;
             }
-        } else {
-            $nameFile = $this->avatar;
+            if ($this->project_id) {
+                $project = Project::find($this->project_id);
+                $project->update([
+                    'avatar'        => $nameFile,
+                    'key'           => $this->key,
+                    'name'          => $this->name,
+                    'slug'          => Str::slug($this->name, '-'),
+                    'description'   => $this->description,
+                    'status'        => $this->status,
+                    'responsable'   => $this->responsable,
+                    'clas_id'       => $this->clas_id,
+                    'category_id'   => $this->category_id,
+                ]);
+                $project->users()->sync($this->user);
+            }
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            $status  = 'error';
+            $content = 'Ocurrio un error al actualizar el proyecto';
         }
-        if ($this->project_id) {
-            $project = Project::find($this->project_id);
-            $project->update([
-                'avatar'        => $nameFile,
-                'key'           => $this->key,
-                'name'          => $this->name,
-                'slug'          => Str::slug($this->name, '-'),
-                'description'   => $this->description,
-                'status'        => $this->status,
-                'responsable'   => $this->responsable,
-                'clas_id'       => $this->clas_id,
-                'category_id'   => $this->category_id,
-            ]);
-            $project->users()->sync($this->user);
-            session()->flash('message', 'Proyecto actualizado correctamente.');
-            $this->clean();
-            $this->emit('projectUpdatedEvent');
-        }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
+        $this->clean();
+        $this->emit('projectUpdatedEvent');
     }
 
     public function limpia()
@@ -245,8 +263,21 @@ class ProjectComponent extends Component
 
     public function destroy()
     {
-        Project::find($this->project_id)->delete();
-        session()->flash('message', 'Proyecto eliminado correctamente.');
+        $status  = 'success';
+        $content = 'Se elimino correctamente el proyecto';
+        try {
+            DB::beginTransaction();
+            Project::find($this->project_id)->delete();
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            $status  = 'error';
+            $content = 'Ocurrio un error al eliminar el proyecto';
+        }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
         $this->clean();
         $this->emit('projectDeletedEvent');
     }

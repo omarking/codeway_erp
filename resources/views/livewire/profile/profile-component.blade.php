@@ -6,11 +6,6 @@
             <h5>Agrege una descripción de quien es usted</h5>
         </div>
         <div class="col-lg-8 col-md-8">
-                @if (session()->has('message1'))
-                    <div class="alert alert-success">
-                        {{ session('message1') }}
-                    </div>
-                @endif
             <div class="container card">
                 <div class="card-body">
                     <div class="col-lg-11 col-md-10">
@@ -77,11 +72,6 @@
             <h5>Actualice la información de su perfil</h5>
         </div>
         <div class="col-lg-8 col-md-8">
-            @if (session()->has('message2'))
-                    <div class="alert alert-success">
-                        {{ session('message2') }}
-                    </div>
-                @endif
             <div class="container card">
                 <div class="card-body">
                     <div class="col-lg-11 col-md-10">
@@ -164,11 +154,6 @@
             <h5>Agrege sus redes sociales que utiliza</h5>
         </div>
         <div class="col-lg-8 col-md-8">
-            @if (session()->has('message3'))
-                    <div class="alert alert-success">
-                        {{ session('message3') }}
-                    </div>
-                @endif
             <div class="container card">
                 <div class="card-body">
                     <div class="col-lg-11 col-md-10">
@@ -249,16 +234,6 @@
             <h5>Asegúrese de que su cuenta esté usando una contraseña larga y aleatoria para mantenerse seguro</h5>
         </div>
         <div class="col-lg-8 col-md-8">
-            @if (session()->has('message4'))
-                <div class="alert alert-success">
-                    {{ session('message4') }}
-                </div>
-            @endif
-            @if (session()->has('message4.0'))
-                <div class="alert alert-danger">
-                    {{ session('message4') }}
-                </div>
-            @endif
             <div class="container card">
                 <div class="card-body">
                     <div class="col-lg-11 col-md-10">
@@ -309,11 +284,6 @@
             <h5>Mantendra tu cuenta inactiva</h5>
         </div>
         <div class="col-lg-8 col-md-8">
-            @if (session()->has('message5'))
-                    <div class="alert alert-success">
-                        {{ session('message5') }}
-                    </div>
-                @endif
             <div class="container card">
                 <div class="card-body">
                     <div class="col-lg-11 col-md-10">
@@ -354,11 +324,6 @@
             <h5>Elimina permanentemente tu cuenta y datos</h5>
         </div>
         <div class="col-lg-8 col-md-8">
-            @if (session()->has('message6'))
-                    <div class="alert alert-success">
-                        {{ session('message6') }}
-                    </div>
-                @endif
             <div class="container card">
                 <div class="card-body">
                     <div class="col-lg-11 col-md-10">
@@ -375,4 +340,5 @@
             </div>
         </div>
     </div>
+    @include('custom.message')
 </div>

@@ -98,6 +98,7 @@
         <label for="dal">Tareas</label>
         <h5>{{$tareas}}</h5>
     </div> --}}
+    @include('custom.message')
     @include('livewire.profile.create')
     @include('livewire.profile.update')
 </div>

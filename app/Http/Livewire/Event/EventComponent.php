@@ -7,18 +7,17 @@ use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class EventComponent extends Component
 {
     use WithPagination;
 
-    public $page = 1;
-
     protected $paginationTheme = 'bootstrap';
 
     public $event_id, $title, $description, $start, $end, $color, $textColor, $status, $created_at, $updated_at, $accion = "store";
 
-    public $search = '', $perPage = '10', $total;
+    public $search = '', $perPage = '10', $page = 1, $total;
 
     public $rules = [
         'title'         => 'required|string|max:200|unique:events,title',
@@ -28,11 +27,6 @@ class EventComponent extends Component
         'color'         => 'required|string|max:100',
         'textColor'     => 'required|string|max:100',
     ];
-
-    /* protected $messages = [
-        'description.required' => 'La descripción es requerida.',
-        'description.unique' => 'La descripción ya esta en uso.',
-    ]; */
 
     protected $queryString = [
         'search'  => ['except' => ''],
@@ -88,16 +82,29 @@ class EventComponent extends Component
             'color'         => 'required|string|max:100',
             'textColor'     => 'required|string|max:100',
         ]);
-        Event::create([
-            'title'         => $this->title,
-            'slug'          => Str::slug($this->title, '-'),
-            'description'   => $this->description,
-            'start'         => $this->start,
-            'end'           => $this->end,
-            'color'         => $this->color,
-            'textColor'     => $this->textColor,
+        $status = 'success';
+        $content = 'Se agrego correctamente el evento';
+        try {
+            DB::beginTransaction();
+            Event::create([
+                'title'         => $this->title,
+                'slug'          => Str::slug($this->title, '-'),
+                'description'   => $this->description,
+                'start'         => $this->start,
+                'end'           => $this->end,
+                'color'         => $this->color,
+                'textColor'     => $this->textColor,
+            ]);
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $status = 'error';
+            $content = 'Ocurrio un error al agregar el evento';
+        }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
         ]);
-        session()->flash('message', 'Evento creado correctamente.');
         $this->clean();
         $this->emit('eventCreatedEvent');
     }
@@ -116,8 +123,6 @@ class EventComponent extends Component
         $this->status       = $event->status;
         $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
         $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
-        /* $this->created_at   = $event->created_at;
-        $this->updated_at   = $event->updated_at; */
     }
 
     public function close()
@@ -149,22 +154,35 @@ class EventComponent extends Component
             'color'         => 'required|string|max:100',
             'textColor'     => 'required|string|max:100',
         ]);
-        if ($this->event_id) {
-            $event = Event::find($this->event_id);
-            $event->update([
-                'title'         => $this->title,
-                'slug'          => Str::slug($this->title, '-'),
-                'description'   => $this->description,
-                'start'         => $this->start,
-                'end'           => $this->end,
-                'color'         => $this->color,
-                'textColor'     => $this->textColor,
-                'status'        => $this->status,
-            ]);
-            session()->flash('message', 'Evento actualizado correctamente.');
-            $this->clean();
-            $this->emit('eventUpdatedEvent');
+        $status = 'success';
+        $content = 'Se actualizo correctamente el evento';
+        try {
+            DB::beginTransaction();
+            if ($this->event_id) {
+                $event = Event::find($this->event_id);
+                $event->update([
+                    'title'         => $this->title,
+                    'slug'          => Str::slug($this->title, '-'),
+                    'description'   => $this->description,
+                    'start'         => $this->start,
+                    'end'           => $this->end,
+                    'color'         => $this->color,
+                    'textColor'     => $this->textColor,
+                    'status'        => $this->status,
+                ]);
+            }
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $status = 'error';
+            $content = 'Ocurrio un error al actualizar el evento';
         }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
+        $this->clean();
+        $this->emit('eventUpdatedEvent');
     }
 
     public function delete(Event $event)
@@ -175,8 +193,21 @@ class EventComponent extends Component
 
     public function destroy()
     {
-        Event::find($this->event_id)->delete();
-        session()->flash('message', 'Evento eliminado correctamente.');
+        $status = 'success';
+        $content = 'Se elimino correctamente el evento';
+        try {
+            DB::beginTransaction();
+            Event::find($this->event_id)->delete();
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $status = 'error';
+            $content = 'Ocurrio un error al eliminar el evento';
+        }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
         $this->clean();
         $this->emit('eventDeletedEvent');
     }

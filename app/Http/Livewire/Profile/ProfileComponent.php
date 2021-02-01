@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\DB;
 
 class ProfileComponent extends Component
 {
@@ -75,11 +76,6 @@ class ProfileComponent extends Component
         'status'    => 'estado',
     ];
 
-    /* protected $messages = [
-        'password.*'    => 'Es necesario que ingrese su contraseña actual.',
-        'password1.*'   => 'El campo de contraseña nueva y de confirmar contraseña no coinciden',
-    ]; */
-
     public function mount()
     {
         $user = Auth::user()->id;
@@ -141,25 +137,38 @@ class ProfileComponent extends Component
             'name'          => 'required|string|max:200|unique:users,name, ' . $this->user->id,
             'description'   => 'required|string|max:500',
         ]);
-        if ($this->user->id) {
-            $usuario = User::find($this->user->id);
-            $usuario->update([
-                'name'  => $this->name,
-            ]);
-            $perfil = $usuario->profile;
-            if ($this->temporary) {
-                $avatarUser = time() . '_' . $this->temporary->getClientOriginalName();
-                $this->temporary->storePubliclyAs('storage/users', $avatarUser, 'public_uploads');
+        $status  = 'success';
+        $content = 'Los datos se guardaron correctamente';
+        try {
+            DB::beginTransaction();
+            if ($this->user->id) {
+                $usuario = User::find($this->user->id);
+                $usuario->update([
+                    'name'  => $this->name,
+                ]);
+                $perfil = $usuario->profile;
+                if ($this->temporary) {
+                    $avatarUser = time() . '_' . $this->temporary->getClientOriginalName();
+                    $this->temporary->storePubliclyAs('storage/users', $avatarUser, 'public_uploads');
+                    $perfil->update([
+                        'avatar'        => $avatarUser,
+                    ]);
+                }
                 $perfil->update([
-                    'avatar'        => $avatarUser,
+                    'description'   => $this->description,
                 ]);
             }
-            $perfil->update([
-                'description'   => $this->description,
-            ]);
-            session()->flash('message1', 'Datos guardados correctamente.');
-            $this->clean();
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            $status  = 'error';
+            $content = 'Ocurrio un error al tratar de guardar los datos';
         }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
+        $this->clean();
     }
 
     public function saveUser()
@@ -172,19 +181,32 @@ class ProfileComponent extends Component
             'email'             => 'required|email|unique:users,email, ' . $this->user->id,
             'corporative'       => 'required|email|unique:users,corporative, ' . $this->user->id,
         ]);
-        if ($this->user->id) {
-            $usuario = User::find($this->user->id);
-            $usuario->update([
-                'nameUser'       => $this->nameUser,
-                'firstLastname'  => $this->firstLastname,
-                'secondLastname' => $this->secondLastname,
-                'phone'          => $this->phone,
-                'email'          => $this->email,
-                'corporative'    => $this->corporative,
-            ]);
-            session()->flash('message2', 'Datos guardados correctamente.');
-            $this->clean();
+        $status  = 'success';
+        $content = 'Perfil actualizado correctamente';
+        try {
+            DB::beginTransaction();
+            if ($this->user->id) {
+                $usuario = User::find($this->user->id);
+                $usuario->update([
+                    'nameUser'       => $this->nameUser,
+                    'firstLastname'  => $this->firstLastname,
+                    'secondLastname' => $this->secondLastname,
+                    'phone'          => $this->phone,
+                    'email'          => $this->email,
+                    'corporative'    => $this->corporative,
+                ]);
+            }
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            $status  = 'error';
+            $content = 'Ocurrio un error al tratar de actualizar su perfil';
         }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
+        $this->clean();
     }
 
     public function saveProfile()
@@ -197,20 +219,33 @@ class ProfileComponent extends Component
             'website'      => 'string|max:200|nullable|unique:profiles,website, ' . $this->profile->id,
             'other'        => 'string|max:200|nullable|unique:profiles,other, ' . $this->profile->id,
         ]);
-        if ($this->user->id) {
-            $usuario = User::find($this->user->id);
-            $perfil = $usuario->profile;
-            $perfil->update([
-                'birthday'    => $this->birthday,
-                'facebook'    => $this->facebook,
-                'instagram'   => $this->instagram,
-                'github'      => $this->github,
-                'website'     => $this->website,
-                'other'       => $this->other,
-            ]);
-            session()->flash('message3', 'Datos guardados correctamente.');
-            $this->clean();
+        $status  = 'success';
+        $content = 'Datos guardados correctamente';
+        try {
+            DB::beginTransaction();
+            if ($this->user->id) {
+                $usuario = User::find($this->user->id);
+                $perfil = $usuario->profile;
+                $perfil->update([
+                    'birthday'    => $this->birthday,
+                    'facebook'    => $this->facebook,
+                    'instagram'   => $this->instagram,
+                    'github'      => $this->github,
+                    'website'     => $this->website,
+                    'other'       => $this->other,
+                ]);
+            }
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            $status  = 'error';
+            $content = 'Ocurrio un error al tratar de guardar sus datos';
         }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
+        $this->clean();
     }
 
     public function savePassword()
@@ -220,21 +255,44 @@ class ProfileComponent extends Component
             'password1'   => 'required|min:8|max:100|confirmed',
             'password1_confirmation'   => 'required|min:8|max:100',
         ]);
-        if ($this->user->id) {
-            $usuario = User::find($this->user->id);
-            if ($usuario->password = Hash::make($this->password)) {
-                if ($this->password1 == $this->password1_confirmation) {
-                    session()->flash('message4', 'Datos guardados correctamente.');
-                    $usuario->update([
-                        'password'  => Hash::make($this->password1),
-                    ]);
-                    $this->clean();
+        $status  = 'success';
+        $content = 'Contraseña actualizada correctamente';
+        try {
+            DB::beginTransaction();
+            if ($this->user->id) {
+                $usuario = User::find($this->user->id);
+                if ($usuario->password = Hash::make($this->password)) {
+                    if ($this->password1 == $this->password1_confirmation) {
+                        $usuario->update([
+                            'password'  => Hash::make($this->password1),
+                        ]);
+                        session()->flash('process_result', [
+                            'status'    => $status,
+                            'content'   => $content,
+                        ]);
+                        $this->clean();
+                    } else {
+                        $status  = 'error';
+                        $content = 'La contraseña nueva no coincide con la confirmación de la contresaña';
+                        session()->flash('process_result', [
+                            'status'    => $status,
+                            'content'   => $content,
+                        ]);
+                    }
                 } else {
-                    session()->flash('message4.0', 'La contraseña nueva no coincide con la contraseña de confirmación.');
+                    $status  = 'error';
+                    $content = 'La contraseña actual no es la correcta';
+                    session()->flash('process_result', [
+                        'status'    => $status,
+                        'content'   => $content,
+                    ]);
                 }
-            } else {
-                session()->flash('message4.0', 'El campo de contraseña actual no es correcta.');
             }
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            $status  = 'error';
+            $content = 'Ocurrio un error al tratar de actualizar su contraseña';
         }
     }
 
@@ -243,28 +301,56 @@ class ProfileComponent extends Component
         $this->validate([
             'status'     => 'required',
         ]);
-        if ($this->user->id) {
-            $usuario = User::find($this->user->id);
-            $usuario->update([
-                'status'    => $this->status,
-            ]);
-            if ($this->status == 1) {
-                $valor = "activada";
-            } else {
-                $valor = "desactivada";
+        $status  = 'success';
+        $content = 'Su cuenta se ';
+        try {
+            DB::beginTransaction();
+            if ($this->user->id) {
+                $usuario = User::find($this->user->id);
+                $usuario->update([
+                    'status'    => $this->status,
+                ]);
+                if ($this->status == 1) {
+                    $valor = "activo";
+                } else {
+                    $valor = "desactivo";
+                }
+                $content = 'Su cuenta se ' . $valor . ' correctamente';
             }
-            session()->flash('message5', 'Cuenta ' . $valor . ' correctamente.');
-            $this->clean();
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            $status  = 'error';
+            $content = 'Ocurrio un error al tratar de guardar los datos';
         }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
+        $this->clean();
     }
 
     public function deleteAcount()
     {
-        if ($this->user->id) {
-            User::find($this->user->id)->delete();
-            session()->flash('message6', 'Cuenta eliminada correctamente.');
-            $this->clean();
+        $status  = 'success';
+        $content = 'Se elimino correctamente su cuenta';
+        try {
+            DB::beginTransaction();
+            if ($this->user->id) {
+                User::find($this->user->id)->deletes();
+                /* User::find($this->user->id)->delete(); */
+            }
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            $status  = 'error';
+            $content = 'Ocurrio un error al tratar de eliminar su cuenta';
         }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
+        $this->clean();
     }
 
     public function clean()

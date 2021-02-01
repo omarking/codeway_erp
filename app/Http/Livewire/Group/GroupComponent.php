@@ -5,32 +5,25 @@ namespace App\Http\Livewire\Group;
 use App\Models\Group;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\DB;
 
 class GroupComponent extends Component
 {
     use WithPagination;
 
-    public $page = 1;
-
     protected $paginationTheme = 'bootstrap';
 
     public $group_id, $name, $description, $responsable, $status, $created_at, $updated_at, $accion = "store";
 
-    public $search = '', $perPage = '10', $total, $usuarios;
+    public $search = '', $perPage = '10', $page = 1, $total, $usuarios;
 
     public $rules = [
         'name'         => 'required|string|max:200|unique:groups,name',
         'description'  => 'required|string',
         'responsable'  => 'required|string',
     ];
-
-    /* protected $messages = [
-        'description.required' => 'La descripción es requerida.',
-        'description.unique' => 'La descripción ya esta en uso.',
-    ]; */
 
     protected $queryString = [
         'search'  => ['except' => ''],
@@ -75,12 +68,25 @@ class GroupComponent extends Component
             'description'  => 'required|string',
             'responsable'  => 'required|string',
         ]);
-        Group::create([
-            'name'          => $this->name,
-            'description'   => $this->description,
-            'responsable'   => $this->responsable,
+        $status = 'success';
+        $content = 'Se agrego correctamente el grupo';
+        try {
+            DB::beginTransaction();
+            Group::create([
+                'name'          => $this->name,
+                'description'   => $this->description,
+                'responsable'   => $this->responsable,
+            ]);
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $status = 'error';
+            $content = 'Ocurrio un error al agregar el grupo';
+        }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
         ]);
-        session()->flash('message', 'Grupo creado correctamente.');
         $this->clean();
         $this->emit('groupCreatedEvent');
     }
@@ -96,8 +102,6 @@ class GroupComponent extends Component
         $this->status       = $group->status;
         $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
         $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
-        /* $this->created_at   = $group->created_at;
-        $this->updated_at   = $group->updated_at; */
     }
 
     public function close()
@@ -123,18 +127,31 @@ class GroupComponent extends Component
             'description'  => 'required|string',
             'responsable'  => 'required|string',
         ]);
-        if ($this->group_id) {
-            $groups = Group::find($this->group_id);
-            $groups->update([
-                'name'          => $this->name,
-                'description'   => $this->description,
-                'responsable'   => $this->responsable,
-                'status'        => $this->status,
-            ]);
-            session()->flash('message', 'Grupo actualizado correctamente.');
-            $this->clean();
-            $this->emit('groupUpdatedEvent');
+        $status = 'success';
+        $content = 'Se actualizo correctamente el grupo';
+        try {
+            DB::beginTransaction();
+            if ($this->group_id) {
+                $groups = Group::find($this->group_id);
+                $groups->update([
+                    'name'          => $this->name,
+                    'description'   => $this->description,
+                    'responsable'   => $this->responsable,
+                    'status'        => $this->status,
+                ]);
+            }
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $status = 'error';
+            $content = 'Ocurrio un error al actualizar el grupo';
         }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
+        $this->clean();
+        $this->emit('groupUpdatedEvent');
     }
 
     public function delete(Group $group)
@@ -145,8 +162,21 @@ class GroupComponent extends Component
 
     public function destroy()
     {
-        Group::find($this->group_id)->delete();
-        session()->flash('message', 'Grupo eliminado correctamente.');
+        $status = 'success';
+        $content = 'Se elimino correctamente el grupo';
+        try {
+            DB::beginTransaction();
+            Group::find($this->group_id)->delete();
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $status = 'error';
+            $content = 'Ocurrio un error al eliminar el grupo';
+        }
+        session()->flash('process_result', [
+            'status'    => $status,
+            'content'   => $content,
+        ]);
         $this->clean();
         $this->emit('groupDeletedEvent');
     }

@@ -10,13 +10,6 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <div class="card">
-                    @if (session()->has('message'))
-                        <div class="alert alert-success">
-                            {{ session('message') }}
-                        </div>
-                    @endif
-                </div>
                 <div class="form-group d-flex justify-content-between">
                     <div class="col-md-auto col-lg-9">
                         <input type="text" class="form-control" placeholder="Buscar" wire:model="search" wire:dirty.class="bg-secondary">
@@ -96,8 +89,9 @@
             @endif
         </div>
     </div>
-    @include('livewire.permission.create')
+    @include('custom.message')
+    {{-- @include('livewire.permission.create') --}}
     @include('livewire.permission.show')
     @include('livewire.permission.update')
-    @include('livewire.permission.delete')
+    {{-- @include('livewire.permission.delete') --}}
 </div>
