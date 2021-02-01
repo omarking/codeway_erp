@@ -30,7 +30,7 @@
                         <h5>{{ $updated_at }}</h5>
                     </div>
                     <div class="form-group ">
-                        <label class="text-muted text-uppercase" for="updated_at">Perfiles relacionadas con esta posición</label>
+                        <label class="text-muted text-uppercase" for="updated_at">Perfiles relacionados con esta posición</label>
                         <div class="table-responsive">
                             <table class="table table-white table-striped table-hover">
                                 <thead>

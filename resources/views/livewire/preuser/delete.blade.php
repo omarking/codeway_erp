@@ -10,7 +10,7 @@
             <div class="modal-body">
                 <form>
                     <div class="form-group">
-                        <h4>¿Seguro que quieres eliminar este aspirante?</h4>
+                        <h4>¿Seguro que quieres eliminar al aspirante?</h4>
                         <h3 class="text-dark text-uppercase">{{ $name }} {{ $lastname }}</h3>
                     </div>
                 </form>

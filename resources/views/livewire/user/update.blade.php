@@ -40,7 +40,7 @@
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label class="text-muted" for="phone">Telefono:</label>
+                        <label class="text-muted" for="phone">Teléfono:</label>
                         <input type="number" name="phone" class="form-control @error('phone') is-invalid @enderror"
                                 wire:model="phone" wire:dirty.class="bg-success">
                         @error('phone')
@@ -50,7 +50,7 @@
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label class="text-muted" for="name">Nombre:</label>
+                        <label class="text-muted" for="name">Nombre de Usuario:</label>
                         <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
                                 wire:model="name" wire:dirty.class="bg-success">
                         @error('name')
@@ -155,9 +155,9 @@
                     </div>
                     @isset ($depa)
                         <div class="form-group">
-                            <label class="text-muted" for="group">Grupo:</label>
+                            <label class="text-muted" for="group">Área:</label>
                             <select wire:model="group" class="form-control @error('group') is-invalid @enderror" name="group" wire:dirty.class="bg-success">
-                                <option value="">--Seleccione el grupo--</option>
+                                <option value="">--Seleccione el área--</option>
                                 @isset($grupos)
                                     @foreach($grupos->groups as $group)
                                         <option value="{{ $group->id }}"

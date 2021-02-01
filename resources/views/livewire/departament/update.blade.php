@@ -33,7 +33,7 @@
                             <div class="form-group">
                                 <label class="text-muted" for="responsable">Responsable:</label>
                                 <select wire:model="responsable" class="form-control @error('responsable') is-invalid @enderror"  name="responsable" wire:dirty.class="bg-success">
-                                    <option value="">--Seleccione el Responsable--</option>
+                                    <option value="">--Seleccione el responsable--</option>
                                     @foreach($usuarios as $usuario)
                                         <option  value="{{ $usuario->name }}"
                                             @isset( $usuario->name )
@@ -75,7 +75,7 @@
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label class="text-muted text-uppercase" for="grupos">Grupos</label>
+                                <label class="text-muted text-uppercase" for="grupos">Lista de Áreas</label>
                                 <div>
                                     @foreach ($groups as $group)
                                         <div class="custom-control custom-checkbox">

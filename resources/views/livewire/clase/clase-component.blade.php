@@ -46,7 +46,7 @@
                                     @if ($clase->status == "1")
                                         Activa
                                     @else
-                                        Inactivo
+                                        Inactiva
                                     @endif
                                 </td>
                                 <td>{{ $clase->created_at->diffForHumans() }}</td>

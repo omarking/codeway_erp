@@ -10,7 +10,7 @@
             <div class="modal-body">
                 <form>
                     <div class="form-group">
-                        <label class="text-muted" for="days">Dias:</label>
+                        <label class="text-muted" for="days">Días:</label>
                         <input type="numeric" name="days" class="form-control @error('days') is-invalid @enderror"
                                 wire:model="days" wire:dirty.class="bg-success">
                         @error('days')
@@ -21,7 +21,7 @@
                     </div>
                     <div class="d-flex justify-content-between mb-auto ">
                         <div class="form-group justify-content-start">
-                            <label class="text-muted" for="beginDate">Fecha de inicio:</label>
+                            <label class="text-muted" for="beginDate">Inicio:</label>
                             <input type="date" name="beginDate" wire:dirty.class="bg-success"
                                 class="form-control @error('beginDate') is-invalid @enderror" wire:model="beginDate">
                             @error('beginDate')
@@ -31,7 +31,7 @@
                             @enderror
                         </div>
                         <div class="form-group justify-content-end">
-                            <label class="text-muted" for="endDate">Fecha de termino:</label>
+                            <label class="text-muted" for="endDate">Terminó:</label>
                             <input type="date" name="endDate" wire:dirty.class="bg-success"
                                 class="form-control @error('endDate') is-invalid @enderror" wire:model="endDate">
                             @error('endDate')

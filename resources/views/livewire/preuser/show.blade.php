@@ -10,11 +10,11 @@
             <div class="modal-body">
                 <form>
                     <div class="form-group">
-                        <label class="text-muted" for="name">Aspirante:</label>
+                        <label class="text-muted" for="name">Nombre:</label>
                         <h5>{{ $name }} {{ $lastname }}</h5>
                     </div>
                     <div class="form-group">
-                        <label class="text-muted" for="phone">Telefono:</label>
+                        <label class="text-muted" for="phone">Teléfono:</label>
                         <h5>{{ $phone }}</h5>
                     </div>
                     <div class="form-group">

@@ -5,7 +5,7 @@
                 <h3 class="card-title text-uppercase">Proyectos</h3>
             </div>
             <div>
-                <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#createProject">Agregar Proyecto</button>
+                <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#createProject">Agregar Proyectó</button>
             </div>
         </div>
         <div class="card-body">
@@ -33,7 +33,7 @@
                         <tr>
                             <th scope="col">Imagen</th>
                             <th scope="col">Clave</th>
-                            <th scope="col">Nombre</th>
+                            <th scope="col">Proyectó</th>
                             <th scope="col">Responsable</th>
                             <th scope="col">Estado</th>
                             <th scope="col">Clase</th>
@@ -45,7 +45,7 @@
                         @foreach($projects as $project)
                             <tr>
                                 <th>
-                                    <img width="90%" class="img-fluid" class="rounded-sm" src="{{ asset('storage/projects/' . $project->avatar) }}" alt="{{-- {{ $project->avatar }} --}}">
+                                    <img width="90%" class="img-fluid" class="rounded-sm" src="{{ asset('storage/projects/' . $project->avatar) }}" alt="{{ $project->avatar }}">
                                 </th>
                                 <td>{{ $project->key }}</td>
                                 <td><a class="color-bg" href="{{ route('project.show', $project) }}">{{ $project->name }}</a></td>
@@ -68,7 +68,7 @@
                                     @isset($project->category->description)
                                         {{ $project->category->description }}
                                     @else
-                                        Sin categoria
+                                        Sin categoría
                                     @endisset
                                 </td>
                                 <td>
@@ -88,7 +88,7 @@
             @if ($projects->count())
                 <nav class="col col-lg-6 justify-content-start" aria-label="Page navigation example">
                     <ul class="pagination justify-content">
-                        <h6>Mostrando {{ $projects->count() }} registros de {{ $total }} registros totales en la pagina {{ $page }}</h6>
+                        <h6>Mostrando {{ $projects->count() }} registros de {{ $total }} registros totales en la página {{ $page }}</h6>
                     </ul>
                 </nav>
                 <nav class="col col-lg-6 justify-content-end" aria-label="Page navigation example">

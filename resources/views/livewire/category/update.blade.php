@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <div class="modal-header bg-success">
-                <h5 class="modal-title" id="updateCategoryModal">MODIFICAR CATEGORIA</h5>
+                <h5 class="modal-title" id="updateCategoryModal">MODIFICAR CATEGORÍA</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -27,7 +27,7 @@
                                     checked
                                 @endif
                             >
-                            <label class="custom-control-label" for="statusType1">Activo</label>
+                            <label class="custom-control-label" for="statusType1">Activa</label>
                         </div>
                         <div class="custom-control custom-radio custom-control-inline">
                             <input type="radio" id="statusType0" wire:model="status" name="status" class="custom-control-input" value="0"
@@ -35,7 +35,7 @@
                                     checked
                                 @endif
                             >
-                            <label class="custom-control-label" for="statusType0">Inactivo</label>
+                            <label class="custom-control-label" for="statusType0">Inactiva</label>
                             <hr>
                         </div>
                     </div>
@@ -46,7 +46,7 @@
                     <div wire:loading wire:loading.class="bg-white">Procesando datos...</div>
                 </div>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" wire:click.prevent="clean()">Cancelar</button>
-                <button type="button" class="btn btn-success" wire:click.prevent="update()">Actualizar Categoria</button>
+                <button type="button" class="btn btn-success" wire:click.prevent="update()">Actualizar Categoría</button>
             </div>
         </div>
     </div>

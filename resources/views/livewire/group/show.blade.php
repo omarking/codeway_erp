@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title" id="showClassModal">MOSTRAR GRUPO</h5>
+                <h5 class="modal-title" id="showClassModal">MOSTRAR ÁREA</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -24,9 +24,9 @@
                     <div class="form-group">
                         <label class="text-muted" for="estado">Estado:</label>
                         @if ($status == "1")
-                            <h5>Activo</h5>
+                            <h5>Activa</h5>
                         @else
-                            <h5>Inactivo</h5>
+                            <h5>Inactiva</h5>
                         @endif
                     </div>
                     <div class="form-group">

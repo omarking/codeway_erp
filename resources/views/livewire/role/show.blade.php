@@ -20,7 +20,7 @@
                                 <h5>{{ $name }}</h5>
                             </div>
                             <div class="form-group">
-                                <label class="text-muted" for="slug">Slug:</label>
+                                <label class="text-muted" for="slug">Identificador:</label>
                                 <h5>{{ $slug }}</h5>
                             </div>
                             <div class="form-group">
@@ -34,7 +34,7 @@
                             <div class="form-group">
                                 <label class="text-muted" for="description">Acceso total:</label>
                                 @if ($fullAccess == "yes")
-                                    <h5>Sí</h5>
+                                    <h5>Si</h5>
                                 @else
                                     <h5>No</h5>
                                 @endif
@@ -60,7 +60,7 @@
                     @if ($fullAccess != "yes")
                         <div class="col-lg-6 mb-4">
                             <div class="form-group">
-                                <label class="text-muted text-uppercase" for="permisos">Permisos</label>
+                                <label class="text-muted text-uppercase" for="permisos">Lista de Permisos</label>
                                 <div>
                                     @foreach ($permissions as $permission)
                                         <div class="custom-control custom-checkbox">

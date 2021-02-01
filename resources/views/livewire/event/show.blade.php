@@ -10,7 +10,7 @@
             <div class="modal-body">
                 <form>
                     <div class="form-group">
-                        <label class="text-muted" for="title">Titulo:</label>
+                        <label class="text-muted" for="title">Título:</label>
                         <h5>{{ $title }}</h5>
                     </div>
                     <div class="form-group">
@@ -18,11 +18,11 @@
                         <h5>{{ $description }}</h5>
                     </div>
                     <div class="form-group">
-                        <label class="text-muted" for="start">Fecha de inicio:</label>
+                        <label class="text-muted" for="start">Inicio:</label>
                         <h5>{{ $start }}</h5>
                     </div>
                     <div class="form-group">
-                        <label class="text-muted" for="end">Fecha de termino:</label>
+                        <label class="text-muted" for="end">Terminó:</label>
                         <h5>{{ $end }}</h5>
                     </div>
                     <div class="form-group">

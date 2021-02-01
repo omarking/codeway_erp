@@ -2,10 +2,10 @@
     <div class="card">
         <div class="card-header bg-secondary">
             <div class="text-xl-left">
-                <h3 class="card-title text-uppercase">Grupos</h3>
+                <h3 class="card-title text-uppercase">Áreas</h3>
             </div>
             <div>
-                <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#createGroup">Agregar Grupo</button>
+                <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#createGroup">Agregar Área</button>
             </div>
         </div>
         <div class="card-body">
@@ -31,7 +31,7 @@
                 <table wire:poll.10000ms id="groupTable" class="table table-white table-striped table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">Grupo</th>
+                            <th scope="col">Área</th>
                             <th scope="col">Descripción</th>
                             <th scope="col">Responsable</th>
                             <th scope="col">Estado</th>
@@ -50,7 +50,7 @@
                                     @if ($group->status == "1")
                                         Activa
                                     @else
-                                        Inactivo
+                                        Inactiva
                                     @endif
                                 </td>
                                 <td>{{ $group->created_at->diffForHumans() }}</td>

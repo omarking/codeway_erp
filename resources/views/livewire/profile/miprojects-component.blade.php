@@ -7,7 +7,7 @@
                     @forelse($user->departaments as $departament)
                         <div class="card">
                             <div class="card-header bg-secondary">
-                                <label class="text-white text-uppercase" for="name"> Departamento de {{ $departament->name }}</label>
+                                <label class="text-white text-uppercase" for="name"> Departamento {{ $departament->name }}</label>
                             </div>
                             <div class="card-body">
                                 <div class="form-group">
@@ -18,7 +18,7 @@
                             <div class="card-footer">
                                 <div class="form-group">
                                     <div class="d-flex justify-content-end">
-                                        <label for="responsable">Resposanble : <small class="text-uppercase">{{ $departament->responsable }}</small></label>
+                                        <label for="responsable">Responsable : <small class="text-uppercase">{{ $departament->responsable }}</small></label>
                                     </div>
                                 </div>
                             </div>
@@ -30,7 +30,7 @@
                             </div>
                             <div class="card-body">
                                 <h4>
-                                    Parace que no te han asignado un departamento con el que puedas trabajar, es raro que pase esto por lo que te recomiendo que le informes a tu superior.
+                                    Parece que no te han asignado un departamento en el que puedas trabajar, es raro que pase esto por lo que te recomiendo que le informes a tu superior.
                                 </h4>
                                 <h4>
                                     Prueba estas opciones:
@@ -38,8 +38,8 @@
                                 <h4>
                                     <li>Cierra sesión y vuelve a entrar</li>
                                     <li>Revisa tu conexión a internet</li>
-                                    <li>Verifica que estes en un departamento</li>
-                                    <li>Informale a tu superior tu situación</li>
+                                    <li>Verifica que estés en un departamento</li>
+                                    <li>Infórmale  a tu superior tu situación</li>
                                 </h4>
                             </div>
                             <div class="card-footer">
@@ -52,7 +52,7 @@
                     @forelse($user->groups as $group)
                         <div class="card">
                             <div class="card-header bg-secondary">
-                                <label class="text-white text-uppercase" for="name">Grupo {{ $group->name }}</label>
+                                <label class="text-white text-uppercase" for="name">Área {{ $group->name }}</label>
                             </div>
                             <div class="card-body">
                                 <div class="form-group">
@@ -71,11 +71,11 @@
                     @empty
                         <div class="card">
                             <div class="card-header bg-secondary">
-                                <label class="text-white text-uppercase" for="nombre"><h4>Aun no eres asignado a un grupo</h4></label>
+                                <label class="text-white text-uppercase" for="nombre"><h4>Aun no eres asignado a un área</h4></label>
                             </div>
                             <div class="card-body">
                                 <h4>
-                                    Parace que no te han asignado un grupo con el que puedas trabajar, es raro que pase esto por lo que te recomiendo que le informes a tu superior.
+                                    Parece que no te han asignado un área en la que puedas trabajar, es raro que pase esto por lo que te recomiendo que le informes a tu superior.
                                 </h4>
                                 <h4>
                                     Prueba estas opciones:
@@ -83,8 +83,8 @@
                                 <h4>
                                     <li>Cierra sesión y vuelve a entrar</li>
                                     <li>Revisa tu conexión a internet</li>
-                                    <li>Verifica que estes en un departamento</li>
-                                    <li>Informale a tu superior tu situación</li>
+                                    <li>Verifica que estés en un departamento</li>
+                                    <li>Infórmale a tu superior tu situación</li>
                                 </h4>
                             </div>
                             <div class="card-footer">
@@ -100,7 +100,7 @@
                         <h3 class="text-uppercase text-center">MIS    PROYECTOS</h3>
                         <div class="card-header bg-secondary">
                             <label class="text-white text-uppercase" for="nombre">{{ $project->name }}</label>
-                            <a class="btn btn-primary float-right" href="{{ route('project.show', $project) }}">Trabajar en este Proyecto</a>
+                            <a class="btn btn-primary float-right" href="{{ route('project.show', $project) }}">Trabajar en este proyectó</a>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -120,17 +120,17 @@
                                                 @isset($project->clas->description)
                                                     <h4>{{ $project->clas->description }}</h4>
                                                 @else
-                                                    <h4>Este proyecto no esta asignado a una clase</h4>
+                                                    <h4>Este proyectó no esta asignado a una clase</h4>
                                                 @endisset
                                             </div>
                                         </div>
                                         <div class="col-lg-6 col-md-6">
                                             <div class="form-group">
-                                                <label for="categoria">Categoria</label>
+                                                <label for="categoria">Categoría</label>
                                                 @isset($project->category->description)
                                                     <h4>{{ $project->category->description }}</h4>
                                                 @else
-                                                    <h4>Este proyecto no esta asignado a una categoria</h4>
+                                                    <h4>Este proyectó no esta asignado a una categoría</h4>
                                                 @endisset
                                             </div>
                                         </div>
@@ -138,9 +138,9 @@
                                     <div class="form-group">
                                         <label for="estado">Estado</label>
                                         @if ($project->status == "1")
-                                            <h5>Activo</h5>
+                                            <h4>Activo</h4>
                                         @else
-                                            <h5>Inactivo</h5>
+                                            <h4>Inactivo</h4>
                                         @endif
                                     </div>
                                 </div>
@@ -160,11 +160,11 @@
                 @empty
                     <div class="card">
                         <div class="card-header bg-secondary">
-                            <label class="text-white text-uppercase" for="nombre"><h4>Aun no eres asignado a un proyecto</h4></label>
+                            <label class="text-white text-uppercase" for="nombre"><h4>Aun no eres asignado a un proyectó</h4></label>
                         </div>
                         <div class="card-body">
                             <h4>
-                                Parace que no te han asignado un proyecto en el que puedas trabajar, es raro que pase esto por lo que te recomiendo que le informes a tu superior.
+                                Parece que no te han asignado un proyectó en el que puedas trabajar, es raro que pase esto por lo que te recomiendo que le informes a tu superior.
                             </h4>
                             <h4>
                                 Prueba estas opciones:
@@ -172,8 +172,8 @@
                             <h4>
                                 <li>Cierra sesión y vuelve a entrar</li>
                                 <li>Revisa tu conexión a internet</li>
-                                <li>Verifica que estes en un departamento</li>
-                                <li>Informale a tu superior tu situación</li>
+                                <li>Verifica que estés en un departamento</li>
+                                <li>Infórmale a tu superior tu situación</li>
                             </h4>
                         </div>
                         <div class="card-footer">

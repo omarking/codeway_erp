@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <div class="modal-header bg-primary">
-                <h5 class="modal-title" id="createClassModal">AGREGAR GRUPO</h5>
+                <h5 class="modal-title" id="createClassModal">AGREGAR ÁREA</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -52,7 +52,7 @@
                 </div>
                 <div class="justify-content-end">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal" wire:click.prevent="clean()">Cancelar</button>
-                    <button type="button" class="btn btn-primary" wire:click.prevent="store()">Agregar Grupo</button>
+                    <button type="button" class="btn btn-primary" wire:click.prevent="store()">Agregar Área</button>
                 </div>
             </div>
         </div>

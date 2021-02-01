@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title_postfix', 'Categorias')
+@section('title_postfix', 'Categorías')
 
 @section('css')
     <link rel="stylesheet" href="/css/admin_custom.css">
@@ -17,7 +17,7 @@
                 <a class="text-uppercase" href="{{ route('project.index') }}">Proyectos</a>
                 /
                 <link class="fas fa-fw fa-boxes" rel="icon">
-                <a class="text-uppercase" href="{{ route('category.index') }}">Categorias</a>
+                <a class="text-uppercase" href="{{ route('category.index') }}">Categorías</a>
             </h3>
         </div>
     </div>

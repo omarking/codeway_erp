@@ -32,7 +32,7 @@
                     <thead>
                         <tr>
                             <th scope="col">Permiso</th>
-                            <th scope="col">Slug</th>
+                            <th scope="col">Identificador</th>
                             <th scope="col">Descripción</th>
                             <th scope="col">Estado</th>
                             <th scope="col">Creado</th>
@@ -48,7 +48,7 @@
                                 <td>{{ $permiso->description }}</td>
                                 <td>
                                     @if ($permiso->status == "1")
-                                        Activa
+                                        Activo
                                     @else
                                         Inactivo
                                     @endif

@@ -24,9 +24,9 @@
                     <div class="form-group">
                         <label class="text-muted" for="estado">Estado:</label>
                         @if ($status == "1")
-                            <h5>Activo</h5>
+                            <h5>Activa</h5>
                         @else
-                            <h5>Inactivo</h5>
+                            <h5>Inactiva</h5>
                         @endif
                     </div>
                     <div class="form-group">

@@ -14,7 +14,7 @@
                         <h5>{{ $name }}</h5>
                     </div>
                     <div class="form-group">
-                        <label class="text-muted" for="slug">Slug:</label>
+                        <label class="text-muted" for="slug">Identificador:</label>
                         <h5>{{ $slug }}</h5>
                     </div>
                     <div class="form-group">

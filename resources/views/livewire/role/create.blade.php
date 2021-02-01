@@ -26,7 +26,7 @@
                                 @enderror
                             </div>
                             <div class="form-group">
-                                <label class="text-muted" for="slug">Slug:</label>
+                                <label class="text-muted" for="slug">Identificador:</label>
                                 <input type="text" name="slug" class="form-control @error('slug') is-invalid @enderror"
                                         wire:model="slug" wire:dirty.class="bg-primary">
                                 @error('slug')
@@ -48,7 +48,7 @@
                                 <label class="text-muted" for="description">Acceso total:</label><br>
                                 <div class="custom-control custom-radio custom-control-inline">
                                     <input type="radio" id="fullaccessyes" name="fullAccess" wire:model="fullAccess" class="custom-control-input" value="yes">
-                                    <label class="custom-control-label" for="fullaccessyes">Yes</label>
+                                    <label class="custom-control-label" for="fullaccessyes">Si</label>
                                 </div>
                                 <div class="custom-control custom-radio custom-control-inline">
                                     <input type="radio" id="fullaccessno" wire:model="fullAccess" name="fullAccess" class="custom-control-input" value="no" checked>
@@ -70,7 +70,7 @@
                     @if ($fullAccess != "yes")
                         <div class="col-lg-6 mb-4">
                             <div class="form-group">
-                                <label class="text-muted text-uppercase" for="permisos">Permisos</label>
+                                <label class="text-muted text-uppercase" for="permisos">Lista de Permisos</label>
                                 <div>
                                     @forelse ($permissions as $permisos )
                                         <div class="custom-control custom-checkbox">

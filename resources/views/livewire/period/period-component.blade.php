@@ -44,7 +44,7 @@
                                 <td>{{ $period->description }}</td>
                                 <td>
                                     @if ($period->status == "1")
-                                        Activa
+                                        Activo
                                     @else
                                         Inactivo
                                     @endif

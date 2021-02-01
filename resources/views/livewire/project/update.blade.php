@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <div class="modal-header bg-success">
-                <h5 class="modal-title" id="updateProjectModal">MODIFICAR PROYECTO</h5>
+                <h5 class="modal-title" id="updateProjectModal">MODIFICAR PROYECTÓ</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -107,16 +107,6 @@
                             </span>
                         @enderror
                     </div>
-                    {{-- <div class="form-group">
-                        <label class="text-muted" for="responsable">Responsable:</label>
-                        <input type="text" name="responsable" wire:dirty.class="bg-success"
-                            class="form-control @error('responsable') is-invalid @enderror" wire:model="responsable" disabled>
-                        @error('responsable')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div> --}}
                     <div class="form-group">
                         <label class="text-muted" for="clas_id">Clase:</label>
                         <select wire:model="clas_id" class="form-control @error('clas_id') is-invalid @enderror" name="clas_id" wire:dirty.class="bg-success">
@@ -140,9 +130,9 @@
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label class="text-muted" for="category_id">Categoria:</label>
+                        <label class="text-muted" for="category_id">Categoría:</label>
                         <select wire:model="category_id" class="form-control @error('category_id') is-invalid @enderror"  name="category_id" wire:dirty.class="bg-success">
-                            <option value="">--Seleccione la categoria--</option>
+                            <option value="">--Seleccione la categoría--</option>
                             @foreach($categorias as $categoria)
                                 <option  value="{{ $categoria->id }}"
                                     @isset( $categoria->description )
@@ -162,7 +152,7 @@
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label class="text-muted text-uppercase" for="user">Usuarios</label>
+                        <label class="text-muted text-uppercase" for="user">Lista de Usuarios</label>
                         <div>
                             @foreach ($usuarios as $usuario)
                                 <div class="custom-control custom-checkbox">
@@ -191,7 +181,7 @@
                     <div wire:loading wire:loading.class="bg-white">Procesando datos...</div>
                 </div>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" wire:click.prevent="clean()">Cancelar</button>
-                <button type="button" class="btn btn-success" wire:click.prevent="update()">Actualizar Proyecto</button>
+                <button type="button" class="btn btn-success" wire:click.prevent="update()">Actualizar Proyectó</button>
             </div>
         </div>
     </div>

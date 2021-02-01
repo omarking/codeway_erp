@@ -31,12 +31,10 @@
                 <table wire:poll.10000ms id="eventTable" class="table table-white table-striped table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">Titulo</th>
+                            <th scope="col">Título</th>
                             <th scope="col">Descripción</th>
                             <th scope="col">Inicio</th>
-                            <th scope="col">Termino</th>
-                            <th scope="col">Color</th>
-                            <th scope="col">Texto Color</th>
+                            <th scope="col">Terminó</th>
                             <th scope="col">Estado</th>
                             <th scope="col">Creado</th>
                             <th scope="col">Actualizado</th>
@@ -50,11 +48,9 @@
                                 <td>{{ $event->description }}</td>
                                 <td>{{ $event->start }}</td>
                                 <td>{{ $event->end }}</td>
-                                <td>{{ $event->color }}</td>
-                                <td>{{ $event->textColor }}</td>
                                 <td>
                                     @if ($event->status == "1")
-                                        Activa
+                                        Activo
                                     @else
                                         Inactivo
                                     @endif
@@ -78,7 +74,7 @@
             @if ($events->count())
                 <nav class="col col-lg-6 justify-content-start" aria-label="Page navigation example">
                     <ul class="pagination justify-content">
-                        <h6>Mostrando {{ $events->count() }} registros de {{ $total }} registros totales en la pagina {{ $page }}</h6>
+                        <h6>Mostrando {{ $events->count() }} registros de {{ $total }} registros totales en la página {{ $page }}</h6>
                     </ul>
                 </nav>
                 <nav class="col col-lg-6 justify-content-end" aria-label="Page navigation example">

@@ -20,7 +20,7 @@
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label class="text-muted" for="slug">Slug:</label>
+                        <label class="text-muted" for="slug">Identificador:</label>
                         <input type="text" name="slug" class="form-control @error('slug') is-invalid @enderror"
                                 wire:model="slug" wire:dirty.class="bg-primary">
                         @error('slug')

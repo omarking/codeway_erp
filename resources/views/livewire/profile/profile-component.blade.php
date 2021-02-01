@@ -3,12 +3,12 @@
         <div class="container col-lg-4 col-md-4">
             <h4>Imagen de perfil</h4>
             <h5>Actualice su imagen de perfil</h5>
-            <h5>Agrege una descripción de quien es usted</h5>
+            <h5>Agregue una descripción de quien es usted</h5>
         </div>
         <div class="col-lg-8 col-md-8">
             <div class="container card">
                 <div class="card-body">
-                    <div class="col-lg-11 col-md-10">
+                    <div class="col-lg-11 col-md-10 ">
                         @if($temporary)
                             <div class="col-lg-5">
                                 <label class="text-muted" for="name">Avatar</label>
@@ -68,7 +68,7 @@
     <hr>
     <div wire:ignore.self class="row">
         <div class="container col-lg-4 col-md-4">
-            <h4>Información de Perfil</h4>
+            <h4>Información de perfil</h4>
             <h5>Actualice la información de su perfil</h5>
         </div>
         <div class="col-lg-8 col-md-8">
@@ -106,7 +106,7 @@
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label class="text-muted" for="phone">Telefono:</label>
+                            <label class="text-muted" for="phone">Teléfono:</label>
                             <input type="number" name="phone" class="form-control @error('phone') is-invalid @enderror"
                                     wire:model="phone" wire:dirty.class="bg-success">
                             @error('phone')
@@ -151,7 +151,7 @@
             <h4>Información de datos personales y sus redes sociales</h4>
             <h5>Actualice la información de su cuenta</h5>
             <h5>Actualice la información personal</h5>
-            <h5>Agrege sus redes sociales que utiliza</h5>
+            <h5>Agregue sus redes sociales que utiliza</h5>
         </div>
         <div class="col-lg-8 col-md-8">
             <div class="container card">
@@ -281,7 +281,7 @@
     <div wire:ignore.self class="row">
         <div class="container col-lg-4 col-md-4">
             <h4>Desactivar cuenta</h4>
-            <h5>Mantendra tu cuenta inactiva</h5>
+            <h5>Mantendrá tu cuenta inactiva</h5>
         </div>
         <div class="col-lg-8 col-md-8">
             <div class="container card">
@@ -329,7 +329,7 @@
                     <div class="col-lg-11 col-md-10">
                         <div class="form-group">
                             <label class="text-muted" for="color">Esto eliminara tus datos e información</label>
-                            <label class="text-muted" for="color">No sera posible volver a recuperar tu cuenta ni datos</label><br>
+                            <label class="text-muted" for="color">No será posible volver a recuperar tu cuenta ni tus datos</label><br>
                             <h4 class="text-danger">¿Seguro que quieres eliminar tu cuenta?</h4>
                             <div class="col-lg-3 col-md-4 col-sm-4">
                                 <button class="btn btn-danger btn-block" wire:click.prevent="deleteAcount()">Eliminar</button>

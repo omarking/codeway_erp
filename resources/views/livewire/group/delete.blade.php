@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <div class="modal-header bg-danger">
-                <h5 class="modal-title" id="deleteClassModal">BORRAR GRUPO</h5>
+                <h5 class="modal-title" id="deleteClassModal">BORRAR ÁREA</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -10,7 +10,7 @@
             <div class="modal-body">
                 <form>
                     <div class="form-group">
-                        <h4>¿Seguro que quieres eliminar el grupo?</h4>
+                        <h4>¿Seguro que quieres eliminar esta área?</h4>
                         <h3 class="text-dark text-uppercase">{{ $name }}</h3>
                     </div>
                 </form>
@@ -20,7 +20,7 @@
                     <div wire:loading wire:loading.class="bg-white">Procesando datos...</div>
                 </div>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" wire:click.prevent="clean()">Cancelar</button>
-                <button type="button" class="btn btn-danger" wire:click.prevent="destroy()">Eliminar Grupo</button>
+                <button type="button" class="btn btn-danger" wire:click.prevent="destroy()">Eliminar Área</button>
             </div>
         </div>
     </div>

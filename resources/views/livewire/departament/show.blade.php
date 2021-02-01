@@ -38,12 +38,12 @@
                         <h5>{{ $updated_at }}</h5>
                     </div>
                     <div class="form-group">
-                        <label class="text-muted text-uppercase" for="updated_at">Grupos que pertencen a este departamento</label>
+                        <label class="text-muted text-uppercase" for="updated_at">Áreas que pertencen a este departamento</label>
                         <div class="table-responsive">
                             <table class="table table-white table-striped table-hover">
                                 <thead>
                                     <tr>
-                                        <th scope="col">Grupo</th>
+                                        <th scope="col">Área</th>
                                         <th scope="col">Descripción</th>
                                         <th scope="col">Responsable</th>
                                     </tr>

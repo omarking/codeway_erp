@@ -5,7 +5,7 @@
                 <h3 class="card-title text-uppercase">Vacaciones</h3>
             </div>
             <div>
-                <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#createHoliday">Agregar Vacacion</button>
+                <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#createHoliday">Agregar Vacación</button>
             </div>
         </div>
         <div class="card-body">
@@ -32,15 +32,15 @@
                     <thead>
                         <tr>
                             <th scope="col">Usuario</th>
-                            <th scope="col">Dias</th>
+                            <th scope="col">Días</th>
                             <th scope="col">Inicio</th>
-                            <th scope="col">Termino</th>
+                            <th scope="col">Terminó</th>
                             <th scope="col">Proceso</th>
                             <th scope="col">Tomadas</th>
                             <th scope="col">Viables</th>
                             <th scope="col">Resposable</th>
-                            <th scope="col">Ausencias</th>
-                            <th scope="col">Periodos</th>
+                            <th scope="col">Ausencia</th>
+                            <th scope="col">Periodo</th>
                             <th scope="colgroup">Acciones</th>
                         </tr>
                     </thead>
@@ -92,7 +92,7 @@
             @if ($holidays->count())
                 <nav class="col col-lg-6 justify-content-start" aria-label="Page navigation example">
                     <ul class="pagination justify-content">
-                        <h6>Mostrando {{ $holidays->count() }} registros de {{ $total }} registros totales en la pagina {{ $page }}</h6>
+                        <h6>Mostrando {{ $holidays->count() }} registros de {{ $total }} registros totales en la página {{ $page }}</h6>
                     </ul>
                 </nav>
                 <nav class="col col-lg-6 justify-content-end" aria-label="Page navigation example">

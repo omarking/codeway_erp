@@ -2,11 +2,11 @@
     <div class="card">
         <div class="card-header bg-secondary">
             <div class="text-xl-left">
-                <h3 class="card-title text-uppercase">Categorias</h3>
+                <h3 class="card-title text-uppercase">Categorías</h3>
             </div>
             <div>
                 @can('haveaccess', 'category.create')
-                    <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#createCategory">Agregar Categoria</button>
+                    <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#createCategory">Agregar Categoría</button>
                 @endcan
             </div>
         </div>
@@ -33,7 +33,7 @@
                 <table wire:poll.10000ms id="categoryTable" class="table table-white table-striped table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">Categoria</th>
+                            <th scope="col">Categoría</th>
                             <th scope="col">Estado</th>
                             <th scope="col">Creado</th>
                             <th scope="col">Actualizado</th>
@@ -48,7 +48,7 @@
                                     @if ($category->status == "1")
                                         Activa
                                     @else
-                                        Inactivo
+                                        Inactiva
                                     @endif
                                 </td>
                                 <td>{{ $category->created_at->diffForHumans() }}</td>
@@ -76,7 +76,7 @@
             @if ($categories->count())
                 <nav class="col col-lg-6 justify-content-start" aria-label="Page navigation example">
                     <ul class="pagination justify-content">
-                        <h6>Mostrando {{ $categories->count() }} registros de {{ $total }} registros totales en la pagina {{ $page }}</h6>
+                        <h6>Mostrando {{ $categories->count() }} registros de {{ $total }} registros totales en la página {{ $page }}</h6>
                     </ul>
                 </nav>
                 <nav class="col col-lg-6 justify-content-end" aria-label="Page navigation example">

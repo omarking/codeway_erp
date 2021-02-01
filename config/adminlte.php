@@ -239,7 +239,7 @@ return [
     /* Barra lateral de control (barra lateral derecha) */
 
     /* Activa / desactiva la barra lateral derecha */
-    'right_sidebar' => true,
+    'right_sidebar' => false,
     /* Cambia el icono del botón alternador de la barra lateral derecha en la navegación superior */
     'right_sidebar_icon' => 'fas fa-cogs',
     /* Cambia el tema de la barra lateral derecha, las siguientes opciones están disponibles: dark & light */
@@ -365,7 +365,7 @@ return [
     'menu' => [
         [
             /* Caja de busqueda en el navbar */
-            'text' => 'Buscar',
+            'text' => 'Búscar',
             'search' => true,
             'topnav' => true,
         ],
@@ -375,7 +375,7 @@ return [
             'url' => 'test',                     // the form action
             'method' => 'POST',                  // the form method
             'input_name' => 'menu-search-input', // the input name
-            'text' => 'Buscar',                  // the input placeholder
+            'text' => 'Búscar',                  // the input placeholder
         ],
         /* Links en el navbar del lado izquierdo */
         /*
@@ -492,7 +492,7 @@ return [
                 ],
                 [
                     /* Gate::authorize('haveaccess', 'category.index'), */
-                    'text'  => 'Categorias',
+                    'text'  => 'Categorías',
                     /* 'can'   => 'category.index', */
                     'url'   => 'category',
                     'icon'  => 'fas fa-fw fa-boxes',
@@ -537,7 +537,7 @@ return [
                     'icon'  => 'fas fa-fw fa-clipboard',/* sticky-note */
                 ],
                 [
-                    'text'  => 'Asirantes',
+                    'text'  => 'Aspirantes',
                     'url'   => 'preuser',
                     'icon'  => 'fas fa-fw fa-portrait',/* user-check user-plus */
                 ],
@@ -569,7 +569,7 @@ return [
                     'icon'  => 'fas fa-fw fa-building',
                 ],
                 [
-                    'text'  => 'Grupos',
+                    'text'  => 'Áreas',
                     'url'   => 'group',
                     'icon'  => 'fas fa-fw fa-user-friends',
                 ],

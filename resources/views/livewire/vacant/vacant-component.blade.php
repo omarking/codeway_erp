@@ -48,7 +48,7 @@
                                     @if ($vacant->status == "1")
                                         Activa
                                     @else
-                                        Inactivo
+                                        Inactiva
                                     @endif
                                 </td>
                                 <td>{{ $vacant->created_at->diffForHumans() }}</td>
@@ -70,7 +70,7 @@
             @if ($vacants->count())
                 <nav class="col col-lg-6 justify-content-start" aria-label="Page navigation example">
                     <ul class="pagination justify-content">
-                        <h6>Mostrando {{ $vacants->count() }} registros de {{ $total }} registros totales en la pagina {{ $page }}</h6>
+                        <h6>Mostrando {{ $vacants->count() }} registros de {{ $total }} registros totales en la página {{ $page }}</h6>
                     </ul>
                 </nav>
                 <nav class="col col-lg-6 justify-content-end" aria-label="Page navigation example">

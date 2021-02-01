@@ -32,7 +32,7 @@
                     <thead>
                         <tr>
                             <th scope="col">Aspirante</th>
-                            <th scope="col">Telefono</th>
+                            <th scope="col">Teléfono</th>
                             <th scope="col">Email</th>
                             <th scope="col">Estado</th>
                             <th scope="col">Creado</th>
@@ -48,7 +48,7 @@
                                 <td>{{ $preuser->email }}</td>
                                 <td>
                                     @if ($preuser->status == "1")
-                                        Activa
+                                        Activo
                                     @else
                                         Inactivo
                                     @endif
@@ -72,7 +72,7 @@
             @if ($preusers->count())
                 <nav class="col col-lg-6 justify-content-start" aria-label="Page navigation example">
                     <ul class="pagination justify-content">
-                        <h6>Mostrando {{ $preusers->count() }} registros de {{ $total }} registros totales en la pagina {{ $page }}</h6>
+                        <h6>Mostrando {{ $preusers->count() }} registros de {{ $total }} registros totales en la página {{ $page }}</h6>
                     </ul>
                 </nav>
                 <nav class="col col-lg-6 justify-content-end" aria-label="Page navigation example">

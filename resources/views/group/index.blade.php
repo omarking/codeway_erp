@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title_postfix', 'Grupos')
+@section('title_postfix', 'Áreas')
 
 @section('css')
     <link rel="stylesheet" href="/css/admin_custom.css">
@@ -20,7 +20,7 @@
                 <a class="text-uppercase" href="{{ route('departament.index') }}">Departamentos</a>
                 /
                 <link class="fas fa-fw fa-user-friends" rel="icon">
-                <a class="text-uppercase" href="{{ route('group.index') }}">Grupos</a>
+                <a class="text-uppercase" href="{{ route('group.index') }}">Áreas</a>
             </h3>
         </div>
     </div>

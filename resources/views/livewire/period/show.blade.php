@@ -35,9 +35,9 @@
                             <table class="table table-white table-striped table-hover">
                                 <thead>
                                     <tr>
-                                        <th scope="col">Dias</th>
+                                        <th scope="col">Días</th>
                                         <th scope="col">Inicio</th>
-                                        <th scope="col">Termino</th>
+                                        <th scope="col">Terminó</th>
                                         <th scope="col">En proceso</th>
                                         <th scope="col">Tomadas</th>
                                         <th scope="col">Disponibles</th>

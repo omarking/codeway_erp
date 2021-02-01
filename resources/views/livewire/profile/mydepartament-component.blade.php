@@ -19,7 +19,7 @@
                             <h5> {{ $departament->description }} </h5>
                         </div>
                     @else
-                        <h5>Espera a que se te asigne a un departamento, por lo mientras tomate un cafe</h5>
+                        <h5>Espera a que se te asigne un departamento, por lo mientras tomate un café</h5>
                     @endisset
                 </div>
                 <div class="card-footer">
@@ -35,10 +35,10 @@
                     <h4 class="text-uppercase">
                         @isset($group->id)
                             <div wire:click.prevent="send({{ $group->id }})">
-                                Grupo de {{ $group->name }}
+                                Área de {{ $group->name }}
                             </div>
                         @else
-                            Aun no eres asignado a un grupo
+                            Aun no eres asignado a una área
                         @endisset
                     </h4>
                 </div>
@@ -48,7 +48,7 @@
                             <h5> {{ $group->description }} </h5>
                         </div>
                     @else
-                        <h5>Espera a que se te asigne a un grupo, por lo mientras tomate un cafe</h5>
+                        <h5>Espera a que se te asigne una área, por lo mientras tomate un café</h5>
                     @endisset
                 </div>
                 <div class="card-footer">

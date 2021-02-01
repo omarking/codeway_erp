@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title" id="showProjectModal">MOSTRAR PROYECTO</h5>
+                <h5 class="modal-title" id="showProjectModal">MOSTRAR PROYECTÓ</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -50,7 +50,7 @@
                         @endisset
                     </div>
                     <div class="form-group">
-                        <label class="text-muted" for="description">Categoria:</label>
+                        <label class="text-muted" for="description">Categoría:</label>
                         @isset($categoria)
                             <h5>{{ $categoria }}</h5>
                         @endisset
@@ -64,7 +64,7 @@
                         <h5>{{ $updated_at }}</h5>
                     </div>
                     <div class="form-group">
-                        <label class="text-muted text-uppercase" for="user">Usuarios</label>
+                        <label class="text-muted text-uppercase" for="user">Lista de Usuarios</label>
                         <div>
                             @foreach ($usuarios as $usuario)
                                 <div class="custom-control custom-checkbox">

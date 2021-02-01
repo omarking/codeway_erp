@@ -35,8 +35,8 @@
                             <th scope="col">Nombre</th>
                             <th scope="col">Usuario</th>
                             <th scope="col">Email</th>
-                            <th scope="col">Roles</th>
-                            <th scope="col">Departamentos</th>
+                            <th scope="col">Rol</th>
+                            <th scope="col">Departamento</th>
                             <th scope="colgroup">Acciones</th>
                         </tr>
                     </thead>
@@ -80,7 +80,7 @@
             @if ($users->count())
                 <nav class="col col-lg-6 justify-content-start" aria-label="Page navigation example">
                     <ul class="pagination justify-content">
-                        <h6>Mostrando {{ $users->count() }} registros de {{ $total }} registros totales en la pagina {{ $page }}</h6>
+                        <h6>Mostrando {{ $users->count() }} registros de {{ $total }} registros totales en la página {{ $page }}</h6>
                     </ul>
                 </nav>
                 <nav class="col col-lg-6 justify-content-end" aria-label="Page navigation example">

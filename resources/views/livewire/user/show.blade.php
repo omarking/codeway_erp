@@ -16,7 +16,7 @@
                                 <h5>{{ $nameUser }} {{ $firstLastname }} {{ $secondLastname }}</h5>
                             </div>
                             <div class="form-group">
-                                <label class="text-muted" for="phone">Telefono:</label>
+                                <label class="text-muted" for="phone">Teléfono:</label>
                                 <h5>{{ $phone }}</h5>
                             </div>
                             <div class="form-group">
@@ -48,7 +48,7 @@
                                 <h5>{{ $departament }}</h5>
                             </div>
                             <div class="form-group">
-                                <label class="text-muted" for="group">Grupo</label>
+                                <label class="text-muted" for="group">Área</label>
                                 <h5>{{ $group }}</h5>
                             </div>
                             <div class="form-group">
@@ -102,7 +102,7 @@
                             @isset($other)
                                 <div class="form-group">
                                     <link class="fas fa-fw fa-blog" rel="icon">
-                                    <a class="text-uppercase" href="{{ $other }}">Otra red</a>
+                                    <a class="text-uppercase" href="{{ $other }}">Otro</a>
                                 </div>
                             @endisset
                         </div>

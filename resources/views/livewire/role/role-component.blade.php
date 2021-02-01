@@ -32,8 +32,8 @@
                     <thead>
                         <tr>
                             <th scope="col">Rol</th>
-                            <th scope="col">Slug</th>
-                            <th scope="col">Descrpción</th>
+                            <th scope="col">Identificador</th>
+                            <th scope="col">Descripción</th>
                             <th scope="col">Acceso total</th>
                             <th scope="col">Estado</th>
                             <th scope="col">Creado</th>
@@ -47,10 +47,16 @@
                                 <td>{{ $rol->name }}</td>
                                 <td>{{ $rol->slug }}</td>
                                 <td>{{ $rol->description }}</td>
-                                <td>{{ $rol["fullAccess"] }}</td>
+                                <td>
+                                    @if ($rol["fullAccess"] == "yes")
+                                        Si
+                                    @else
+                                        No
+                                    @endif
+                                </td>
                                 <td>
                                     @if ($rol->status == "1")
-                                        Activa
+                                        Activo
                                     @else
                                         Inactivo
                                     @endif
@@ -74,7 +80,7 @@
             @if ($roles->count())
                 <nav class="col col-lg-6 justify-content-start" aria-label="Page navigation example">
                     <ul class="pagination justify-content">
-                        <h6>Mostrando {{ $roles->count() }} registros de {{ $total }} registros totales en la pagina {{ $page }}</h6>
+                        <h6>Mostrando {{ $roles->count() }} registros de {{ $total }} registros totales en la página {{ $page }}</h6>
                     </ul>
                 </nav>
                 <nav class="col col-lg-6 justify-content-end" aria-label="Page navigation example">

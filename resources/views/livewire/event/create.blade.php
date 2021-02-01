@@ -10,7 +10,7 @@
             <div class="modal-body">
                 <form>
                     <div class="form-group">
-                        <label class="text-muted" for="title">Titulo:</label>
+                        <label class="text-muted" for="title">Título:</label>
                         <input type="text" name="title" class="form-control @error('title') is-invalid @enderror"
                                 wire:model="title" wire:dirty.class="bg-primary">
                         @error('title')
@@ -40,7 +40,7 @@
                             @enderror
                         </div>
                         <div class="form-group justify-content-end">
-                            <label class="text-muted" for="end">Fin:</label>
+                            <label class="text-muted" for="end">Terminó:</label>
                             <input type="date" name="end" class="form-control @error('end') is-invalid @enderror"
                                     wire:model="end" wire:dirty.class="bg-primary">
                             @error('end')

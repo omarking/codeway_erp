@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <div class="modal-header bg-primary">
-                <h5 class="modal-title" id="createCategoryModal">AGREGAR CATEGORIA</h5>
+                <h5 class="modal-title" id="createCategoryModal">AGREGAR CATEGORÍA</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -27,7 +27,7 @@
                 </div>
                 <div class="justify-content-end">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal" wire:click.prevent="clean()">Cancelar</button>
-                    <button type="button" class="btn btn-primary" wire:click.prevent="store()">Agregar Categoria</button>
+                    <button type="button" class="btn btn-primary" wire:click.prevent="store()">Agregar Categoría</button>
                 </div>
             </div>
         </div>

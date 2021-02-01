@@ -28,7 +28,6 @@
                     <thead>
                         <tr>
                             <th scope="col">Tarea</th>
-                            <th scope="col">Inicio</th>
                             <th scope="col">Informador</th>
                             <th scope="col">Responsable</th>
                             <th scope="col">Estado</th>
@@ -41,7 +40,6 @@
                         @foreach($tasks as $task)
                             <tr>
                                 <td>{{ $task->name }}</td>
-                                <td>{{ $task->start }}</td>
                                 <td>{{ $task->informer }}</td>
                                 <td>{{ $task->responsable }}</td>
                                 <td>
@@ -82,7 +80,7 @@
             @if ($tasks->count())
                 <nav class="col col-lg-6 justify-content-start" aria-label="Page navigation example">
                     <ul class="pagination justify-content">
-                        <h6>Mostrando {{ $tasks->count() }} registros de {{ $total }} registros totales en la pagina {{ $page }}</h6>
+                        <h6>Mostrando {{ $tasks->count() }} registros de {{ $total }} registros totales en la página {{ $page }}</h6>
                     </ul>
                 </nav>
                 <nav class="col col-lg-6 justify-content-end" aria-label="Page navigation example">

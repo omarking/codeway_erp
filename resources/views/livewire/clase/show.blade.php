@@ -16,9 +16,9 @@
                     <div class="form-group">
                         <label class="text-muted" for="estado">Estado:</label>
                         @if ($status == "1")
-                            <h5>Activo</h5>
+                            <h5>Activa</h5>
                         @else
-                            <h5>Inactivo</h5>
+                            <h5>Inactiva</h5>
                         @endif
                     </div>
                     <div class="form-group">
@@ -30,7 +30,7 @@
                         <h5>{{ $updated_at }}</h5>
                     </div>
                     <div class="form-group ">
-                        <label class="text-muted text-uppercase" for="updated_at">Proyectos relacionadas con esta clase</label>
+                        <label class="text-muted text-uppercase" for="updated_at">Proyectos relacionados con esta clase</label>
                         <div class="table-responsive">
                             <table class="table table-white table-striped table-hover">
                                 <thead>

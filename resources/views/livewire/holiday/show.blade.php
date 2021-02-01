@@ -10,15 +10,15 @@
             <div class="modal-body">
                 <form>
                     <div class="form-group">
-                        <label class="text-muted" for="days">Dias:</label>
+                        <label class="text-muted" for="days">Días:</label>
                         <h5>{{ $days }}</h5>
                     </div>
                     <div class="form-group">
-                        <label class="text-muted" for="beginDate">Fecha de inicio:</label>
+                        <label class="text-muted" for="beginDate">Incio:</label>
                         <h5>{{ $beginDate }}</h5>
                     </div>
                     <div class="form-group">
-                        <label class="text-muted" for="endDate">Fecha de termino:</label>
+                        <label class="text-muted" for="endDate">Terminó:</label>
                         <h5>{{ $endDate }}</h5>
                     </div>
                     <div class="form-group">

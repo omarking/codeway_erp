@@ -50,7 +50,7 @@
                             @enderror
                         </div>
                         <div class="form-group justify-content-end">
-                            <label class="text-muted" for="end">Fin:</label>
+                            <label class="text-muted" for="end">Terminó:</label>
                             <input type="date" name="end" class="form-control @error('end') is-invalid @enderror"
                                     wire:model="end" wire:dirty.class="bg-primary">
                             @error('end')

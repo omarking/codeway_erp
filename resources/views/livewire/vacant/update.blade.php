@@ -46,7 +46,7 @@
                                     checked
                                 @endif
                             >
-                            <label class="custom-control-label" for="statusType1">Activo</label>
+                            <label class="custom-control-label" for="statusType1">Activa</label>
                         </div>
                         <div class="custom-control custom-radio custom-control-inline">
                             <input type="radio" id="statusType0" wire:model="status" name="status" class="custom-control-input" value="0"
@@ -54,7 +54,7 @@
                                     checked
                                 @endif
                             >
-                            <label class="custom-control-label" for="statusType0">Inactivo</label>
+                            <label class="custom-control-label" for="statusType0">Inactiva</label>
                             <hr>
                         </div>
                     </div>
