@@ -53,7 +53,7 @@ class TaskComponent extends Component
         'temporary'     => 'archivo',
         'file'          => 'archivo',
         'start'         => 'fecha de inicio',
-        'end'           => 'fecha termino',
+        'end'           => 'fecha terminó',
         'informer'      => 'informador',
         'responsable'   => 'responsable',
         'statu_id'      => 'estado',
@@ -63,8 +63,9 @@ class TaskComponent extends Component
 
     public function mount()
     {
-        $this->total = count(Task::all());
+        $this->total       = count(Task::all());
         $this->responsable = Auth::user()->name;
+
         $this->resetErrorBag();
         $this->resetValidation();
     }
@@ -114,10 +115,14 @@ class TaskComponent extends Component
             'priority_id'   => 'required',
             'type_id'       => 'required',
         ]);
+
         $status  = 'success';
-        $content = 'Se agrego correctamente la tarea';
+        $content = 'Se agregó correctamente la tarea';
+
         try {
+
             DB::beginTransaction();
+
             if ($this->temporary != null) {
                 if ($this->temporary->getClientOriginalName()) {
                     $nameFile = time() . '_' . $this->temporary->getClientOriginalName();
@@ -126,6 +131,7 @@ class TaskComponent extends Component
             } else {
                 $nameFile = null;
             }
+
             Task::create([
                 'name'          => $this->name,
                 'slug'          => Str::slug($this->name, '-'),
@@ -139,16 +145,23 @@ class TaskComponent extends Component
                 'priority_id'   => $this->priority_id,
                 'type_id'       => $this->type_id,
             ]);
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollback();
+
             $status  = 'error';
-            $content = 'Ocurrio un error al agregar la tarea';
+            $content = 'Ocurrió un error al agregar la tarea';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('taskCreatedEvent');
     }
@@ -176,11 +189,13 @@ class TaskComponent extends Component
         } else {
             $this->estado   = "Sin estado";
         }
+
         if (isset($task->type->description)) {
             $this->tipo     = $task->type->description;
         } else {
             $this->tipo     = "Sin tipo";
         }
+
         if (isset($task->priority->description)) {
             $this->prioridad = $task->priority->description;
         } else {
@@ -225,12 +240,17 @@ class TaskComponent extends Component
             'priority_id'   => 'required',
             'type_id'       => 'required',
         ]);
+
         $status  = 'success';
-        $content = 'Se actualizo correctamente la tarea';
+        $content = 'Se actualizó correctamente la tarea';
+
         try {
+
             DB::beginTransaction();
+
             if ($this->task_id) {
                 $task = Task::find($this->task_id);
+
                 $task->update([
                     'name'          => $this->name,
                     'slug'          => Str::slug($this->name, '-'),
@@ -242,6 +262,7 @@ class TaskComponent extends Component
                     'priority_id'   => $this->priority_id,
                     'type_id'       => $this->type_id,
                 ]);
+
                 if ($this->temporary != null) {
                     if ($this->temporary->getClientOriginalName()) {
                         $nameFile = time() . '_' . $this->temporary->getClientOriginalName();
@@ -249,17 +270,25 @@ class TaskComponent extends Component
                         $task->update(['file'   => $nameFile]);
                     }
                 }
+
             }
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollback();
+
             $status  = 'error';
-            $content = 'Ocurrio un error al actualizar la tarea';
+            $content = 'Ocurrió un error al actualizar la tarea';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('taskUpdatedEvent');
     }
@@ -273,21 +302,31 @@ class TaskComponent extends Component
     public function destroy()
     {
         $status  = 'success';
-        $content = 'Se elimino correctamente la tarea';
+        $content = 'Se eliminó correctamente la tarea';
+
         try {
+
             DB::beginTransaction();
+
             Task::find($this->task_id)->delete();
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollback();
+
             $status  = 'error';
-            $content = 'Ocurrio un error al eliminar la tarea';
+            $content = 'Ocurrió un error al eliminar la tarea';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
         /* Storage::delete('file.jpg'); */
+
         $this->clean();
         $this->emit('taskDeletedEvent');
     }
@@ -314,6 +353,7 @@ class TaskComponent extends Component
             'tipo',
             'prioridad',
         ]);
+
         $this->mount();
     }
 
@@ -324,13 +364,14 @@ class TaskComponent extends Component
 
     public function render()
     {
-        $estados    = Statu::orderBy('description')->where('status', '1')->get();
-        $types      = Type::orderBy('description')->where('status', '1')->get();
-        $priorities = Priority::orderBy('description')->where('status', '1')->get();
+        $estados    = Statu::orderBy('description')->where('status', '=', 1)->get();
+        $types      = Type::orderBy('description')->where('status', '=', 1)->get();
+        $priorities = Priority::orderBy('description')->where('status', '=', 1)->get();
 
         if ($this->search != '') {
             $this->page = 1;
         }
+        
         if (isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)) {
             $this->reset(['perPage']);
         }

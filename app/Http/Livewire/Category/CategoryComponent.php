@@ -36,6 +36,7 @@ class CategoryComponent extends Component
     public function mount()
     {
         $this->total = count(Category::all());
+        
         $this->resetErrorBag();
         $this->resetValidation();
     }
@@ -60,23 +61,34 @@ class CategoryComponent extends Component
         $this->validate([
             'description' => 'required|max:200|unique:categories,description',
         ]);
+
         $status = 'success';
-        $content = 'Se agrego correctamente la categoria';
+        $content = 'Se agregó correctamente la categoría';
+
         try {
+
             DB::beginTransaction();
+
             Category::create([
                 'description'   => $this->description,
             ]);
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollBack();
+
             $status = 'error';
-            $content = 'Ocurrio un error al agregar la categoria';
+            $content = 'Ocurrió un error al agregar la categoría';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('categoryCreatedEvent');
     }
@@ -118,10 +130,14 @@ class CategoryComponent extends Component
         $this->validate([
             'description' => 'required|max:200|unique:categories,description,' . $this->category_id,
         ]);
+
         $status = 'success';
-        $content = 'Se actualizo correctamente la categoria';
+        $content = 'Se actualizó correctamente la categoría';
+
         try {
+
             DB::beginTransaction();
+
             if ($this->category_id) {
                 $clase = Category::find($this->category_id);
                 $clase->update([
@@ -129,16 +145,23 @@ class CategoryComponent extends Component
                     'status'        => $this->status,
                 ]);
             }
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollBack();
+
             $status = 'error';
-            $content = 'Ocurrio un error al actualizar la categoria';
+            $content = 'Ocurrió un error al actualizar la categoría';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('categoryUpdatedEvent');
     }
@@ -156,20 +179,30 @@ class CategoryComponent extends Component
         Gate::authorize('haveaccess', 'category.destroy');
 
         $status = 'success';
-        $content = 'Se elimino correctamente la categoria';
+        $content = 'Se eliminó correctamente la categoría';
+
         try {
+
             DB::beginTransaction();
+
             Category::find($this->category_id)->delete();
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollBack();
+
             $status = 'error';
-            $content = 'Ocurrio un error al eliminar la categoria';
+            $content = 'Ocurrió un error al eliminar la categoría';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('categoryDeletedEvent');
     }
@@ -185,6 +218,7 @@ class CategoryComponent extends Component
             'created_at',
             'updated_at',
         ]);
+
         $this->mount();
     }
 
@@ -195,11 +229,12 @@ class CategoryComponent extends Component
 
     public function render()
     {
-        $proyectos = Project::orderBy('name')->get();
+        $proyectos = Project::orderBy('name')->where('status', '=', 1)->get();
 
         if ($this->search != '') {
             $this->page = 1;
         }
+
         if (isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)) {
             $this->reset(['perPage']);
         }

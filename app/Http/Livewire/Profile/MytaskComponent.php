@@ -8,6 +8,7 @@ use App\Models\Project;
 use App\Models\Statu;
 use App\Models\Task;
 use App\Models\Type;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Livewire\WithFileUploads;
@@ -18,15 +19,15 @@ class MytaskComponent extends Component
 {
     use WithFileUploads;
 
-    public $search = '', $perPage = '10', $page = 1;
+    public $search = '', $responsable_proyecto, $responsable_imagen, $pivote, $usuarios, $informadores;
 
-    public $proyecto, $tareas, $tasks, $usuario;
+    public $proyecto, $tareas, $usuario;
 
     public $estados;
 
     public $task_id, $name, $description, $file, $start, $end, $informer, $responsable, $created_at, $updated_at, $accion = "store";
 
-    public $estado, $tipo, $prioridad, $statu_id, $priority_id, $type_id, $temporary;
+    public $estado, $tipo, $prioridad, $statu_id, $priority_id, $type_id, $temporary, $informador;
 
     public $rules = [
         'name'          => 'required|string|max:200|unique:tasks,name',
@@ -40,6 +41,11 @@ class MytaskComponent extends Component
         'statu_id'      => 'required',
         'priority_id'   => 'required',
         'type_id'       => 'required',
+    ];
+
+    protected $queryString = [
+        'search'  => ['except' => ''],
+        'search'  => ['except' => ''],
     ];
 
     protected $validationAttributes = [
@@ -58,20 +64,33 @@ class MytaskComponent extends Component
 
     public function mount(Project $project)
     {
-        $this->proyecto = $project;
-        $this->tareas = Project::with('tasks', 'users')->where('id', '=', $project->id)->get();
-        $this->estados = Statu::where('status', '=', 1)->get();
-        $this->tasks = Task::all();
+        $this->proyecto   = $project;
+        $this->pivote     = Project::with('tasks', 'users')->where('id', '=', $project->id)->get();
+        $this->estados    = Statu::orderBy('id', 'Asc')->where('status', '=', 1)->get();
+        /* $this->tasks      = Task::all(); */
 
-        foreach ($this->tareas as $tarea) {
+        $this->responsable_proyecto = $this->proyecto->responsable;
+        $responsable = User::with('profile')->where('name', '=', $this->proyecto->responsable)->first();
+        $this->responsable_imagen = $responsable->profile->avatar;
+
+        $this->usuarios = User::with('profile')->orderBy('id', 'Desc')->get();
+
+        $this->informadores = User::orderBy('id', 'Desc')->get();
+
+        $this->informer = $this->responsable_proyecto;
+
+
+
+        /* Aqui te debuelve lo de una tarea de todas las tareas */
+        /* foreach ($this->tareas as $tarea) {
             foreach ($tarea->tasks as $task) {
-                /* $this->name = $task->name;
+                $this->name = $task->name;
                 $this->start = $task->start;
                 $this->end = $task->end;
                 $this->informer = $task->informer;
-                $this->responsable = $task->responsable; */
+                $this->responsable = $task->responsable;
             }
-        }
+        } */
 
         /* @foreach ($tareas as $tarea)
             @foreach ($tarea->tasks as $task)
@@ -139,10 +158,14 @@ class MytaskComponent extends Component
             'priority_id'   => 'required',
             'type_id'       => 'required',
         ]);
+
         $status  = 'success';
-        $content = 'Se agrego correctamente la tarea';
+        $content = 'Se agregó correctamente la tarea';
+
         try {
+
             DB::beginTransaction();
+
             if ($this->temporary != null) {
                 if ($this->temporary->getClientOriginalName()) {
                     $nameFile = time() . '_' . $this->temporary->getClientOriginalName();
@@ -151,6 +174,7 @@ class MytaskComponent extends Component
             } else {
                 $nameFile = null;
             }
+
             $task = Task::create([
                 'name'          => $this->name,
                 'slug'          => Str::slug($this->name, '-'),
@@ -164,17 +188,23 @@ class MytaskComponent extends Component
                 'priority_id'   => $this->priority_id,
                 'type_id'       => $this->type_id,
             ]);
+
             $task->projects()->sync($this->proyecto->id);
+
             DB::commit();
         } catch (\Throwable $th) {
+
             DB::rollback();
+
             $status  = 'error';
-            $content = 'Ocurrio un error al agregar la tarea';
+            $content = 'Ocurrió un error al agregar la tarea';
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('taskCreatedEvent');
     }
@@ -219,12 +249,18 @@ class MytaskComponent extends Component
             'priority_id'   => 'required',
             'type_id'       => 'required',
         ]);
+
         $status  = 'success';
-        $content = 'Se actualizo correctamente la tarea';
+        $content = 'Se actualizó correctamente la tarea';
+
         try {
+
             DB::beginTransaction();
+
             if ($this->task_id) {
+
                 $task = Task::find($this->task_id);
+
                 $task->update([
                     'name'          => $this->name,
                     'slug'          => Str::slug($this->name, '-'),
@@ -236,6 +272,7 @@ class MytaskComponent extends Component
                     'priority_id'   => $this->priority_id,
                     'type_id'       => $this->type_id,
                 ]);
+
                 if ($this->temporary != null) {
                     if ($this->temporary->getClientOriginalName()) {
                         $nameFile = time() . '_' . $this->temporary->getClientOriginalName();
@@ -244,16 +281,21 @@ class MytaskComponent extends Component
                     }
                 }
             }
+
             DB::commit();
         } catch (\Throwable $th) {
+
             DB::rollback();
+
             $status  = 'error';
-            $content = 'Ocurrio un error al actualizar la tarea';
+            $content = 'Ocurrió un error al actualizar la tarea';
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('taskUpdatedEvent');
     }
@@ -267,21 +309,29 @@ class MytaskComponent extends Component
     public function destroy()
     {
         $status  = 'success';
-        $content = 'Se elimino correctamente la tarea';
+        $content = 'Se eliminó correctamente la tarea';
+
         try {
+
             DB::beginTransaction();
+
             Task::find($this->task_id)->delete();
+
             DB::commit();
         } catch (\Throwable $th) {
+
             DB::rollback();
+
             $status  = 'error';
-            $content = 'Ocurrio un error al eliminar la tarea';
+            $content = 'Ocurrió un error al eliminar la tarea';
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
         /* Storage::delete('file.jpg'); */
+
         $this->clean();
         $this->emit('taskDeletedEvent');
     }
@@ -308,39 +358,35 @@ class MytaskComponent extends Component
             'tipo',
             'prioridad',
         ]);
+
         $this->responsable = Auth::user()->name;
         $this->resetErrorBag();
         $this->resetValidation();
+        /* $this->render(); */
     }
 
     public function clear()
     {
-        $this->reset(['search', 'perPage', 'page']);
+        $this->reset(['search',]);
     }
 
     public function render()
     {
-        $estados    = Statu::orderBy('description')->where('status', '1')->get();
-        $types      = Type::orderBy('description')->where('status', '1')->get();
-        $priorities = Priority::orderBy('description')->where('status', '1')->get();
+        $estados    = Statu::orderBy('description')->where('status', '=', 1)->get();
+        $types      = Type::orderBy('description')->where('status', '=', 1)->get();
+        $priorities = Priority::orderBy('description')->where('status', '=', 1)->get();
 
-        if ($this->search != '') {
-            $this->page = 1;
-        }
-        if (isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)) {
-            $this->reset(['perPage']);
-        }
+        $informador = "";
 
         return view(
             'livewire.profile.mytask-component',
             [
-                'tasks' => Task::latest('id')
-                    ->with('type', 'statu', 'priority')
+                'tasks' => Task::orderBy('id', 'Desc')
+                    ->with('type', 'statu', 'priority', 'projects')
                     ->where('name', 'LIKE', "%{$this->search}%")
-                    ->orWhere('description', 'LIKE', "%{$this->search}%")
                     ->orWhere('informer', 'LIKE', "%{$this->search}%")
                     ->orWhere('responsable', 'LIKE', "%{$this->search}%")
-                    ->paginate($this->perPage)
+                    ->get()
             ],
             compact('estados', 'types', 'priorities')
         );

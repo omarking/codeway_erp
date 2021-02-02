@@ -38,6 +38,7 @@ class PermissionComponent extends Component
     public function mount()
     {
         $this->total = count(Permission::all());
+
         $this->resetErrorBag();
         $this->resetValidation();
     }
@@ -66,25 +67,35 @@ class PermissionComponent extends Component
             'slug'         => 'required|string|max:100|unique:permissions,slug',
             'description'  => 'required|string',
         ]);
+
         $status  = 'success';
-        $content = 'Se agrego correctamente el permiso';
+        $content = 'Se agregó correctamente el permiso, SI ESTO SE MUESTRA ALGO ESTA MAL YA QUE NO SE DEBEN DE AGREGAR LOS PERMISOS DESDE EL FRONT';
+
         try {
+
             DB::beginTransaction();
+
             Permission::create([
                 'name'          => $this->name,
                 /* 'slug'          => $this->slug, */
                 'description'   => $this->description,
             ]);
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollBack();
+
             $status  = 'error';
-            $content = 'Ocurrio un error al agregar el permiso';
+            $content = 'Ocurrió un error al agregar el permiso';
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('permissionCreatedEvent');
     }
@@ -125,10 +136,14 @@ class PermissionComponent extends Component
             'slug'         => 'required|string|max:100|unique:permissions,slug,' . $this->permission_id,
             'description'  => 'required|string',
         ]);
+
         $status  = 'success';
-        $content = 'Se actualizo correctamente el permiso';
+        $content = 'Se actualizó correctamente el permiso';
+
         try {
+
             DB::beginTransaction();
+
             if ($this->permission_id) {
                 $permissions = Permission::find($this->permission_id);
                 $permissions->update([
@@ -138,18 +153,24 @@ class PermissionComponent extends Component
                     'status'        => $this->status,
                 ]);
             }
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollBack();
+
             $status  = 'error';
-            $content = 'Ocurrio un error al actualizar el permiso';
+            $content = 'Ocurrió un error al actualizar el permiso';
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
-            $this->clean();
-            $this->emit('permissionUpdatedEvent');
+
+        $this->clean();
+        $this->emit('permissionUpdatedEvent');
     }
 
     public function delete(Permission $permissions)
@@ -161,20 +182,30 @@ class PermissionComponent extends Component
     public function destroy()
     {
         $status  = 'success';
-        $content = 'Se elimino correctamente el permiso';
+        $content = 'Se eliminó correctamente el permiso, QUE NO DEBERIA DE HACER ESO YA QUE ALGO ESTAS HACIENDO MAL';
+
         try {
+
             DB::beginTransaction();
-            Permission::find($this->permission_id)->delete();
+
+            /* Permission::find($this->permission_id)->delete(); */
+            Permission::find($this->permission_id)->deletes();
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollBack();
+
             $status  = 'error';
-            $content = 'Ocurrio un error al eliminar el permiso';
+            $content = 'Ocurrió un error al eliminar el permiso HAHAHA';
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('permissionDeletedEvent');
     }
@@ -191,6 +222,7 @@ class PermissionComponent extends Component
             'created_at',
             'updated_at',
         ]);
+
         $this->mount();
     }
 
@@ -204,6 +236,7 @@ class PermissionComponent extends Component
         if ($this->search != '') {
             $this->page = 1;
         }
+
         if (isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)) {
             $this->reset(['perPage']);
         }

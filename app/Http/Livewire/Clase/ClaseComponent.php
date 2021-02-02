@@ -36,6 +36,7 @@ class ClaseComponent extends Component
     public function mount()
     {
         $this->total = count(Clas::all());
+        
         $this->resetErrorBag();
         $this->resetValidation();
     }
@@ -58,23 +59,34 @@ class ClaseComponent extends Component
         $this->validate([
             'description' => 'required|max:200|unique:class,description',
         ]);
+
         $status = 'success';
-        $content = 'Se agrego correctamente la clase';
+        $content = 'Se agregó correctamente la clase';
+
         try {
+
             DB::beginTransaction();
+
             Clas::create([
                 'description'   => $this->description,
             ]);
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollBack();
+
             $status = 'error';
-            $content = 'Ocurrio un error al agregar la clase';
+            $content = 'Ocurrió un error al agregar la clase';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('classCreatedEvent');
     }
@@ -110,10 +122,14 @@ class ClaseComponent extends Component
         $this->validate([
             'description' => 'required|max:200|unique:class,description,' . $this->class_id,
         ]);
+
         $status = 'success';
-        $content = 'Se actualizo correctamente la clase';
+        $content = 'Se actualizó correctamente la clase';
+
         try {
+
             DB::beginTransaction();
+
             if ($this->class_id) {
                 $clase = Clas::find($this->class_id);
                 $clase->update([
@@ -121,16 +137,23 @@ class ClaseComponent extends Component
                     'status'        => $this->status,
                 ]);
             }
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollBack();
+
             $status = 'error';
-            $content = 'Ocurrio un error al actualizar la clase';
+            $content = 'Ocurrió un error al actualizar la clase';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('classUpdatedEvent');
     }
@@ -144,20 +167,30 @@ class ClaseComponent extends Component
     public function destroy()
     {
         $status = 'success';
-        $content = 'Se elimino correctamente la clase';
+        $content = 'Se eliminó correctamente la clase';
+
         try {
+
             DB::beginTransaction();
+
             Clas::find($this->class_id)->delete();
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollBack();
+
             $status = 'error';
-            $content = 'Ocurrio un error al eliminar la clase';
+            $content = 'Ocurrió un error al eliminar la clase';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('classDeletedEvent');
     }
@@ -173,6 +206,7 @@ class ClaseComponent extends Component
             'created_at',
             'updated_at',
         ]);
+
         $this->mount();
     }
 
@@ -183,7 +217,7 @@ class ClaseComponent extends Component
 
     public function render()
     {
-        $proyectos = Project::orderBy('name')->get();
+        $proyectos = Project::orderBy('name')->where('status', '=', 1)->get();
 
         if ($this->search != '') {
             $this->page = 1;

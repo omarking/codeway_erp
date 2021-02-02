@@ -37,7 +37,7 @@ class RoleComponent extends Component
 
     protected $validationAttributes = [
         'name'          => 'nombre',
-        'slug'          => 'slug',
+        'slug'          => 'identificador',
         'description'   => 'descripción',
         'resposanble'   => 'responsable',
         'fullAccess'    => 'acceso total',
@@ -82,10 +82,14 @@ class RoleComponent extends Component
             'responsable'  => 'required|string',
             'fullAccess'   => 'required|in:yes,no',
         ]);
+
         $status  = 'success';
-        $content = 'Se agrego correctamente el rol';
+        $content = 'Se agregó correctamente el rol';
+
         try {
+
             DB::beginTransaction();
+
             $role = Role::create([
                 'name'          => $this->name,
                 'slug'          => $this->slug,
@@ -93,17 +97,25 @@ class RoleComponent extends Component
                 'responsable'   => $this->responsable,
                 'fullAccess'    => $this->fullAccess,
             ]);
+
             $role->permissions()->sync($this->permission);
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollback();
+
             $status  = 'error';
-            $content = 'Ocurrio un error al agregar el rol';
+            $content = 'Ocurrió un error al agregar el rol';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('roleCreatedEvent');
     }
@@ -158,10 +170,14 @@ class RoleComponent extends Component
             'responsable'  => 'required|string',
             'fullAccess'   => 'required|in:yes,no',
         ]);
+
         $status  = 'success';
-        $content = 'Se actualizo correctamente el rol';
+        $content = 'Se actualizó correctamente el rol';
+
         try {
+
             DB::beginTransaction();
+
             if ($this->role_id) {
                 $role = Role::find($this->role_id);
                 $role->update([
@@ -172,18 +188,25 @@ class RoleComponent extends Component
                     'fullAccess'    => $this->fullAccess,
                     'status'        => $this->status,
                 ]);
+
                 $role->permissions()->sync($this->permission);
             }
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollback();
+
             $status  = 'error';
-            $content = 'Ocurrio un error al actualizar el rol';
+            $content = 'Ocurrió un error al actualizar el rol';
+
         }
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('roleUpdatedEvent');
     }
@@ -202,20 +225,30 @@ class RoleComponent extends Component
     public function destroy()
     {
         $status  = 'success';
-        $content = 'Se elimino correctamente el rol';
+        $content = 'Se eliminó correctamente el rol';
+
         try {
+
             DB::beginTransaction();
+
             Role::find($this->role_id)->delete();
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollback();
+
             $status  = 'error';
-            $content = 'Ocurrio un error al eliminar el rol';
+            $content = 'Ocurrió un error al eliminar el rol';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('roleDeletedEvent');
     }
@@ -236,6 +269,7 @@ class RoleComponent extends Component
             'created_at',
             'updated_at',
         ]);
+
         $this->mount();
     }
 
@@ -246,11 +280,12 @@ class RoleComponent extends Component
 
     public function render()
     {
-        $permissions = Permission::all();
+        $permissions = Permission::orderBy('Asc')->where('status', '=', 1);
 
         if ($this->search != '') {
             $this->page = 1;
         }
+
         if (isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)) {
             $this->reset(['perPage']);
         }

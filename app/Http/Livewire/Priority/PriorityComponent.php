@@ -35,6 +35,7 @@ class PriorityComponent extends Component
     public function mount()
     {
         $this->total = count(Priority::all());
+
         $this->resetErrorBag();
         $this->resetValidation();
     }
@@ -57,23 +58,34 @@ class PriorityComponent extends Component
         $this->validate([
             'description' => 'required|max:200|unique:priorities,description',
         ]);
+
         $status  = 'success';
-        $content = 'Se agrego correctamente la prioridad';
+        $content = 'Se agregó correctamente la prioridad';
+
         try {
+
             DB::beginTransaction();
+
             Priority::create([
                 'description'   => $this->description,
             ]);
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollback();
+
             $status  = 'error';
-            $content = 'Ocurrio un error al agregar la prioridad';
+            $content = 'Ocurrió un error al agregar la prioridad';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('priorityCreatedEvent');
     }
@@ -109,10 +121,14 @@ class PriorityComponent extends Component
         $this->validate([
             'description' => 'required|max:200|unique:priorities,description,' . $this->priority_id,
         ]);
+
         $status  = 'success';
-        $content = 'Se actualizo correctamente la prioridad';
+        $content = 'Se actualizó correctamente la prioridad';
+
         try {
+
             DB::beginTransaction();
+
             if ($this->priority_id) {
                 $priority = Priority::find($this->priority_id);
                 $priority->update([
@@ -120,16 +136,23 @@ class PriorityComponent extends Component
                     'status'        => $this->status,
                 ]);
             }
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollback();
+
             $status  = 'error';
-            $content = 'Ocurrio un error al actualizar la prioridad';
+            $content = 'Ocurrió un error al actualizar la prioridad';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('priorityUpdatedEvent');
     }
@@ -143,20 +166,30 @@ class PriorityComponent extends Component
     public function destroy()
     {
         $status  = 'success';
-        $content = 'Se elimino correctamente la prioridad';
+        $content = 'Se eliminó correctamente la prioridad';
+
         try {
+
             DB::beginTransaction();
+
             Priority::find($this->priority_id)->delete();
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollback();
+
             $status  = 'error';
-            $content = 'Ocurrio un error al eliminar la prioridad';
+            $content = 'Ocurrió un error al eliminar la prioridad';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('priorityDeletedEvent');
     }
@@ -173,6 +206,7 @@ class PriorityComponent extends Component
             'created_at',
             'updated_at',
         ]);
+
         $this->mount();
     }
 

@@ -51,20 +51,21 @@ class UserComponent extends Component
         'nameUser'       => 'nombre',
         'firstLastname'  => 'primer apellido',
         'secondLastname' => 'segundo apellido',
-        'phone'          => 'telefono',
+        'phone'          => 'teléfono',
         'name'           => 'nombre de usuario',
         'email'          => 'email',
         'corporative'    => 'email corporativo',
         'password'       => 'contraseña',
         'role'           => 'rol',
         'departament'    => 'departamento',
-        'group'          => 'grupo',
+        'group'          => 'área',
     ];
 
     public function mount()
     {
         $this->total = count(User::all());
         $this->now = now();
+
         $this->resetErrorBag();
         $this->resetValidation();
     }
@@ -117,10 +118,14 @@ class UserComponent extends Component
             'departament'    => 'required',
             'group'          => 'required',
         ]);
+
         $status  = 'success';
-        $content = 'Se agrego correctamente el usuario';
+        $content = 'Se agregó correctamente el usuario';
+
         try {
+
             DB::beginTransaction();
+
             $user = User::create([
                 'nameUser'          => $this->nameUser,
                 'firstLastname'     => $this->firstLastname,
@@ -132,30 +137,42 @@ class UserComponent extends Component
                 'password'          => Hash::make($this->password),
                 'email_verified_at' => $this->now,
             ]);
+
             if ($this->role) {
                 $user->roles()->sync($this->role);
             }
+
             if ($this->departament) {
                 $user->departaments()->sync($this->departament);
             }
+
             if ($this->group) {
                 $user->groups()->sync($this->group);
             }
+
             Profile::create([
                 'user_id' => $user->id,
             ]);
+
             /* Envio de email */
             /* Mail::to('admin@admin.com')->queue(new MessageReceived($user)); */
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollback();
+
             $status  = 'error';
-            $content = 'Ocurrio un error al agregar el usuario';
+            $content = 'Ocurrió un error al agregar el usuario';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('userCreatedEvent');
     }
@@ -181,6 +198,7 @@ class UserComponent extends Component
             $this->user_profile   = $user;
             $this->avatar         = $user->profile->avatar;
             $this->description    = $user->profile->description;
+
             if ($user->profile->facebook == "") {
                 $this->facebook       = null;
             } else {
@@ -210,7 +228,9 @@ class UserComponent extends Component
             } else {
                 $this->other       = $user->profile->other;
             }
+
             $this->position       = $user->profile->position_id;
+
         } else {
             $this->user_profile   = "nothing";
             $this->avatar         = "nothing";
@@ -238,7 +258,7 @@ class UserComponent extends Component
         if (isset($user->groups[0]->name)) {
             $this->group  = $user->groups[0]->name;
         } else {
-            $this->group  = "Aún no se le ha asignado a un grupo";
+            $this->group  = "Aún no se le ha asignado a un área";
         }
     }
 
@@ -290,12 +310,18 @@ class UserComponent extends Component
             'departament'    => 'required',
             'group'          => 'required',
         ]);
+
         $status  = 'success';
-        $content = 'Se actualizo correctamente el usuario';
+        $content = 'Se actualizó correctamente el usuario';
+
         try {
+
             DB::beginTransaction();
+
             if ($this->user_id) {
+
                 $user = User::find($this->user_id);
+
                 $user->update([
                     'nameUser'        => $this->nameUser,
                     'firstLastname'   => $this->firstLastname,
@@ -306,26 +332,36 @@ class UserComponent extends Component
                     'corporative'     => $this->corporative,
                     'status'          => $this->status,
                 ]);
+
                 if ($this->role) {
                     $user->roles()->sync($this->role);
                 }
+
                 if ($this->departament) {
                     $user->departaments()->sync($this->departament);
                 }
+
                 if ($this->group) {
                     $user->groups()->sync($this->group);
                 }
             }
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollback();
+
             $status  = 'error';
-            $content = 'Ocurrio un error al actualizar el usuario';
+            $content = 'Ocurrió un error al actualizar el usuario';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('userUpdatedEvent');
     }
@@ -341,20 +377,30 @@ class UserComponent extends Component
     public function destroy()
     {
         $status  = 'success';
-        $content = 'Se elimino correctamente el usuario';
+        $content = 'Se eliminó correctamente el usuario';
+
         try {
+
             DB::beginTransaction();
+
             User::find($this->user_id)->delete();
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollback();
+
             $status  = 'error';
-            $content = 'Ocurrio un error al eliminar el usuario';
+            $content = 'Ocurrió un error al eliminar el usuario';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('userDeletedEvent');
     }
@@ -383,6 +429,7 @@ class UserComponent extends Component
             'group',
             'depa',
         ]);
+
         $this->mount();
     }
 
@@ -393,26 +440,29 @@ class UserComponent extends Component
 
     public function render()
     {
-        $roless         = Role::orderBy('name')->get();
+        $roless         = Role::orderBy('name')->where('status', '=', 1)->get();
 
-        $departamentss  = Departament::orderBy('name')->get();
+        $departamentss  = Departament::orderBy('name')->where('status', '=', 1)->get();
 
-        $groupss        = Group::orderBy('name')->get();
+        $groupss        = Group::orderBy('name')->where('status', '=', 1)->get();
 
         $this->depa = $this->departament;
 
         if ($this->depa) {
             $departamentos = Departament::with('groups')->where('id', '=', $this->depa)->get();
+
             if (isset($departamentos)) {
                 foreach ($departamentos as $departamento) {
                     $this->grupos = $departamento;
                 }
             }
+
         }
 
         if ($this->search != '') {
             $this->page = 1;
         }
+
         if (isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)) {
             $this->reset(['perPage']);
         }

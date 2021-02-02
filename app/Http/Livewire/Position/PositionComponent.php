@@ -35,6 +35,7 @@ class PositionComponent extends Component
     public function mount()
     {
         $this->total = count(Position::all());
+
         $this->resetErrorBag();
         $this->resetValidation();
     }
@@ -57,23 +58,34 @@ class PositionComponent extends Component
         $this->validate([
             'description' => 'required|max:200|unique:positions,description',
         ]);
+
         $status  = 'success';
-        $content = 'Se agrego correctamente la posicion';
+        $content = 'Se agregó correctamente la posición';
+
         try {
+
             DB::beginTransaction();
+
             Position::create([
                 'description'   => $this->description,
             ]);
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollBack();
+
             $status  = 'error';
-            $content = 'Ocurrio un error al agregar la posicion';
+            $content = 'Ocurrió un error al agregar la posición';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('positionCreatedEvent');
     }
@@ -109,10 +121,14 @@ class PositionComponent extends Component
         $this->validate([
             'description' => 'required|max:200|unique:positions,description,' . $this->position_id,
         ]);
+
         $status  = 'success';
-        $content = 'Se actualizo correctamente la posicion';
+        $content = 'Se actualizó correctamente la posición';
+
         try {
+
             DB::beginTransaction();
+
             if ($this->position_id) {
                 $positions = Position::find($this->position_id);
                 $positions->update([
@@ -120,16 +136,23 @@ class PositionComponent extends Component
                     'status'        => $this->status,
                 ]);
             }
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollBack();
+
             $status  = 'error';
-            $content = 'Ocurrio un error al actualizar la posicion';
+            $content = 'Ocurrió un error al actualizar la posición';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('positionUpdatedEvent');
     }
@@ -144,20 +167,30 @@ class PositionComponent extends Component
     public function destroy()
     {
         $status  = 'success';
-        $content = 'Se elimino correctamente la posicion';
+        $content = 'Se eliminó correctamente la posición';
+
         try {
+
             DB::beginTransaction();
+
             Position::find($this->position_id)->delete();
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollBack();
+
             $status  = 'error';
-            $content = 'Ocurrio un error al eliminar la posicion';
+            $content = 'Ocurrió un error al eliminar la posición';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('positionDeletedEvent');
     }
@@ -172,6 +205,7 @@ class PositionComponent extends Component
             'created_at',
             'updated_at',
         ]);
+
         $this->mount();
     }
 
@@ -182,11 +216,12 @@ class PositionComponent extends Component
 
     public function render()
     {
-        $perfiles = Profile::latest('id')->get();
+        $perfiles = Profile::latest('id')->where('status', '=', 1)->get();
 
         if ($this->search != '') {
             $this->page = 1;
         }
+        
         if (isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)) {
             $this->reset(['perPage']);
         }

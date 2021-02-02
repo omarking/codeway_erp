@@ -39,6 +39,7 @@ class VacantComponent extends Component
     public function mount()
     {
         $this->total = count(Vacant::all());
+
         $this->resetErrorBag();
         $this->resetValidation();
     }
@@ -67,26 +68,37 @@ class VacantComponent extends Component
             'description'  => 'required|string',
             'quantity'     => 'required|numeric',
         ]);
+
         $status  = 'success';
-        $content = 'Se agrego correctamente la vacante';
+        $content = 'Se agregó correctamente la vacante';
+
         try {
+
             DB::beginTransaction();
+
             Vacant::create([
                 'name'          => $this->name,
                 'slug'          => Str::slug($this->name, '-'),
                 'description'   => $this->description,
                 'quantity'      => $this->quantity,
             ]);
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollback();
+
             $status  = 'error';
-            $content = 'Ocurrio un error al agregar la vacante';
+            $content = 'Ocurrió un error al agregar la vacante';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('vacantCreatedEvent');
     }
@@ -127,11 +139,16 @@ class VacantComponent extends Component
             'description'  => 'required|string',
             'quantity'     => 'required|numeric',
         ]);
+
         $status  = 'success';
-        $content = 'Se actualizo correctamente la vacante';
+        $content = 'Se actualizó correctamente la vacante';
+
         try {
+
             DB::beginTransaction();
+
             if ($this->vacant_id) {
+
                 $vacants = Vacant::find($this->vacant_id);
                 $vacants->update([
                     'name'          => $this->name,
@@ -141,16 +158,23 @@ class VacantComponent extends Component
                     'status'        => $this->status,
                 ]);
             }
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollback();
+
             $status  = 'error';
-            $content = 'Ocurrio un error al actualizar la vacante';
+            $content = 'Ocurrió un error al actualizar la vacante';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('vacantUpdatedEvent');
     }
@@ -164,20 +188,30 @@ class VacantComponent extends Component
     public function destroy()
     {
         $status  = 'success';
-        $content = 'Se elimino correctamente la vacante';
+        $content = 'Se eliminó correctamente la vacante';
+
         try {
+
             DB::beginTransaction();
+
             Vacant::find($this->vacant_id)->delete();
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollback();
+
             $status  = 'error';
-            $content = 'Ocurrio un error al eliminar la vacante';
+            $content = 'Ocurrió un error al eliminar la vacante';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('vacantDeletedEvent');
     }
@@ -194,6 +228,7 @@ class VacantComponent extends Component
             'created_at',
             'updated_at',
         ]);
+
         $this->mount();
     }
 
@@ -207,6 +242,7 @@ class VacantComponent extends Component
         if ($this->search != '') {
             $this->page = 1;
         }
+
         if (isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)) {
             $this->reset(['perPage']);
         }

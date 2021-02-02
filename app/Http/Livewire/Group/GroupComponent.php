@@ -40,6 +40,7 @@ class GroupComponent extends Component
     {
         $this->total        = count(Group::all());
         $this->usuarios     = User::where('status', '=', 1)->get();
+
         $this->resetErrorBag();
         $this->resetValidation();
     }
@@ -68,25 +69,36 @@ class GroupComponent extends Component
             'description'  => 'required|string',
             'responsable'  => 'required|string',
         ]);
+
         $status = 'success';
-        $content = 'Se agrego correctamente el grupo';
+        $content = 'Se agregó correctamente el área';
+
         try {
+
             DB::beginTransaction();
+
             Group::create([
                 'name'          => $this->name,
                 'description'   => $this->description,
                 'responsable'   => $this->responsable,
             ]);
+
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollBack();
+
             $status = 'error';
-            $content = 'Ocurrio un error al agregar el grupo';
+            $content = 'Ocurrió un error al agregar el área';
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('groupCreatedEvent');
     }
@@ -127,10 +139,14 @@ class GroupComponent extends Component
             'description'  => 'required|string',
             'responsable'  => 'required|string',
         ]);
+
         $status = 'success';
-        $content = 'Se actualizo correctamente el grupo';
+        $content = 'Se actualizó correctamente el área';
+
         try {
+
             DB::beginTransaction();
+
             if ($this->group_id) {
                 $groups = Group::find($this->group_id);
                 $groups->update([
@@ -140,16 +156,23 @@ class GroupComponent extends Component
                     'status'        => $this->status,
                 ]);
             }
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollBack();
+
             $status = 'error';
-            $content = 'Ocurrio un error al actualizar el grupo';
+            $content = 'Ocurrió un error al actualizar el área';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('groupUpdatedEvent');
     }
@@ -163,20 +186,30 @@ class GroupComponent extends Component
     public function destroy()
     {
         $status = 'success';
-        $content = 'Se elimino correctamente el grupo';
+        $content = 'Se eliminó correctamente el área';
+
         try {
+
             DB::beginTransaction();
+
             Group::find($this->group_id)->delete();
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollBack();
+
             $status = 'error';
-            $content = 'Ocurrio un error al eliminar el grupo';
+            $content = 'Ocurrió un error al eliminar el área';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('groupDeletedEvent');
     }
@@ -193,6 +226,7 @@ class GroupComponent extends Component
             'created_at',
             'updated_at',
         ]);
+
         $this->mount();
     }
 

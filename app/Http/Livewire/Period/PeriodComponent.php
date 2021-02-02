@@ -35,6 +35,7 @@ class PeriodComponent extends Component
     public function mount()
     {
         $this->total = count(Period::all());
+
         $this->resetErrorBag();
         $this->resetValidation();
     }
@@ -57,23 +58,34 @@ class PeriodComponent extends Component
         $this->validate([
             'description' => 'required|numeric|unique:periods,description',
         ]);
+
         $status  = 'success';
-        $content = 'Se agrego correctamente el periodo';
+        $content = 'Se agregó correctamente el periodo';
+
         try {
+
             DB::beginTransaction();
+
             Period::create([
                 'description'   => $this->description,
             ]);
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollBack();
+
             $status  = 'error';
-            $content = 'Ocurrio un error al agregar el periodo';
+            $content = 'Ocurrió un error al agregar el periodo';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('periodCreatedEvent');
     }
@@ -109,10 +121,14 @@ class PeriodComponent extends Component
         $this->validate([
             'description' => 'required|numeric|unique:periods,description,' . $this->period_id,
         ]);
+
         $status  = 'success';
-        $content = 'Se actualizo correctamente el periodo';
+        $content = 'Se actualizó correctamente el periodo';
+
         try {
+
             DB::beginTransaction();
+
             if ($this->period_id) {
                 $periods = Period::find($this->period_id);
                 $periods->update([
@@ -120,18 +136,25 @@ class PeriodComponent extends Component
                     'status'        => $this->status,
                 ]);
             }
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollBack();
+
             $status  = 'error';
-            $content = 'Ocurrio un error al actualizar el periodo';
+            $content = 'Ocurrió un error al actualizar el periodo';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
-            $this->clean();
-            $this->emit('periodUpdatedEvent');
+
+        $this->clean();
+        $this->emit('periodUpdatedEvent');
     }
 
     public function delete(Period $period)
@@ -143,20 +166,30 @@ class PeriodComponent extends Component
     public function destroy()
     {
         $status  = 'success';
-        $content = 'Se elimino correctamente el periodo';
+        $content = 'Se eliminó correctamente el periodo';
+
         try {
+
             DB::beginTransaction();
+
             Period::find($this->period_id)->delete();
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollBack();
+
             $status  = 'error';
-            $content = 'Ocurrio un error al eliminar el periodo';
+            $content = 'Ocurrió un error al eliminar el periodo';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('periodDeletedEvent');
     }
@@ -172,6 +205,7 @@ class PeriodComponent extends Component
             'created_at',
             'updated_at',
         ]);
+
         $this->mount();
     }
 
@@ -183,9 +217,11 @@ class PeriodComponent extends Component
     public function render()
     {
         $vacaciones = Holiday::latest('id')->get();
+
         if ($this->search != '') {
             $this->page = 1;
         }
+
         if (isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)) {
             $this->reset(['perPage']);
         }

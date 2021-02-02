@@ -34,10 +34,10 @@ class EventComponent extends Component
     ];
 
     protected $validationAttributes = [
-        'title'         => 'titulo',
+        'title'         => 'título',
         'description'   => 'descripción',
         'start'         => 'fecha inicio',
-        'end'           => 'fecha termino',
+        'end'           => 'fecha terminó',
         'color'         => 'color',
         'textColor'     => 'color de texto',
     ];
@@ -45,6 +45,7 @@ class EventComponent extends Component
     public function mount()
     {
         $this->total = count(Event::all());
+        
         $this->resetErrorBag();
         $this->resetValidation();
     }
@@ -82,10 +83,14 @@ class EventComponent extends Component
             'color'         => 'required|string|max:100',
             'textColor'     => 'required|string|max:100',
         ]);
+
         $status = 'success';
-        $content = 'Se agrego correctamente el evento';
+        $content = 'Se agregó correctamente el evento';
+
         try {
+
             DB::beginTransaction();
+
             Event::create([
                 'title'         => $this->title,
                 'slug'          => Str::slug($this->title, '-'),
@@ -95,16 +100,23 @@ class EventComponent extends Component
                 'color'         => $this->color,
                 'textColor'     => $this->textColor,
             ]);
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollBack();
+
             $status = 'error';
-            $content = 'Ocurrio un error al agregar el evento';
+            $content = 'Ocurrió un error al agregar el evento';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('eventCreatedEvent');
     }
@@ -154,10 +166,14 @@ class EventComponent extends Component
             'color'         => 'required|string|max:100',
             'textColor'     => 'required|string|max:100',
         ]);
+
         $status = 'success';
-        $content = 'Se actualizo correctamente el evento';
+        $content = 'Se actualizó correctamente el evento';
+
         try {
+
             DB::beginTransaction();
+
             if ($this->event_id) {
                 $event = Event::find($this->event_id);
                 $event->update([
@@ -171,16 +187,23 @@ class EventComponent extends Component
                     'status'        => $this->status,
                 ]);
             }
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollBack();
+
             $status = 'error';
-            $content = 'Ocurrio un error al actualizar el evento';
+            $content = 'Ocurrió un error al actualizar el evento';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('eventUpdatedEvent');
     }
@@ -194,20 +217,30 @@ class EventComponent extends Component
     public function destroy()
     {
         $status = 'success';
-        $content = 'Se elimino correctamente el evento';
+        $content = 'Se eliminó correctamente el evento';
+
         try {
+
             DB::beginTransaction();
+
             Event::find($this->event_id)->delete();
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollBack();
+
             $status = 'error';
-            $content = 'Ocurrio un error al eliminar el evento';
+            $content = 'Ocurrió un error al eliminar el evento';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('eventDeletedEvent');
     }
@@ -227,6 +260,7 @@ class EventComponent extends Component
             'created_at',
             'updated_at',
         ]);
+
         $this->mount();
     }
 
@@ -240,6 +274,7 @@ class EventComponent extends Component
         if ($this->search != '') {
             $this->page = 1;
         }
+
         if (isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)) {
             $this->reset(['perPage']);
         }

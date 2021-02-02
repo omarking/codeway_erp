@@ -43,6 +43,7 @@ class DepartamentComponent extends Component
     {
         $this->total     = count(Departament::all());
         $this->usuarios  = User::where('status', '=', 1)->get();
+
         $this->resetErrorBag();
         $this->resetValidation();
     }
@@ -71,26 +72,38 @@ class DepartamentComponent extends Component
             'description'  => 'required|string',
             'responsable'  => 'required|string',
         ]);
+
         $status = 'success';
-        $content = 'Se agrego correctamente el departamento';
-        try {
+        $content = 'Se agregó correctamente el departamento';
+
+        try{
+
             DB::beginTransaction();
+
             $departament = Departament::create([
                 'name'          => $this->name,
                 'description'   => $this->description,
                 'responsable'   => $this->responsable,
             ]);
+
             $departament->groups()->sync($this->group);
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollBack();
+
             $status = 'error';
-            $content = 'Ocurrio un error al agregar el departamento';
+            $content = 'Ocurrió un error al agregar el departamento';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('departamentCreatedEvent');
     }
@@ -140,10 +153,14 @@ class DepartamentComponent extends Component
             'description'  => 'required|string',
             'responsable'  => 'required|string',
         ]);
+
         $status = 'success';
-        $content = 'Se actualizo correctamente el departamento';
+        $content = 'Se actualizó correctamente el departamento';
+
         try {
+
             DB::beginTransaction();
+
             if ($this->departament_id) {
                 $departaments = Departament::find($this->departament_id);
                 $departaments->update([
@@ -152,18 +169,26 @@ class DepartamentComponent extends Component
                     'responsable'   => $this->responsable,
                     'status'        => $this->status,
                 ]);
+
                 $departaments->groups()->sync($this->group);
             }
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollBack();
+
             $status = 'error';
-            $content = 'Ocurrio un error al actualizar el departamento';
+            $content = 'Ocurrió un error al actualizar el departamento';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('departamentUpdatedEvent');
     }
@@ -182,20 +207,30 @@ class DepartamentComponent extends Component
     public function destroy()
     {
         $status = 'success';
-        $content = 'Se elimino correctamente el departamento';
+        $content = 'Se eliminó correctamente el departamento';
+
         try {
+
             DB::beginTransaction();
+
             Departament::find($this->departament_id)->delete();
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollBack();
+
             $status = 'error';
-            $content = 'Ocurrio un error al eliminar el departamento';
+            $content = 'Ocurrió un error al eliminar el departamento';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('departamentDeletedEvent');
     }
@@ -215,6 +250,7 @@ class DepartamentComponent extends Component
             'group',
             'departamento',
         ]);
+
         $this->mount();
     }
 
@@ -225,11 +261,12 @@ class DepartamentComponent extends Component
 
     public function render()
     {
-        $groups = Group::all();
+        $groups = Group::orderBy('name')->where('status', '=', 1)->get();
 
         if ($this->search != '') {
             $this->page = 1;
         }
+        
         if (isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)) {
             $this->reset(['perPage']);
         }

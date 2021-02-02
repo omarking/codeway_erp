@@ -35,6 +35,7 @@ class TypeComponent extends Component
     public function mount()
     {
         $this->total = count(Type::all());
+
         $this->resetErrorBag();
         $this->resetValidation();
     }
@@ -57,23 +58,34 @@ class TypeComponent extends Component
         $this->validate([
             'description' => 'required|max:100|unique:types,description',
         ]);
+
         $status  = 'success';
-        $content = 'Se agrego correctamente el tipo';
+        $content = 'Se agregó correctamente el tipo';
+
         try {
+
             DB::beginTransaction();
+
             Type::create([
                 'description'   => $this->description,
             ]);
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollback();
+
             $status  = 'error';
-            $content = 'Ocurrio un error al agregar el tipo';
+            $content = 'Ocurrió un error al agregar el tipo';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('typesCreatedEvent');
     }
@@ -109,10 +121,14 @@ class TypeComponent extends Component
         $this->validate([
             'description' => 'required|max:100|unique:types,description,' . $this->type_id,
         ]);
+
         $status  = 'success';
-        $content = 'Se actualizo correctamente el tipo';
+        $content = 'Se actualizó correctamente el tipo';
+
         try {
+
             DB::beginTransaction();
+
             if ($this->type_id) {
                 $clase = Type::find($this->type_id);
                 $clase->update([
@@ -120,16 +136,22 @@ class TypeComponent extends Component
                     'status'        => $this->status,
                 ]);
             }
+
             DB::commit();
+
         } catch (\Throwable $th) {
             DB::rollback();
+
             $status  = 'error';
-            $content = 'Ocurrio un error al actualizar el tipo';
+            $content = 'Ocurrió un error al actualizar el tipo';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('typesUpdatedEvent');
     }
@@ -144,20 +166,30 @@ class TypeComponent extends Component
     public function destroy()
     {
         $status  = 'success';
-        $content = 'Se elimino correctamente el tipo';
+        $content = 'Se eliminó correctamente el tipo';
+
         try {
+
             DB::beginTransaction();
+
             Type::find($this->type_id)->delete();
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollback();
+
             $status  = 'error';
-            $content = 'Ocurrio un error al eliminar el tipo';
+            $content = 'Ocurrió un error al eliminar el tipo';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('typesDeletedEvent');
     }
@@ -173,6 +205,7 @@ class TypeComponent extends Component
             'created_at',
             'updated_at',
         ]);
+
         $this->mount();
     }
 
@@ -188,6 +221,7 @@ class TypeComponent extends Component
         if ($this->search != '') {
             $this->page = 1;
         }
+
         if (isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)) {
             $this->reset(['perPage']);
         }

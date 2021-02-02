@@ -14,6 +14,7 @@ use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ProjectComponent extends Component
 {
@@ -54,13 +55,14 @@ class ProjectComponent extends Component
         'description'   => 'descripción',
         'responsable'   => 'responsable',
         'clas_id'       => 'clase',
-        'category_id'   => 'categoria',
+        'category_id'   => 'categoría',
     ];
 
     public function mount()
     {
         $this->total = count(Project::all());
         $this->usuarios = User::where('status', '=', 1)->get();
+
         $this->resetErrorBag();
         $this->resetValidation();
     }
@@ -101,10 +103,14 @@ class ProjectComponent extends Component
             'clas_id'       => 'required',
             'category_id'   => 'required',
         ]);
+
         $status  = 'success';
-        $content = 'Se agrego correctamente el proyecto';
+        $content = 'Se agregó correctamente el proyecto';
+
         try {
+
             DB::beginTransaction();
+
             if ($this->temporary != null) {
                 if ($this->temporary->getClientOriginalName()) {
                     $nameFile = time() . '_' . $this->temporary->getClientOriginalName();
@@ -113,6 +119,7 @@ class ProjectComponent extends Component
             } else {
                 $nameFile = null;
             }
+
             $project = Project::create([
                 'avatar'        => $nameFile,
                 'key'           => $this->key,
@@ -123,17 +130,23 @@ class ProjectComponent extends Component
                 'clas_id'       => $this->clas_id,
                 'category_id'   => $this->category_id,
             ]);
+
             $project->users()->sync($this->user);
+
             DB::commit();
         } catch (\Throwable $th) {
+
             DB::rollback();
+
             $status  = 'error';
-            $content = 'Ocurrio un error al agregar el proyecto';
+            $content = 'Ocurrió un error al agregar el proyecto';
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('projectCreatedEvent');
     }
@@ -159,6 +172,7 @@ class ProjectComponent extends Component
         } else {
             $this->clase   = "Sin clase";
         }
+
         if (isset($project->category->description)) {
             $this->categoria     = $project->category->description;
         } else {
@@ -208,10 +222,14 @@ class ProjectComponent extends Component
             'clas_id'       => 'required',
             'category_id'   => 'required',
         ]);
+
         $status  = 'success';
-        $content = 'Se actualizo correctamente el proyecto';
+        $content = 'Se actualizó correctamente el proyecto';
+
         try {
+
             DB::beginTransaction();
+
             if ($this->temporary != null) {
                 if ($this->temporary->getClientOriginalName()) {
                     $nameFile = time() . '_' . $this->temporary->getClientOriginalName();
@@ -220,6 +238,7 @@ class ProjectComponent extends Component
             } else {
                 $nameFile = $this->avatar;
             }
+
             if ($this->project_id) {
                 $project = Project::find($this->project_id);
                 $project->update([
@@ -233,18 +252,24 @@ class ProjectComponent extends Component
                     'clas_id'       => $this->clas_id,
                     'category_id'   => $this->category_id,
                 ]);
+
                 $project->users()->sync($this->user);
             }
+
             DB::commit();
         } catch (\Throwable $th) {
+
             DB::rollback();
+
             $status  = 'error';
-            $content = 'Ocurrio un error al actualizar el proyecto';
+            $content = 'Ocurrió un error al actualizar el proyecto';
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('projectUpdatedEvent');
     }
@@ -259,25 +284,34 @@ class ProjectComponent extends Component
         $this->project_id   = $project->id;
         $this->key          = $project->key;
         $this->name         = $project->name;
+        $this->avatar       = $project->avatar;
     }
 
     public function destroy()
     {
         $status  = 'success';
-        $content = 'Se elimino correctamente el proyecto';
+        $content = 'Se eliminó correctamente el proyecto';
+
         try {
+
             DB::beginTransaction();
+
             Project::find($this->project_id)->delete();
+
             DB::commit();
         } catch (\Throwable $th) {
+
             DB::rollback();
+
             $status  = 'error';
-            $content = 'Ocurrio un error al eliminar el proyecto';
+            $content = 'Ocurrió un error al eliminar el proyecto';
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('projectDeletedEvent');
     }
@@ -303,6 +337,7 @@ class ProjectComponent extends Component
             'user',
             'projects_users',
         ]);
+
         $this->mount();
     }
 
@@ -313,14 +348,15 @@ class ProjectComponent extends Component
 
     public function render()
     {
-        $clases      = Clas::orderBy('description')->where('status', '1')->get();
-        $categorias  = Category::orderBy('description')->where('status', '1')->get();
+        $clases      = Clas::orderBy('description')->where('status', '=', 1)->get();
+        $categorias  = Category::orderBy('description')->where('status', '=', 1)->get();
+        $usuarios    = User::latest('id')->where('status', '=', 1)->get();
         $tareas      = Task::latest('id')->get();
-        $usuarios    = User::latest('id')->get();
 
         if ($this->search != '') {
             $this->page = 1;
         }
+
         if (isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)) {
             $this->reset(['perPage']);
         }

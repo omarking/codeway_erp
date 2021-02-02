@@ -95,9 +95,9 @@
                 </div>
             </div>
             <hr>
+            <h3 class="text-uppercase text-center">MIS    PROYECTOS</h3>
                 @forelse($user->projects as $project)
                     <div class="card">
-                        <h3 class="text-uppercase text-center">MIS    PROYECTOS</h3>
                         <div class="card-header bg-secondary">
                             <label class="text-white text-uppercase" for="nombre">{{ $project->name }}</label>
                             <a class="btn btn-primary float-right" href="{{ route('project.show', $project) }}">Trabajar en este proyectó</a>

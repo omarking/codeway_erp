@@ -35,6 +35,7 @@ class AbsenceComponent extends Component
     public function mount()
     {
         $this->total = count(Absence::all());
+        
         $this->resetErrorBag();
         $this->resetValidation();
     }
@@ -59,23 +60,32 @@ class AbsenceComponent extends Component
         ]);
 
         $status = 'success';
-        $content = 'Se agrego correctamente la ausencia';
+        $content = 'Se agregó correctamente la ausencia';
 
         try {
+
             DB::beginTransaction();
+
             Absence::create([
                 'description'   => $this->description,
             ]);
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollBack();
+
             $status = 'error';
-            $content = 'Ocurrio un error al agregar la ausencia';
+            $content = 'Ocurrió un error al agregar la ausencia';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('absenceCreatedEvent');
     }
@@ -111,10 +121,14 @@ class AbsenceComponent extends Component
         $this->validate([
             'description' => 'required|max:200|unique:absences,description,' . $this->absence_id,
         ]);
+
         $status = 'success';
-        $content = 'Se actualizo correctamente la ausencia';
+        $content = 'Se actualizó correctamente la ausencia';
+
         try {
+
             DB::beginTransaction();
+
             if ($this->absence_id) {
                 $absence = Absence::find($this->absence_id);
                 $absence->update([
@@ -122,16 +136,23 @@ class AbsenceComponent extends Component
                     'status'        => $this->status,
                 ]);
             }
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollBack();
+
             $status = 'error';
-            $content = 'Ocurrio un error al actualizar la ausencia';
+            $content = 'Ocurrió un error al actualizar la ausencia';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('absenceUpdatedEvent');
     }
@@ -145,20 +166,30 @@ class AbsenceComponent extends Component
     public function destroy()
     {
         $status = 'success';
-        $content = 'Se elimino correctamente la ausencia';
+        $content = 'Se eliminó correctamente la ausencia';
+
         try {
+
             DB::beginTransaction();
+
             Absence::find($this->absence_id)->delete();
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollBack();
+
             $status = 'error';
-            $content = 'Ocurrio un error al eliminar la ausencia';
+            $content = 'Ocurrió un error al eliminar la ausencia';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('absenceDeletedEvent');
     }
@@ -174,6 +205,7 @@ class AbsenceComponent extends Component
             'created_at',
             'updated_at',
         ]);
+
         $this->mount();
     }
 
@@ -189,6 +221,7 @@ class AbsenceComponent extends Component
         if ($this->search != '') {
             $this->page = 1;
         }
+
         if (isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)) {
             $this->reset(['perPage']);
         }

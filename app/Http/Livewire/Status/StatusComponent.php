@@ -35,6 +35,7 @@ class StatusComponent extends Component
     public function mount()
     {
         $this->total = count(Statu::all());
+
         $this->resetErrorBag();
         $this->resetValidation();
     }
@@ -57,23 +58,34 @@ class StatusComponent extends Component
         $this->validate([
             'description' => 'required|max:200|unique:status,description',
         ]);
+
         $status  = 'success';
-        $content = 'Se agrego correctamente el estado';
+        $content = 'Se agregó correctamente el estado';
+
         try {
+
             DB::beginTransaction();
+
             Statu::create([
                 'description'   => $this->description,
             ]);
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollback();
+
             $status  = 'error';
-            $content = 'Ocurrio un error al agregar el estado';
+            $content = 'Ocurrió un error al agregar el estado';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('statusCreatedEvent');
     }
@@ -109,10 +121,14 @@ class StatusComponent extends Component
         $this->validate([
             'description' => 'required|max:200|unique:status,description,' . $this->status_id,
         ]);
+
         $status  = 'success';
-        $content = 'Se actualizo correctamente el estado';
+        $content = 'Se actualizó correctamente el estado';
+
         try {
+
             DB::beginTransaction();
+
             if ($this->status_id) {
                 $clase = Statu::find($this->status_id);
                 $clase->update([
@@ -120,16 +136,23 @@ class StatusComponent extends Component
                     'status'        => $this->status,
                 ]);
             }
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollback();
+
             $status  = 'error';
-            $content = 'Ocurrio un error al actualizar el estado';
+            $content = 'Ocurrió un error al actualizar el estado';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('statusUpdatedEvent');
     }
@@ -143,20 +166,30 @@ class StatusComponent extends Component
     public function destroy()
     {
         $status  = 'success';
-        $content = 'Se elimino correctamente el estado';
+        $content = 'Se eliminó correctamente el estado';
+
         try {
+
             DB::beginTransaction();
+
             Statu::find($this->status_id)->delete();
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollback();
+
             $status  = 'error';
-            $content = 'Ocurrio un error al eliminar el estado';
+            $content = 'Ocurrió un error al eliminar el estado';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('statusDeletedEvent');
     }
@@ -173,6 +206,7 @@ class StatusComponent extends Component
             'created_at',
             'updated_at',
         ]);
+
         $this->mount();
     }
 
@@ -188,6 +222,7 @@ class StatusComponent extends Component
         if ($this->search != '') {
             $this->page = 1;
         }
+
         if (isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)) {
             $this->reset(['perPage']);
         }

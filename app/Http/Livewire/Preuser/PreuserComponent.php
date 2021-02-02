@@ -33,13 +33,14 @@ class PreuserComponent extends Component
     protected $validationAttributes = [
         'name'          => 'nombre',
         'lastname'      => 'apellidos',
-        'phone'         => 'telefono',
-        'email'         => 'correo electronico',
+        'phone'         => 'teléfono',
+        'email'         => 'email',
     ];
 
     public function mount()
     {
         $this->total = count(Preuser::all());
+
         $this->resetErrorBag();
         $this->resetValidation();
     }
@@ -71,26 +72,37 @@ class PreuserComponent extends Component
             'phone'        => 'required|numeric|unique:preusers,phone',
             'email'        => 'required|email|max:100|unique:preusers,email',
         ]);
+
         $status  = 'success';
-        $content = 'Se agrego correctamente al aspirante';
+        $content = 'Se agregó correctamente al aspirante';
+
         try {
+
             DB::beginTransaction();
+
             Preuser::create([
                 'name'          => $this->name,
                 'lastname'      => $this->lastname,
                 'phone'         => $this->phone,
                 'email'         => $this->email,
             ]);
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollBack();
+
             $status  = 'error';
-            $content = 'Ocurrio un error al agregar al aspirante';
+            $content = 'Ocurrió un error al agregar al aspirante';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('preuserCreatedEvent');
     }
@@ -134,10 +146,14 @@ class PreuserComponent extends Component
             'phone'        => 'required|numeric|unique:preusers,phone,' . $this->preuser_id,
             'email'        => 'required|email|max:100|unique:preusers,email,' . $this->preuser_id,
         ]);
+
         $status  = 'success';
-        $content = 'Se actualizo correctamente al aspirante';
+        $content = 'Se actualizó correctamente al aspirante';
+
         try {
+
             DB::beginTransaction();
+
             if ($this->preuser_id) {
                 $preusers = Preuser::find($this->preuser_id);
                 $preusers->update([
@@ -148,16 +164,24 @@ class PreuserComponent extends Component
                     'status'        => $this->status,
                 ]);
             }
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollBack();
+
             $status  = 'error';
-            $content = 'Ocurrio un error al actualizar al aspirante';
+            $content = 'Ocurrió un error al actualizar al aspirante';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
+
         ]);
+
         $this->clean();
         $this->emit('preuserUpdatedEvent');
     }
@@ -172,20 +196,30 @@ class PreuserComponent extends Component
     public function destroy()
     {
         $status  = 'success';
-        $content = 'Se elimino correctamente al aspirante';
+        $content = 'Se eliminó correctamente al aspirante';
+
         try {
+
             DB::beginTransaction();
+
             Preuser::find($this->preuser_id)->delete();
+
             DB::commit();
+
         } catch (\Throwable $th) {
+
             DB::rollBack();
+
             $status  = 'error';
-            $content = 'Ocurrio un error al eliminar al aspirante';
+            $content = 'Ocurrió un error al eliminar al aspirante';
+
         }
+
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
         ]);
+
         $this->clean();
         $this->emit('preuserDeletedEvent');
     }
@@ -203,6 +237,7 @@ class PreuserComponent extends Component
             'created_at',
             'updated_at',
         ]);
+
         $this->mount();
     }
 
@@ -216,6 +251,7 @@ class PreuserComponent extends Component
         if ($this->search != '') {
             $this->page = 1;
         }
+
         if (isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)) {
             $this->reset(['perPage']);
         }
