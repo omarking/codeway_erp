@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class RoleComponent extends Component
 {
@@ -75,6 +76,8 @@ class RoleComponent extends Component
 
     public function store()
     {
+        Gate::authorize('haveaccess', 'role.create');
+
         $this->validate([
             'name'         => 'required|string|max:100|unique:roles,name',
             'slug'         => 'required|string|max:100|unique:roles,slug',
@@ -101,14 +104,12 @@ class RoleComponent extends Component
             $role->permissions()->sync($this->permission);
 
             DB::commit();
-
         } catch (\Throwable $th) {
 
             DB::rollback();
 
             $status  = 'error';
             $content = 'Ocurrió un error al agregar el rol';
-
         }
 
         session()->flash('process_result', [
@@ -122,6 +123,8 @@ class RoleComponent extends Component
 
     public function show(Role $role)
     {
+        Gate::authorize('haveaccess', 'role.show');
+
         $created            = new Carbon($role->created_at);
         $updated            = new Carbon($role->updated_at);
         $this->role_id      = $role->id;
@@ -147,6 +150,8 @@ class RoleComponent extends Component
 
     public function edit(Role $role)
     {
+        Gate::authorize('haveaccess', 'role.edit');
+
         $this->role_id      = $role->id;
         $this->name         = $role->name;
         $this->slug         = $role->slug;
@@ -163,6 +168,8 @@ class RoleComponent extends Component
 
     public function update()
     {
+        Gate::authorize('haveaccess', 'role.edit');
+
         $this->validate([
             'name'         => 'required|string|max:100|unique:roles,name,' . $this->role_id,
             'slug'         => 'required|string|max:100|unique:roles,slug,' . $this->role_id,
@@ -193,14 +200,12 @@ class RoleComponent extends Component
             }
 
             DB::commit();
-
         } catch (\Throwable $th) {
 
             DB::rollback();
 
             $status  = 'error';
             $content = 'Ocurrió un error al actualizar el rol';
-
         }
         session()->flash('process_result', [
             'status'    => $status,
@@ -218,12 +223,16 @@ class RoleComponent extends Component
 
     public function delete(Role $role)
     {
+        Gate::authorize('haveaccess', 'role.destroy');
+
         $this->role_id   = $role->id;
         $this->name      = $role->name;
     }
 
     public function destroy()
     {
+        Gate::authorize('haveaccess', 'role.destroy');
+
         $status  = 'success';
         $content = 'Se eliminó correctamente el rol';
 
@@ -234,14 +243,12 @@ class RoleComponent extends Component
             Role::find($this->role_id)->delete();
 
             DB::commit();
-
         } catch (\Throwable $th) {
 
             DB::rollback();
 
             $status  = 'error';
             $content = 'Ocurrió un error al eliminar el rol';
-
         }
 
         session()->flash('process_result', [
@@ -280,7 +287,7 @@ class RoleComponent extends Component
 
     public function render()
     {
-        $permissions = Permission::orderBy('Asc')->where('status', '=', 1);
+        $permissions = Permission::orderBy('id', 'Asc')->where('status', '=', 1)->get();
 
         if ($this->search != '') {
             $this->page = 1;

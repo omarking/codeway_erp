@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class PeriodComponent extends Component
 {
@@ -55,6 +56,8 @@ class PeriodComponent extends Component
 
     public function store()
     {
+        Gate::authorize('haveaccess', 'period.create');
+
         $this->validate([
             'description' => 'required|numeric|unique:periods,description',
         ]);
@@ -92,6 +95,8 @@ class PeriodComponent extends Component
 
     public function show(Period $period)
     {
+        Gate::authorize('haveaccess', 'period.show');
+
         $created            = new Carbon($period->created_at);
         $updated            = new Carbon($period->updated_at);
         $this->period_id    = $period->id;
@@ -110,6 +115,8 @@ class PeriodComponent extends Component
 
     public function edit(Period $period)
     {
+        Gate::authorize('haveaccess', 'period.edit');
+
         $this->period_id    = $period->id;
         $this->description  = $period->description;
         $this->status       = $period->status;
@@ -118,6 +125,8 @@ class PeriodComponent extends Component
 
     public function update()
     {
+        Gate::authorize('haveaccess', 'period.edit');
+
         $this->validate([
             'description' => 'required|numeric|unique:periods,description,' . $this->period_id,
         ]);
@@ -159,12 +168,16 @@ class PeriodComponent extends Component
 
     public function delete(Period $period)
     {
+        Gate::authorize('haveaccess', 'period.destroy');
+
         $this->period_id    = $period->id;
         $this->description  = $period->description;
     }
 
     public function destroy()
     {
+        Gate::authorize('haveaccess', 'period.destroy');
+
         $status  = 'success';
         $content = 'Se eliminó correctamente el periodo';
 

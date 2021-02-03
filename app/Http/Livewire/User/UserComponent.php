@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class UserComponent extends Component
 {
@@ -105,6 +106,8 @@ class UserComponent extends Component
 
     public function store()
     {
+        Gate::authorize('haveaccess', 'user.create');
+
         $this->validate([
             'nameUser'       => 'required|string|max:100',
             'firstLastname'  => 'required|string|max:100',
@@ -115,8 +118,8 @@ class UserComponent extends Component
             'corporative'    => 'required|email|max:100|unique:users,corporative',
             'password'       => 'required|string|min:8|max:100',
             'role'           => 'required',
-            'departament'    => 'required',
-            'group'          => 'required',
+            /* 'departament'    => 'required',
+            'group'          => 'required', */
         ]);
 
         $status  = 'success';
@@ -158,14 +161,12 @@ class UserComponent extends Component
             /* Mail::to('admin@admin.com')->queue(new MessageReceived($user)); */
 
             DB::commit();
-
         } catch (\Throwable $th) {
 
             DB::rollback();
 
             $status  = 'error';
             $content = 'Ocurrió un error al agregar el usuario';
-
         }
 
         session()->flash('process_result', [
@@ -179,6 +180,8 @@ class UserComponent extends Component
 
     public function show(User $user)
     {
+        Gate::authorize('haveaccess', 'user.show');
+
         $created              = new Carbon($user->created_at);
         $updated              = new Carbon($user->updated_at);
         $this->user_id        = $user->id;
@@ -230,7 +233,6 @@ class UserComponent extends Component
             }
 
             $this->position       = $user->profile->position_id;
-
         } else {
             $this->user_profile   = "nothing";
             $this->avatar         = "nothing";
@@ -270,6 +272,8 @@ class UserComponent extends Component
 
     public function edit(User $user)
     {
+        Gate::authorize('haveaccess', 'user.edit');
+
         $this->user_id        = $user->id;
         $this->nameUser       = $user->nameUser;
         $this->firstLastname  = $user->firstLastname;
@@ -298,6 +302,8 @@ class UserComponent extends Component
 
     public function update()
     {
+        Gate::authorize('haveaccess', 'user.edit');
+
         $this->validate([
             'nameUser'       => 'required|string|max:100',
             'firstLastname'  => 'required|string|max:100',
@@ -347,14 +353,12 @@ class UserComponent extends Component
             }
 
             DB::commit();
-
         } catch (\Throwable $th) {
 
             DB::rollback();
 
             $status  = 'error';
             $content = 'Ocurrió un error al actualizar el usuario';
-
         }
 
         session()->flash('process_result', [
@@ -368,6 +372,8 @@ class UserComponent extends Component
 
     public function delete(User $user)
     {
+        Gate::authorize('haveaccess', 'user.destroy');
+
         $this->user_id         = $user->id;
         $this->nameUser        = $user->nameUser;
         $this->firstLastname   = $user->firstLastname;
@@ -376,6 +382,8 @@ class UserComponent extends Component
 
     public function destroy()
     {
+        Gate::authorize('haveaccess', 'user.destroy');
+
         $status  = 'success';
         $content = 'Se eliminó correctamente el usuario';
 
@@ -386,14 +394,12 @@ class UserComponent extends Component
             User::find($this->user_id)->delete();
 
             DB::commit();
-
         } catch (\Throwable $th) {
 
             DB::rollback();
 
             $status  = 'error';
             $content = 'Ocurrió un error al eliminar el usuario';
-
         }
 
         session()->flash('process_result', [
@@ -456,7 +462,6 @@ class UserComponent extends Component
                     $this->grupos = $departamento;
                 }
             }
-
         }
 
         if ($this->search != '') {

@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class PreuserComponent extends Component
 {
@@ -66,6 +67,8 @@ class PreuserComponent extends Component
 
     public function store()
     {
+        Gate::authorize('haveaccess', 'preuser.create');
+
         $this->validate([
             'name'         => 'required|string|max:100',
             'lastname'     => 'required|string|max:100',
@@ -109,6 +112,8 @@ class PreuserComponent extends Component
 
     public function show(Preuser $preuser)
     {
+        Gate::authorize('haveaccess', 'preuser.show');
+
         $created                = new Carbon($preuser->created_at);
         $updated                = new Carbon($preuser->updated_at);
         $this->preuser_id       = $preuser->id;
@@ -129,6 +134,8 @@ class PreuserComponent extends Component
 
     public function edit(Preuser $preuser)
     {
+        Gate::authorize('haveaccess', 'preuser.edit');
+
         $this->preuser_id       = $preuser->id;
         $this->name             = $preuser->name;
         $this->lastname         = $preuser->lastname;
@@ -140,6 +147,8 @@ class PreuserComponent extends Component
 
     public function update()
     {
+        Gate::authorize('haveaccess', 'preuser.edit');
+
         $this->validate([
             'name'         => 'required|string|max:100',
             'lastname'     => 'required|string|max:100',
@@ -188,6 +197,8 @@ class PreuserComponent extends Component
 
     public function delete(Preuser $preusers)
     {
+        Gate::authorize('haveaccess', 'preuser.destroy');
+
         $this->preuser_id   = $preusers->id;
         $this->name         = $preusers->name;
         $this->lastname     = $preusers->lastname;
@@ -195,6 +206,8 @@ class PreuserComponent extends Component
 
     public function destroy()
     {
+        Gate::authorize('haveaccess', 'preuser.destroy');
+
         $status  = 'success';
         $content = 'Se eliminó correctamente al aspirante';
 

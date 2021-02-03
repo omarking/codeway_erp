@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Group;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class GroupController extends Controller
 {
@@ -14,6 +15,8 @@ class GroupController extends Controller
      */
     public function index()
     {
+        Gate::authorize('haveaccess', 'area.index');
+
         return view('group.index');
     }
 

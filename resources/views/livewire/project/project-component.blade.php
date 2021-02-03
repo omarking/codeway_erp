@@ -45,7 +45,7 @@
                         @foreach($projects as $project)
                             <tr>
                                 <th>
-                                    <img width="90%" class="img-fluid" class="rounded-sm" src="{{ asset('storage/projects/' . $project->avatar) }}" alt="{{ $project->avatar }}">
+                                    <img style="height: 4rem" class="rounded-circle" class="rounded-sm" src="{{ asset('storage/projects/' . $project->avatar) }}" alt="{{ $project->avatar }}">
                                 </th>
                                 <td>{{ $project->key }}</td>
                                 <td><a class="color-bg" href="{{ route('project.show', $project) }}">{{ $project->name }}</a></td>

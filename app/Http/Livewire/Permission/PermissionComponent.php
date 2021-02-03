@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class PermissionComponent extends Component
 {
@@ -62,6 +63,8 @@ class PermissionComponent extends Component
 
     public function store()
     {
+        Gate::authorize('haveaccess', 'permission.create');
+
         $this->validate([
             'name'         => 'required|string|max:100|unique:permissions,name',
             'slug'         => 'required|string|max:100|unique:permissions,slug',
@@ -102,6 +105,8 @@ class PermissionComponent extends Component
 
     public function show(Permission $permission)
     {
+        Gate::authorize('haveaccess', 'permission.show');
+
         $created                = new Carbon($permission->created_at);
         $updated                = new Carbon($permission->updated_at);
         $this->permission_id    = $permission->id;
@@ -121,6 +126,8 @@ class PermissionComponent extends Component
 
     public function edit(Permission $permission)
     {
+        Gate::authorize('haveaccess', 'permission.edit');
+
         $this->permission_id    = $permission->id;
         $this->name             = $permission->name;
         $this->slug             = $permission->slug;
@@ -131,6 +138,8 @@ class PermissionComponent extends Component
 
     public function update()
     {
+        Gate::authorize('haveaccess', 'permission.edit');
+
         $this->validate([
             'name'         => 'required|string|max:100|unique:permissions,name,' . $this->permission_id,
             'slug'         => 'required|string|max:100|unique:permissions,slug,' . $this->permission_id,
@@ -175,12 +184,16 @@ class PermissionComponent extends Component
 
     public function delete(Permission $permissions)
     {
+        Gate::authorize('haveaccess', 'permission.destroy');
+
         $this->permission_id    = $permissions->id;
         $this->name             = $permissions->name;
     }
 
     public function destroy()
     {
+        Gate::authorize('haveaccess', 'permission.destroy');
+
         $status  = 'success';
         $content = 'Se eliminó correctamente el permiso, QUE NO DEBERIA DE HACER ESO YA QUE ALGO ESTAS HACIENDO MAL';
 

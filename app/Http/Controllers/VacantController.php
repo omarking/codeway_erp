@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Vacant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class VacantController extends Controller
 {
@@ -14,6 +15,8 @@ class VacantController extends Controller
      */
     public function index()
     {
+        Gate::authorize('haveaccess', 'vacant.index');
+
         return view('vacant.index');
     }
 

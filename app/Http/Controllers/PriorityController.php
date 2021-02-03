@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Priority;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class PriorityController extends Controller
 {
@@ -14,6 +15,8 @@ class PriorityController extends Controller
      */
     public function index()
     {
+        Gate::authorize('haveaccess', 'priority.index');
+
         return view('priority.index');
     }
 

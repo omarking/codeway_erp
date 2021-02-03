@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class EventController extends Controller
 {
@@ -14,6 +15,8 @@ class EventController extends Controller
      */
     public function index()
     {
+        Gate::authorize('haveaccess', 'event.index');
+
         return view('event.index');
     }
 

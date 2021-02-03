@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Absence;
-use Illuminate\Auth\Access\Gate;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 
 class AbsenceController extends Controller
@@ -15,7 +15,8 @@ class AbsenceController extends Controller
      */
     public function index()
     {
-        /* Gate::authorize('haveaccess', 'busines.index'); */
+        Gate::authorize('haveaccess', 'absence.index');
+
         return view('absence.index');
     }
 

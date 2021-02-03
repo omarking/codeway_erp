@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Permission;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class PermissionController extends Controller
 {
@@ -14,6 +15,8 @@ class PermissionController extends Controller
      */
     public function index()
     {
+        Gate::authorize('haveaccess', 'permission.index');
+
         return view('permission.index');
     }
 

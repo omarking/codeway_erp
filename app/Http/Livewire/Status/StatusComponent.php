@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class StatusComponent extends Component
 {
@@ -55,6 +56,8 @@ class StatusComponent extends Component
 
     public function store()
     {
+        Gate::authorize('haveaccess', 'status.create');
+
         $this->validate([
             'description' => 'required|max:200|unique:status,description',
         ]);
@@ -92,6 +95,8 @@ class StatusComponent extends Component
 
     public function show(Statu $status)
     {
+        Gate::authorize('haveaccess', 'status.show');
+
         $created            = new Carbon($status->created_at);
         $updated            = new Carbon($status->updated_at);
         $this->status_id    = $status->id;
@@ -110,6 +115,8 @@ class StatusComponent extends Component
 
     public function edit(Statu $status)
     {
+        Gate::authorize('haveaccess', 'status.edit');
+
         $this->status_id    = $status->id;
         $this->description  = $status->description;
         $this->status       = $status->status;
@@ -118,6 +125,8 @@ class StatusComponent extends Component
 
     public function update()
     {
+        Gate::authorize('haveaccess', 'status.edit');
+
         $this->validate([
             'description' => 'required|max:200|unique:status,description,' . $this->status_id,
         ]);
@@ -159,12 +168,16 @@ class StatusComponent extends Component
 
     public function delete(Statu $status)
     {
+        Gate::authorize('haveaccess', 'status.destroy');
+
         $this->status_id    = $status->id;
         $this->description  = $status->description;
     }
 
     public function destroy()
     {
+        Gate::authorize('haveaccess', 'status.destroy');
+
         $status  = 'success';
         $content = 'Se eliminó correctamente el estado';
 

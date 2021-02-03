@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class GroupComponent extends Component
 {
@@ -64,6 +65,8 @@ class GroupComponent extends Component
 
     public function store()
     {
+        Gate::authorize('haveaccess', 'area.create');
+
         $this->validate([
             'name'         => 'required|string|max:200|unique:groups,name',
             'description'  => 'required|string',
@@ -105,6 +108,8 @@ class GroupComponent extends Component
 
     public function show(Group $group)
     {
+        Gate::authorize('haveaccess', 'area.show');
+
         $created            = new Carbon($group->created_at);
         $updated            = new Carbon($group->updated_at);
         $this->group_id     = $group->id;
@@ -124,6 +129,8 @@ class GroupComponent extends Component
 
     public function edit(Group $group)
     {
+        Gate::authorize('haveaccess', 'area.edit');
+
         $this->group_id     = $group->id;
         $this->name         = $group->name;
         $this->description  = $group->description;
@@ -134,6 +141,8 @@ class GroupComponent extends Component
 
     public function update()
     {
+        Gate::authorize('haveaccess', 'area.edit');
+
         $this->validate([
             'name'         => 'required|string|max:200|unique:groups,name,' . $this->group_id,
             'description'  => 'required|string',
@@ -179,12 +188,16 @@ class GroupComponent extends Component
 
     public function delete(Group $group)
     {
+        Gate::authorize('haveaccess', 'area.destroy');
+
         $this->group_id     = $group->id;
         $this->name         = $group->name;
     }
 
     public function destroy()
     {
+        Gate::authorize('haveaccess', 'area.destroy');
+
         $status = 'success';
         $content = 'Se eliminó correctamente el área';
 

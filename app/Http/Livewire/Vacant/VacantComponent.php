@@ -8,6 +8,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class VacantComponent extends Component
 {
@@ -63,6 +64,8 @@ class VacantComponent extends Component
 
     public function store()
     {
+        Gate::authorize('haveaccess', 'vacant.create');
+
         $this->validate([
             'name'         => 'required|string|max:200|unique:vacants,name',
             'description'  => 'required|string',
@@ -105,6 +108,8 @@ class VacantComponent extends Component
 
     public function show(Vacant $vacant)
     {
+        Gate::authorize('haveaccess', 'vacant.show');
+
         $created            = new Carbon($vacant->created_at);
         $updated            = new Carbon($vacant->updated_at);
         $this->vacant_id    = $vacant->id;
@@ -124,6 +129,8 @@ class VacantComponent extends Component
 
     public function edit(Vacant $vacant)
     {
+        Gate::authorize('haveaccess', 'vacant.edit');
+
         $this->vacant_id    = $vacant->id;
         $this->name         = $vacant->name;
         $this->description  = $vacant->description;
@@ -134,6 +141,8 @@ class VacantComponent extends Component
 
     public function update()
     {
+        Gate::authorize('haveaccess', 'vacant.edit');
+
         $this->validate([
             'name'         => 'required|string|max:200|unique:vacants,name,' . $this->vacant_id,
             'description'  => 'required|string',
@@ -181,12 +190,16 @@ class VacantComponent extends Component
 
     public function delete(Vacant $vacant)
     {
+        Gate::authorize('haveaccess', 'vacant.destroy');
+
         $this->vacant_id    = $vacant->id;
         $this->name         = $vacant->name;
     }
 
     public function destroy()
     {
+        Gate::authorize('haveaccess', 'vacant.destroy');
+
         $status  = 'success';
         $content = 'Se eliminó correctamente la vacante';
 

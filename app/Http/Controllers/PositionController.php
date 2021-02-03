@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Position;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class PositionController extends Controller
 {
@@ -14,6 +15,8 @@ class PositionController extends Controller
      */
     public function index()
     {
+        Gate::authorize('haveaccess', 'position.index');
+
         return view('position.index');
     }
 

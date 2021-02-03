@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class ClaseComponent extends Component
 {
@@ -36,7 +37,7 @@ class ClaseComponent extends Component
     public function mount()
     {
         $this->total = count(Clas::all());
-        
+
         $this->resetErrorBag();
         $this->resetValidation();
     }
@@ -56,6 +57,8 @@ class ClaseComponent extends Component
 
     public function store()
     {
+        Gate::authorize('haveaccess', 'class.create');
+
         $this->validate([
             'description' => 'required|max:200|unique:class,description',
         ]);
@@ -93,6 +96,8 @@ class ClaseComponent extends Component
 
     public function show(Clas $clase)
     {
+        Gate::authorize('haveaccess', 'class.show');
+
         $created            = new Carbon($clase->created_at);
         $updated            = new Carbon($clase->updated_at);
         $this->class_id     = $clase->id;
@@ -111,6 +116,8 @@ class ClaseComponent extends Component
 
     public function edit(Clas $clase)
     {
+        Gate::authorize('haveaccess', 'class.edit');
+
         $this->class_id     = $clase->id;
         $this->description  = $clase->description;
         $this->status       = $clase->status;
@@ -119,6 +126,8 @@ class ClaseComponent extends Component
 
     public function update()
     {
+        Gate::authorize('haveaccess', 'class.edit');
+
         $this->validate([
             'description' => 'required|max:200|unique:class,description,' . $this->class_id,
         ]);
@@ -160,12 +169,16 @@ class ClaseComponent extends Component
 
     public function delete(Clas $clase)
     {
+        Gate::authorize('haveaccess', 'class.destroy');
+
         $this->class_id     = $clase->id;
         $this->description  = $clase->description;
     }
 
     public function destroy()
     {
+        Gate::authorize('haveaccess', 'class.destroy');
+
         $status = 'success';
         $content = 'Se eliminó correctamente la clase';
 

@@ -286,41 +286,41 @@ class PermissionListSeeder extends Seeder
     Listar todos los groupss
     */
         $permission = Permission::create([
-            'name'          => 'List groups',
-            'slug'          => 'groups.index',
-            'description'   => 'A user can list groups',
+            'name'          => 'List area',
+            'slug'          => 'area.index',
+            'description'   => 'A user can list area',
         ]);
         /* Agregamos a la variable permission el id del permiso creado */
         $permission_all[] = $permission->id;
         /* Ver en detalle a un grupo */
         $permission = Permission::create([
-            'name'          => 'Show groups',
-            'slug'          => 'groups.show',
-            'description'   => 'A user can see groups',
+            'name'          => 'Show area',
+            'slug'          => 'area.show',
+            'description'   => 'A user can see area',
         ]);
         /* Agregamos a la variable permission el id del permiso creado */
         $permission_all[] = $permission->id;
         /* Permite crear un nuevo grupo */
         $permission = Permission::create([
-            'name'          => 'Create groups',
-            'slug'          => 'groups.create',
-            'description'   => 'A user can create groups',
+            'name'          => 'Create area',
+            'slug'          => 'area.create',
+            'description'   => 'A user can create area',
         ]);
         /* Agregamos a la variable permission el id del permiso creado */
         $permission_all[] = $permission->id;
         /* Permite editar un grupo */
         $permission = Permission::create([
-            'name'          => 'Edit groups',
-            'slug'          => 'groups.edit',
-            'description'   => 'A user can edit groups',
+            'name'          => 'Edit area',
+            'slug'          => 'area.edit',
+            'description'   => 'A user can edit area',
         ]);
         /* Agregamos a la variable permission el id del permiso creado */
         $permission_all[] = $permission->id;
         /* Permite eliminar un grupo */
         $permission = Permission::create([
-            'name'          => 'Destroy groups',
-            'slug'          => 'groups.destroy',
-            'description'   => 'A user can destroy groups',
+            'name'          => 'Destroy area',
+            'slug'          => 'area.destroy',
+            'description'   => 'A user can destroy area',
         ]);
         /* Agregamos a la variable permission el id del permiso creado */
         $permission_all[] = $permission->id;

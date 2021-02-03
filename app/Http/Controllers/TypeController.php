@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Type;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class TypeController extends Controller
 {
@@ -20,6 +21,8 @@ class TypeController extends Controller
      */
     public function index()
     {
+        Gate::authorize('haveaccess', 'type.index');
+
         return view('type.index');
     }
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Clas;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class ClassController extends Controller
 {
@@ -14,6 +15,8 @@ class ClassController extends Controller
      */
     public function index()
     {
+        Gate::authorize('haveaccess', 'class.index');
+
         return view('class.index');
     }
 

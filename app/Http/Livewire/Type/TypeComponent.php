@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class TypeComponent extends Component
 {
@@ -55,6 +56,8 @@ class TypeComponent extends Component
 
     public function store()
     {
+        Gate::authorize('haveaccess', 'type.create');
+
         $this->validate([
             'description' => 'required|max:100|unique:types,description',
         ]);
@@ -92,6 +95,8 @@ class TypeComponent extends Component
 
     public function show(Type $type)
     {
+        Gate::authorize('haveaccess', 'type.show');
+
         $created            = new Carbon($type->created_at);
         $updated            = new Carbon($type->updated_at);
         $this->type_id      = $type->id;
@@ -110,6 +115,8 @@ class TypeComponent extends Component
 
     public function edit(Type $type)
     {
+        Gate::authorize('haveaccess', 'type.edit');
+
         $this->type_id      = $type->id;
         $this->description  = $type->description;
         $this->status       = $type->status;
@@ -118,6 +125,8 @@ class TypeComponent extends Component
 
     public function update()
     {
+        Gate::authorize('haveaccess', 'type.edit');
+
         $this->validate([
             'description' => 'required|max:100|unique:types,description,' . $this->type_id,
         ]);
@@ -158,6 +167,8 @@ class TypeComponent extends Component
 
     public function delete(Type $type)
     {
+        Gate::authorize('haveaccess', 'type.destroy');
+
         $this->type_id      = $type->id;
         $this->description  = $type->description;
         $this->status       = $type->status;
@@ -165,6 +176,8 @@ class TypeComponent extends Component
 
     public function destroy()
     {
+        Gate::authorize('haveaccess', 'type.destroy');
+
         $status  = 'success';
         $content = 'Se eliminó correctamente el tipo';
 

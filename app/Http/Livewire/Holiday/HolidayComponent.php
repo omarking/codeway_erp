@@ -11,6 +11,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class HolidayComponent extends Component
 {
@@ -97,6 +98,8 @@ class HolidayComponent extends Component
 
     public function store()
     {
+        Gate::authorize('haveaccess', 'holiday.create');
+
         $this->validate([
             'days'          => 'required|numeric|max:100',
             'beginDate'     => 'required|date',
@@ -154,6 +157,8 @@ class HolidayComponent extends Component
 
     public function show(Holiday $holiday)
     {
+        Gate::authorize('haveaccess', 'holiday.show');
+
         $created              = new Carbon($holiday->created_at);
         $updated              = new Carbon($holiday->updated_at);
         $this->holiday_id     = $holiday->id;
@@ -191,6 +196,8 @@ class HolidayComponent extends Component
 
     public function edit(Holiday $holiday)
     {
+        Gate::authorize('haveaccess', 'holiday.edit');
+
         $this->holiday_id     = $holiday->id;
         $this->days           = $holiday->days;
         $this->beginDate      = $holiday->beginDate;
@@ -209,6 +216,8 @@ class HolidayComponent extends Component
 
     public function update()
     {
+        Gate::authorize('haveaccess', 'holiday.edit');
+
         $this->validate([
             'days'          => 'required|numeric|max:100',
             'beginDate'     => 'required|date',
@@ -232,7 +241,7 @@ class HolidayComponent extends Component
             if ($this->holiday_id) {
                 $holiday = Holiday::find($this->holiday_id);
                 $slug = $this->days . ' ' . $this->beginDate . ' ' . $this->endDate;
-                
+
                 $holiday->update([
                     'slug'         => Str::slug($slug, '-'),
                     'days'         => $this->days,
@@ -271,6 +280,8 @@ class HolidayComponent extends Component
 
     public function delete(Holiday $holiday)
     {
+        Gate::authorize('haveaccess', 'holiday.destroy');
+
         $this->holiday_id     = $holiday->id;
         $this->days           = $holiday->days;
         $this->beginDate      = $holiday->beginDate;
@@ -282,6 +293,8 @@ class HolidayComponent extends Component
 
     public function destroy()
     {
+        Gate::authorize('haveaccess', 'holiday.destroy');
+
         $status = 'success';
         $content = 'Se eliminó correctamente la vacación';
 

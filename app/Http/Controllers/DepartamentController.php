@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Departament;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class DepartamentController extends Controller
 {
@@ -14,6 +15,8 @@ class DepartamentController extends Controller
      */
     public function index()
     {
+        Gate::authorize('haveaccess', 'departament.index');
+
         return view('departament.index');
     }
 

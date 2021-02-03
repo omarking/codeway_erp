@@ -15,7 +15,7 @@ class StatusSeeder extends Seeder
     public function run()
     {
         $status = Statu::create([
-            'description' => 'Creada',
+            'description' => 'Creado',
         ]);
 
         $status = Statu::create([
@@ -23,7 +23,7 @@ class StatusSeeder extends Seeder
         ]);
 
         $status = Statu::create([
-            'description' => 'Finalizada',
+            'description' => 'Finalizado',
         ]);
 
         $status = Statu::create([

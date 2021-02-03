@@ -13,6 +13,7 @@ use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class TaskComponent extends Component
 {
@@ -103,6 +104,8 @@ class TaskComponent extends Component
 
     public function store()
     {
+        Gate::authorize('haveaccess', 'task.create');
+
         $this->validate([
             'name'          => 'required|string|max:200|unique:tasks,name',
             'description'   => 'required|string|',
@@ -168,6 +171,8 @@ class TaskComponent extends Component
 
     public function show(Task $task)
     {
+        Gate::authorize('haveaccess', 'task.show');
+
         $created             = new Carbon($task->created_at);
         $updated             = new Carbon($task->updated_at);
         $this->task_id       = $task->id;
@@ -211,6 +216,8 @@ class TaskComponent extends Component
 
     public function edit(Task $task)
     {
+        Gate::authorize('haveaccess', 'task.edit');
+
         $this->task_id       = $task->id;
         $this->name          = $task->name;
         $this->description   = $task->description;
@@ -228,6 +235,8 @@ class TaskComponent extends Component
 
     public function update()
     {
+        Gate::authorize('haveaccess', 'task.edit');
+
         $this->validate([
             'name'          => 'required|string|max:200|unique:tasks,name,' . $this->task_id,
             'description'   => 'required|string',
@@ -295,12 +304,16 @@ class TaskComponent extends Component
 
     public function delete(Task $task)
     {
+        Gate::authorize('haveaccess', 'task.destroy');
+
         $this->task_id      = $task->id;
         $this->name         = $task->name;
     }
 
     public function destroy()
     {
+        Gate::authorize('haveaccess', 'task.destroy');
+
         $status  = 'success';
         $content = 'Se eliminó correctamente la tarea';
 
@@ -371,7 +384,7 @@ class TaskComponent extends Component
         if ($this->search != '') {
             $this->page = 1;
         }
-        
+
         if (isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)) {
             $this->reset(['perPage']);
         }

@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class PositionComponent extends Component
 {
@@ -55,6 +56,8 @@ class PositionComponent extends Component
 
     public function store()
     {
+        Gate::authorize('haveaccess', 'position.create');
+
         $this->validate([
             'description' => 'required|max:200|unique:positions,description',
         ]);
@@ -92,6 +95,8 @@ class PositionComponent extends Component
 
     public function show(Position $position)
     {
+        Gate::authorize('haveaccess', 'position.show');
+
         $created            = new Carbon($position->created_at);
         $updated            = new Carbon($position->updated_at);
         $this->position_id  = $position->id;
@@ -110,6 +115,8 @@ class PositionComponent extends Component
 
     public function edit(Position $position)
     {
+        Gate::authorize('haveaccess', 'position.edit');
+
         $this->position_id  = $position->id;
         $this->description  = $position->description;
         $this->status       = $position->status;
@@ -118,6 +125,8 @@ class PositionComponent extends Component
 
     public function update()
     {
+        Gate::authorize('haveaccess', 'position.edit');
+
         $this->validate([
             'description' => 'required|max:200|unique:positions,description,' . $this->position_id,
         ]);
@@ -159,6 +168,8 @@ class PositionComponent extends Component
 
     public function delete(Position $position)
     {
+        Gate::authorize('haveaccess', 'position.destroy');
+
         $this->position_id  = $position->id;
         $this->description  = $position->description;
         $this->status       = $position->status;
@@ -166,6 +177,8 @@ class PositionComponent extends Component
 
     public function destroy()
     {
+        Gate::authorize('haveaccess', 'position.destroy');
+
         $status  = 'success';
         $content = 'Se eliminó correctamente la posición';
 
@@ -221,7 +234,7 @@ class PositionComponent extends Component
         if ($this->search != '') {
             $this->page = 1;
         }
-        
+
         if (isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)) {
             $this->reset(['perPage']);
         }

@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class PriorityComponent extends Component
 {
@@ -55,6 +56,8 @@ class PriorityComponent extends Component
 
     public function store()
     {
+        Gate::authorize('haveaccess', 'priority.create');
+
         $this->validate([
             'description' => 'required|max:200|unique:priorities,description',
         ]);
@@ -92,6 +95,8 @@ class PriorityComponent extends Component
 
     public function show(Priority $priority)
     {
+        Gate::authorize('haveaccess', 'priority.show');
+
         $created            = new Carbon($priority->created_at);
         $updated            = new Carbon($priority->updated_at);
         $this->priority_id  = $priority->id;
@@ -110,6 +115,8 @@ class PriorityComponent extends Component
 
     public function edit(Priority $priority)
     {
+        Gate::authorize('haveaccess', 'priority.edit');
+
         $this->priority_id  = $priority->id;
         $this->description  = $priority->description;
         $this->status       = $priority->status;
@@ -118,6 +125,8 @@ class PriorityComponent extends Component
 
     public function update()
     {
+        Gate::authorize('haveaccess', 'priority.edit');
+
         $this->validate([
             'description' => 'required|max:200|unique:priorities,description,' . $this->priority_id,
         ]);
@@ -159,12 +168,16 @@ class PriorityComponent extends Component
 
     public function delete(Priority $priority)
     {
+        Gate::authorize('haveaccess', 'priority.destroy');
+
         $this->priority_id  = $priority->id;
         $this->description  = $priority->description;
     }
 
     public function destroy()
     {
+        Gate::authorize('haveaccess', 'priority.destroy');
+
         $status  = 'success';
         $content = 'Se eliminó correctamente la prioridad';
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Statu;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class StatusController extends Controller
 {
@@ -14,6 +15,8 @@ class StatusController extends Controller
      */
     public function index()
     {
+        Gate::authorize('haveaccess', 'status.index');
+
         return view('status.index');
     }
 

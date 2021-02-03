@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Holiday;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class HolidayController extends Controller
 {
@@ -14,6 +15,8 @@ class HolidayController extends Controller
      */
     public function index()
     {
+        Gate::authorize('haveaccess', 'holiday.index');
+
         return view('holiday.index');
     }
 

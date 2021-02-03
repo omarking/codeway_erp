@@ -15,6 +15,14 @@ class PeriodSeeder extends Seeder
     public function run()
     {
         $periods = Period::create([
+            'description' => '2023',
+        ]);
+
+        $periods = Period::create([
+            'description' => '2022',
+        ]);
+
+        $periods = Period::create([
             'description' => '2021',
         ]);
 

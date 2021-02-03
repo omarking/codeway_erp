@@ -18,7 +18,12 @@
                             <div class="card-footer">
                                 <div class="form-group">
                                     <div class="d-flex justify-content-end">
-                                        <label for="responsable">Responsable : <small class="text-uppercase">{{ $departament->responsable }}</small></label>
+                                        @foreach ($res_depa as $responsable)
+                                            @if ($responsable->name == $departament->responsable)
+                                                <img src="{{ asset('storage/users/' . $responsable->profile->avatar) }}" width="10%" class="rounded-circle" alt="{{ $responsable->profile->avatar }}">
+                                                {{-- <small> {{ $departament->responsable}} </small> --}}
+                                            @endif
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>
@@ -63,7 +68,12 @@
                             <div class="card-footer">
                                 <div class="form-group">
                                     <div class="d-flex justify-content-end">
-                                        <label for="responsable">Resposanble : <small class="text-uppercase">{{ $group->responsable }}</small></label>
+                                        @foreach ($res_area as $responsable)
+                                            @if ($responsable->name == $group->responsable)
+                                                <img src="{{ asset('storage/users/' . $responsable->profile->avatar) }}" width="10%" class="rounded-circle" alt="{{ $responsable->profile->avatar }}">
+                                                {{-- <small> {{ $group->responsable}} </small> --}}
+                                            @endif
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>
@@ -152,7 +162,12 @@
                         <div class="card-footer">
                             <div class="form-group">
                                 <div class="d-flex justify-content-end">
-                                    <label for="responsable">Resposanble : <small class="text-uppercase">{{ $project->responsable }}</small></label>
+                                    @foreach ($res_project as $responsable)
+                                        @if ($responsable->name == $project->responsable)
+                                            <img src="{{ asset('storage/users/' . $responsable->profile->avatar) }}" width="10%" class="rounded-circle" alt="{{ $responsable->profile->avatar }}">
+                                            {{-- <small> {{ $project->responsable}} </small> --}}
+                                        @endif
+                                    @endforeach
                                 </div>
                             </div>
                         </div>

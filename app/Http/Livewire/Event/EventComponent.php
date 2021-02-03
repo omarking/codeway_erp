@@ -8,6 +8,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class EventComponent extends Component
 {
@@ -45,7 +46,7 @@ class EventComponent extends Component
     public function mount()
     {
         $this->total = count(Event::all());
-        
+
         $this->resetErrorBag();
         $this->resetValidation();
     }
@@ -75,6 +76,8 @@ class EventComponent extends Component
 
     public function store()
     {
+        Gate::authorize('haveaccess', 'event.create');
+
         $this->validate([
             'title'         => 'required|string|max:200|unique:events,title',
             'description'   => 'required|string',
@@ -123,6 +126,8 @@ class EventComponent extends Component
 
     public function show(Event $event)
     {
+        Gate::authorize('haveaccess', 'event.show');
+
         $created            = new Carbon($event->created_at);
         $updated            = new Carbon($event->updated_at);
         $this->event_id     = $event->id;
@@ -145,6 +150,8 @@ class EventComponent extends Component
 
     public function edit(Event $event)
     {
+        Gate::authorize('haveaccess', 'event.edit');
+
         $this->event_id     = $event->id;
         $this->title        = $event->title;
         $this->description  = $event->description;
@@ -158,6 +165,8 @@ class EventComponent extends Component
 
     public function update()
     {
+        Gate::authorize('haveaccess', 'event.edit');
+
         $this->validate([
             'title'         => 'required|string|max:200|unique:events,title,' . $this->event_id,
             'description'   => 'required|string',
@@ -210,12 +219,16 @@ class EventComponent extends Component
 
     public function delete(Event $event)
     {
+        Gate::authorize('haveaccess', 'event.destroy');
+
         $this->event_id     = $event->id;
         $this->title        = $event->title;
     }
 
     public function destroy()
     {
+        Gate::authorize('haveaccess', 'event.destroy');
+
         $status = 'success';
         $content = 'Se eliminó correctamente el evento';
 

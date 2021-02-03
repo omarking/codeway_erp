@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class RoleController extends Controller
 {
@@ -14,6 +15,8 @@ class RoleController extends Controller
      */
     public function index()
     {
+        Gate::authorize('haveaccess', 'role.index');
+
         return view('role.index');
     }
 

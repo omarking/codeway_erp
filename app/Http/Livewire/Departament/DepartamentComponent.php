@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class DepartamentComponent extends Component
 {
@@ -67,6 +68,8 @@ class DepartamentComponent extends Component
 
     public function store()
     {
+        Gate::authorize('haveaccess', 'departament.create');
+
         $this->validate([
             'name'         => 'required|string|max:200|unique:departaments,name',
             'description'  => 'required|string',
@@ -110,6 +113,8 @@ class DepartamentComponent extends Component
 
     public function show(Departament $departament)
     {
+        Gate::authorize('haveaccess', 'departament.show');
+
         $created                  = new Carbon($departament->created_at);
         $updated                  = new Carbon($departament->updated_at);
         $this->departament_id     = $departament->id;
@@ -134,6 +139,8 @@ class DepartamentComponent extends Component
 
     public function edit(Departament $departament)
     {
+        Gate::authorize('haveaccess', 'departament.edit');
+
         $this->departament_id     = $departament->id;
         $this->name               = $departament->name;
         $this->description        = $departament->description;
@@ -148,6 +155,8 @@ class DepartamentComponent extends Component
 
     public function update()
     {
+        Gate::authorize('haveaccess', 'departament.edit');
+
         $this->validate([
             'name'         => 'required|string|max:200|unique:departaments,name,' . $this->departament_id,
             'description'  => 'required|string',
@@ -200,12 +209,16 @@ class DepartamentComponent extends Component
 
     public function delete(Departament $departament)
     {
+        Gate::authorize('haveaccess', 'departament.destroy');
+
         $this->departament_id     = $departament->id;
         $this->name               = $departament->name;
     }
 
     public function destroy()
     {
+        Gate::authorize('haveaccess', 'departament.destroy');
+
         $status = 'success';
         $content = 'Se eliminó correctamente el departamento';
 
@@ -266,7 +279,7 @@ class DepartamentComponent extends Component
         if ($this->search != '') {
             $this->page = 1;
         }
-        
+
         if (isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)) {
             $this->reset(['perPage']);
         }

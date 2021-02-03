@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class ProfileComponent extends Component
 {
@@ -78,7 +79,7 @@ class ProfileComponent extends Component
 
     public function mount()
     {
-        $user = Auth::user()->id;
+        $user             = Auth::user()->id;
         $this->user       = User::find($user);
         $this->profile    = $this->user->profile;
 
@@ -132,6 +133,8 @@ class ProfileComponent extends Component
 
     public function saveAvatar()
     {
+        Gate::authorize('haveaccess', 'profile.edit');
+
         $this->validate([
             'temporary'     => 'nullable|mimes:jpeg,png|max:4096',
             'name'          => 'required|string|max:200|unique:users,name, ' . $this->user->id,
@@ -190,6 +193,8 @@ class ProfileComponent extends Component
 
     public function saveUser()
     {
+        Gate::authorize('haveaccess', 'profile.edit');
+
         $this->validate([
             'nameUser'          => 'required|string|max:200',
             'firstLastname'     => 'required|string|max:200',
@@ -241,6 +246,8 @@ class ProfileComponent extends Component
 
     public function saveProfile()
     {
+        Gate::authorize('haveaccess', 'profile.edit');
+
         $this->validate([
             'birthday'     => 'date|nullable',
             'facebook'     => 'string|max:200|nullable|unique:profiles,facebook, ' . $this->profile->id,
@@ -293,6 +300,8 @@ class ProfileComponent extends Component
 
     public function savePassword()
     {
+        Gate::authorize('haveaccess', 'profile.edit');
+
         $this->validate([
             'password'    => 'required|password|min:8|max:100',
             'password1'   => 'required|min:8|max:100|confirmed',
@@ -359,6 +368,8 @@ class ProfileComponent extends Component
 
     public function saveEstado()
     {
+        Gate::authorize('haveaccess', 'profile.destroy');
+
         $this->validate([
             'status'     => 'required',
         ]);
@@ -407,6 +418,8 @@ class ProfileComponent extends Component
 
     public function deleteAcount()
     {
+        Gate::authorize('haveaccess', 'profile.destroy');
+
         $status  = 'success';
         $content = 'Se eliminó correctamente su cuenta';
 
@@ -415,7 +428,7 @@ class ProfileComponent extends Component
             DB::beginTransaction();
 
             if ($this->user->id) {
-                User::find($this->user->id)->deletes();
+                User::find($this->user->id)->deletedAt();
                 /* User::find($this->user->id)->delete(); */
             }
 
@@ -433,8 +446,8 @@ class ProfileComponent extends Component
         session()->flash('process_result', [
             'status'    => $status,
             'content'   => $content,
+        ]);
 
-            ]);
         $this->clean();
     }
 

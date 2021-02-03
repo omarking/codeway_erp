@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Period;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class PeriodController extends Controller
 {
@@ -14,6 +15,8 @@ class PeriodController extends Controller
      */
     public function index()
     {
+        Gate::authorize('haveaccess', 'period.index');
+
         return view('period.index');
     }
 

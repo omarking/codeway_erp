@@ -14,6 +14,7 @@ use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 
 class ProjectComponent extends Component
@@ -94,6 +95,8 @@ class ProjectComponent extends Component
 
     public function store()
     {
+        Gate::authorize('haveaccess', 'project.create');
+
         $this->validate([
             'temporary'     => 'image|mimes:jpeg,png|max:5000',
             'key'           => 'required|string|max:100|unique:projects,key',
@@ -153,6 +156,8 @@ class ProjectComponent extends Component
 
     public function show(Project $project)
     {
+        Gate::authorize('haveaccess', 'project.show');
+
         $created             = new Carbon($project->created_at);
         $updated             = new Carbon($project->updated_at);
         $this->project_id    = $project->id;
@@ -192,6 +197,8 @@ class ProjectComponent extends Component
 
     public function edit(Project $project)
     {
+        Gate::authorize('haveaccess', 'project.edit');
+
         $this->project_id    = $project->id;
         $this->avatar        = $project->avatar;
         $this->key           = $project->key;
@@ -212,6 +219,8 @@ class ProjectComponent extends Component
 
     public function update()
     {
+        Gate::authorize('haveaccess', 'project.edit');
+
         $this->validate([
             'temporary'     => 'image|mimes:jpeg,png|max:5000|nullable',
             'key'           => 'required|string|max:100|unique:projects,key,' . $this->project_id,
@@ -281,6 +290,8 @@ class ProjectComponent extends Component
 
     public function delete(Project $project)
     {
+        Gate::authorize('haveaccess', 'project.destroy');
+
         $this->project_id   = $project->id;
         $this->key          = $project->key;
         $this->name         = $project->name;
@@ -289,6 +300,8 @@ class ProjectComponent extends Component
 
     public function destroy()
     {
+        Gate::authorize('haveaccess', 'project.destroy');
+
         $status  = 'success';
         $content = 'Se eliminó correctamente el proyecto';
 

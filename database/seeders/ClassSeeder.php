@@ -25,5 +25,13 @@ class ClassSeeder extends Seeder
         $class = Clas::create([
             'description' => 'Desarrollo móvil',
         ]);
+
+        $class = Clas::create([
+            'description' => 'Aplicaciones nativas',
+        ]);
+
+        $class = Clas::create([
+            'description' => 'Aplicaciónes Hibridas',
+        ]);
     }
 }

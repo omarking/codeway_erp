@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Gate;
 
 class AbsenceComponent extends Component
 {
@@ -35,7 +36,7 @@ class AbsenceComponent extends Component
     public function mount()
     {
         $this->total = count(Absence::all());
-        
+
         $this->resetErrorBag();
         $this->resetValidation();
     }
@@ -55,6 +56,8 @@ class AbsenceComponent extends Component
 
     public function store()
     {
+        Gate::authorize('haveaccess', 'absence.create');
+
         $this->validate([
             'description' => 'required|max:200|unique:absences,description',
         ]);
@@ -92,6 +95,8 @@ class AbsenceComponent extends Component
 
     public function show(Absence $absence)
     {
+        Gate::authorize('haveaccess', 'absence.show');
+
         $created            = new Carbon($absence->created_at);
         $updated            = new Carbon($absence->updated_at);
         $this->absence_id   = $absence->id;
@@ -110,6 +115,8 @@ class AbsenceComponent extends Component
 
     public function edit(Absence $absence)
     {
+        Gate::authorize('haveaccess', 'absence.edit');
+
         $this->absence_id   = $absence->id;
         $this->description  = $absence->description;
         $this->status       = $absence->status;
@@ -118,6 +125,8 @@ class AbsenceComponent extends Component
 
     public function update()
     {
+        Gate::authorize('haveaccess', 'absence.edit');
+
         $this->validate([
             'description' => 'required|max:200|unique:absences,description,' . $this->absence_id,
         ]);
@@ -159,12 +168,16 @@ class AbsenceComponent extends Component
 
     public function delete(Absence $absence)
     {
+        Gate::authorize('haveaccess', 'absence.destroy');
+
         $this->absence_id   = $absence->id;
         $this->description  = $absence->description;
     }
 
     public function destroy()
     {
+        Gate::authorize('haveaccess', 'absence.destroy');
+        
         $status = 'success';
         $content = 'Se eliminó correctamente la ausencia';
 
