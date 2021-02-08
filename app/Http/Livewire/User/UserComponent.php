@@ -12,12 +12,14 @@ use App\Models\Holiday;
 use App\Models\Period;
 use Carbon\Carbon;
 use Illuminate\Database\Events\TransactionBeginning;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
 
 class UserComponent extends Component
 {
@@ -143,6 +145,10 @@ class UserComponent extends Component
                 'email_verified_at' => $this->now,
             ]);
 
+            Profile::create([
+                'user_id' => $user->id,
+            ]);
+
             if ($this->role) {
                 $user->roles()->sync($this->role);
             }
@@ -156,30 +162,36 @@ class UserComponent extends Component
             }
 
             $fecha  = Carbon::now();
-            $anio   = Carbon::now()->year();
-            $mes    = Carbon::now()->month();
-            $dia    = Carbon::now()->day();
-            $periodo = Period::where('description', '=', now())->get();
-            $begin      = Carbon::now();
-            $vacacion = Holiday::create([
-                'days'  => '',
-                'beginDate'  => '',
-                'days'  => '',
-                'days'  => '',
-                'days'  => '',
-                'days'  => '',
-                'days'  => '',
-                'days'  => '',
-            ]);
+            $anio = $fecha->format('Y');
+            $period_id = Period::where('description', '=', $anio)->first();
 
-            Profile::create([
-                'user_id' => $user->id,
-            ]);
+            if ($period_id) {
+                $beginDate = $fecha->format('Y-m-d');
+                $endDate = $fecha->addYear()->format('Y-m-d');
+
+                $vacation = Holiday::create([
+                    'slug'         => null,
+                    'days'         => null,
+                    'beginDate'    => $beginDate,
+                    'endDate'      => $endDate,
+                    'inProcess'    => null,
+                    'taken'        => null,
+                    'available'    => null,
+                    'responsable'  => Auth::user()->name,
+                    'commentable'  => null,
+                    'absence_id'   => null,
+                    'period_id'    => $period_id->id,
+                ]);
+
+                $user->holidays()->sync($vacation->id);
+            }
+
 
             /* Envio de email */
             /* Mail::to('admin@admin.com')->queue(new MessageReceived($user)); */
 
             DB::commit();
+
         } catch (\Throwable $th) {
 
             DB::rollback();
@@ -285,7 +297,6 @@ class UserComponent extends Component
             } else {
                 $this->group  = "Aún no se le ha asignado a un área";
             }
-
         } catch (\Throwable $th) {
 
             $status = 'error';
@@ -295,7 +306,6 @@ class UserComponent extends Component
                 'status'    => $status,
                 'content'   => $content,
             ]);
-
         }
     }
 
@@ -337,7 +347,6 @@ class UserComponent extends Component
             foreach ($user->groups as $group) {
                 $this->group = $group->id;
             }
-
         } catch (\Throwable $th) {
 
             $status = 'error';
@@ -347,7 +356,6 @@ class UserComponent extends Component
                 'status'    => $status,
                 'content'   => $content,
             ]);
-
         }
     }
 
@@ -431,7 +439,6 @@ class UserComponent extends Component
             $this->nameUser        = $user->nameUser;
             $this->firstLastname   = $user->firstLastname;
             $this->secondLastname  = $user->secondLastname;
-
         } catch (\Throwable $th) {
 
             $status = 'error';
@@ -441,7 +448,6 @@ class UserComponent extends Component
                 'status'    => $status,
                 'content'   => $content,
             ]);
-
         }
     }
 

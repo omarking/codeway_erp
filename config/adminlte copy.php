@@ -363,12 +363,97 @@ return [
 
     */
     'menu' => [
+        /* [
+            //Caja de busqueda en el navbar
+            'text' => 'Búscar',
+            'search' => true,
+            'topnav' => true,
+        ],
+        [
+            //Caja de busqueda en el sidebar
+            'search' => true,
+            'url' => 'test',                     // the form action
+            'method' => 'POST',                  // the form method
+            'input_name' => 'menu-search-input', // the input name
+            'text' => 'Búscar',                  // the input placeholder
+        ], */
+        /* Links en el navbar del lado izquierdo */
+        /*
+        [
+            'text' => 'Home',
+            'url'  => '#',
+            'can'  => '',
+            'topnav' => false,
+        ],
+        [
+             'text' => 'Explore',
+            'url'  => '#',
+            'can'  => '',
+            'topnav' => false,
+        ],
+    */
+        /* Links en el navbar del lado derecho */
+        /*
+        [
+            'text' => 'Contact',
+            'url'  => '#',
+            'can'  => '',
+            'topnav_right' => false,
+        ],
+        [
+            'text' => 'Info',
+            'url'  => '#',
+            'can'  => '',
+            'topnav_right' => false,
+        ],
+    */
+        /* Links en el menu del usuario */
+        /*
+        [
+            'text' => 'Acount',
+            'url'  => '#',
+            'can'  => '',
+            'topnav_user' => true,
+        ],
+        [
+            'text' => 'Info',
+            'url'  => '#',
+            'can'  => '',
+            'topnav_user' => true,
+        ],
+    */
+        /* Configuraciones con diferentes tipos de etiquetas */
+        /*
+        [
+            'text' => 'Config',
+            'url'  => '#',
+            'can'  => '',
+            'label'       => 10,
+            'label_color' => 'info',
+        ],
+        [
+            'text' => 'Files',
+            'url'  => '#',
+            'can'  => '',
+            'label'       => 2,
+            'label_color' => 'danger',
+        ],
+        [
+            'text'        => 'pages',
+            'url'         => '#',
+            'icon'        => 'far fa-fw fa-file',
+            'label'       => 4,
+            'label_color' => 'success',
+        ],
+    */
+        /* Inicia ASIDE */
         [
             'text' => 'Principal',
             'url'  => 'home',
             'can'  => '',
             'icon' => 'fas fa-fw fa-home'
         ],
+        /* ['header' => 'TAREAS'], */
         [
             'text'    => 'Tareas',
             'icon'    => 'fas fa-fw fa-tasks',
@@ -395,6 +480,7 @@ return [
                 ],
             ],
         ],
+        /* ['header' => 'PROYECTOS'], */
         [
             'text'    => 'Proyectos',
             'icon'    => 'fas fa-fw fa-project-diagram',
@@ -405,8 +491,9 @@ return [
                     'icon'  => 'fas fa-fw fa-project-diagram',
                 ],
                 [
+                    /* Gate::authorize('haveaccess', 'category.index'), */
                     'text'  => 'Categorías',
-                    'can'   => 'category.index',
+                    /* 'can'   => 'category.index', */
                     'url'   => 'category',
                     'icon'  => 'fas fa-fw fa-boxes',
                 ],
@@ -439,10 +526,7 @@ return [
                 ],
             ],
         ],
-        [
-            'header' => 'VACANTES',
-            'can'  => 'holiday.index',
-        ],
+        /* ['header' => 'VACANTES'], */
         [
             'text'    => 'Vacantes',
             'icon'    => 'fas fa-fw fa-clipboard',
@@ -459,14 +543,11 @@ return [
                 ],
             ],
         ],
+        /* ['header' => 'USUARIOS'], */
         [
-            'header' => 'USUARIOS',
-            'can'    => 'user.index',
-        ],
-        [
+            /* 'can'  => 'user.index', */
             'text' => 'Usuarios',
             'url'  => 'user',
-            'can'   => '',
             'icon' => 'fas fa-fw fa-users',
         ],
         [

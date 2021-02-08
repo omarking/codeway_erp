@@ -54,8 +54,8 @@
                         @foreach($holidays as $holiday)
                             <tr>
                                 <th>
-                                    @isset($holiday->users->id)
-                                        {{ $holiday->users->name }}
+                                    @isset($holiday->users[0]->id)
+                                        {{ $holiday->users[0]->name }}
                                     @else
                                         No hay usuario
                                     @endisset

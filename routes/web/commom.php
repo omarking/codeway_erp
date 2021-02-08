@@ -32,6 +32,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+    Route::get('dashboard', [App\Http\Controllers\HomeController::class, 'dashboard'])->name('dashboard');
+
     Route::get('profile', [ProfileController::class, 'show'])->name('profile');
 
     Route::get('mydepartament', [ProfileController::class, 'departament'])->name('mydepartament');

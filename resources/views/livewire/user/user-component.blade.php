@@ -50,7 +50,9 @@
                         @foreach($users as $user)
                             <tr>
                                 <th>
-                                    <img src="{{ asset('storage/users/' . $user->profile->avatar) }}" width="90px" class="rounded-circle" alt="{{ $user->profile->avatar }}">
+                                    @isset($user->profile->avatar)
+                                        <img src="{{ asset('storage/users/' . $user->profile->avatar) }}" width="90px" class="rounded-circle" alt="{{ $user->profile->avatar }}">
+                                    @endisset
                                 </th>
                                 <td>{{ $user->nameUser }} {{ $user->firstLastname }} {{ $user->secondLastname }}</td>
                                 <td>{{ $user->name }}</td>
