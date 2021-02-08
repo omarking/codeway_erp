@@ -10,6 +10,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
 
 class RoleComponent extends Component
 {
@@ -49,6 +50,7 @@ class RoleComponent extends Component
         $this->total = count(Role::all());
         $this->responsable = Auth::user()->name;
         $this->fullAccess = 'no';
+
         $this->resetErrorBag();
         $this->resetValidation();
     }
@@ -72,6 +74,7 @@ class RoleComponent extends Component
                 'fullAccess'   => 'required|in:yes,no',
             ]);
         }
+        $this->slug = Str::slug($this->name, '.');
     }
 
     public function store()
@@ -97,7 +100,7 @@ class RoleComponent extends Component
                 'name'          => $this->name,
                 'slug'          => $this->slug,
                 'description'   => $this->description,
-                'responsable'   => $this->responsable,
+                'responsable'   => Auth::user()->name,
                 'fullAccess'    => $this->fullAccess,
             ]);
 
@@ -125,20 +128,32 @@ class RoleComponent extends Component
     {
         Gate::authorize('haveaccess', 'role.show');
 
-        $created            = new Carbon($role->created_at);
-        $updated            = new Carbon($role->updated_at);
-        $this->role_id      = $role->id;
-        $this->name         = $role->name;
-        $this->slug         = $role->slug;
-        $this->description  = $role->description;
-        $this->responsable  = $role->responsable;
-        $this->fullAccess   = $role->fullAccess;
-        $this->status       = $role->status;
-        $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
-        $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
+        try {
 
-        foreach ($role->permissions as $permission) {
-            $this->permission_role[] = $permission->id;
+            $created            = new Carbon($role->created_at);
+            $updated            = new Carbon($role->updated_at);
+            $this->role_id      = $role->id;
+            $this->name         = $role->name;
+            $this->slug         = $role->slug;
+            $this->description  = $role->description;
+            $this->responsable  = $role->responsable;
+            $this->fullAccess   = $role->fullAccess;
+            $this->status       = $role->status;
+            $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
+            $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
+
+            foreach ($role->permissions as $permission) {
+                $this->permission_role[] = $permission->id;
+            }
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
         }
     }
 
@@ -152,17 +167,29 @@ class RoleComponent extends Component
     {
         Gate::authorize('haveaccess', 'role.edit');
 
-        $this->role_id      = $role->id;
-        $this->name         = $role->name;
-        $this->slug         = $role->slug;
-        $this->description  = $role->description;
-        $this->responsable  = $role->responsable;
-        $this->fullAccess   = $role->fullAccess;
-        $this->status       = $role->status;
-        $this->accion       = "update";
+        try {
 
-        foreach ($role->permissions as $permission) {
-            $this->permission[] = $permission->id;
+            $this->role_id      = $role->id;
+            $this->name         = $role->name;
+            $this->slug         = $role->slug;
+            $this->description  = $role->description;
+            $this->responsable  = $role->responsable;
+            $this->fullAccess   = $role->fullAccess;
+            $this->status       = $role->status;
+            $this->accion       = "update";
+
+            foreach ($role->permissions as $permission) {
+                $this->permission[] = $permission->id;
+            }
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
         }
     }
 
@@ -191,7 +218,7 @@ class RoleComponent extends Component
                     'name'          => $this->name,
                     'slug'          => $this->slug,
                     'description'   => $this->description,
-                    'responsable'   => $this->responsable,
+                    'responsable'   => Auth::user()->name,
                     'fullAccess'    => $this->fullAccess,
                     'status'        => $this->status,
                 ]);
@@ -225,8 +252,20 @@ class RoleComponent extends Component
     {
         Gate::authorize('haveaccess', 'role.destroy');
 
-        $this->role_id   = $role->id;
-        $this->name      = $role->name;
+        try {
+
+            $this->role_id   = $role->id;
+            $this->name      = $role->name;
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+        }
     }
 
     public function destroy()
@@ -302,9 +341,7 @@ class RoleComponent extends Component
             [
                 'roles' => Role::latest('id')
                     ->where('name', 'LIKE', "%{$this->search}%")
-                    ->orWhere('slug', 'LIKE', "%{$this->search}%")
                     ->orWhere('description', 'LIKE', "%{$this->search}%")
-                    ->orWhere('responsable', 'LIKE', "%{$this->search}%")
                     ->paginate($this->perPage)
             ],
             compact('permissions')

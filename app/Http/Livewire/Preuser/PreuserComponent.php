@@ -114,16 +114,30 @@ class PreuserComponent extends Component
     {
         Gate::authorize('haveaccess', 'preuser.show');
 
-        $created                = new Carbon($preuser->created_at);
-        $updated                = new Carbon($preuser->updated_at);
-        $this->preuser_id       = $preuser->id;
-        $this->name             = $preuser->name;
-        $this->lastname         = $preuser->lastname;
-        $this->phone            = $preuser->phone;
-        $this->email            = $preuser->email;
-        $this->status           = $preuser->status;
-        $this->created_at       = $created->format('l jS \\of F Y h:i:s A');
-        $this->updated_at       = $updated->format('l jS \\of F Y h:i:s A');
+        try {
+
+            $created                = new Carbon($preuser->created_at);
+            $updated                = new Carbon($preuser->updated_at);
+            $this->preuser_id       = $preuser->id;
+            $this->name             = $preuser->name;
+            $this->lastname         = $preuser->lastname;
+            $this->phone            = $preuser->phone;
+            $this->email            = $preuser->email;
+            $this->status           = $preuser->status;
+            $this->created_at       = $created->format('l jS \\of F Y h:i:s A');
+            $this->updated_at       = $updated->format('l jS \\of F Y h:i:s A');
+
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function close()
@@ -136,13 +150,27 @@ class PreuserComponent extends Component
     {
         Gate::authorize('haveaccess', 'preuser.edit');
 
-        $this->preuser_id       = $preuser->id;
-        $this->name             = $preuser->name;
-        $this->lastname         = $preuser->lastname;
-        $this->phone            = $preuser->phone;
-        $this->email            = $preuser->email;
-        $this->status           = $preuser->status;
-        $this->accion           = "update";
+        try {
+
+            $this->preuser_id       = $preuser->id;
+            $this->name             = $preuser->name;
+            $this->lastname         = $preuser->lastname;
+            $this->phone            = $preuser->phone;
+            $this->email            = $preuser->email;
+            $this->status           = $preuser->status;
+            $this->accion           = "update";
+
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function update()
@@ -199,9 +227,23 @@ class PreuserComponent extends Component
     {
         Gate::authorize('haveaccess', 'preuser.destroy');
 
-        $this->preuser_id   = $preusers->id;
-        $this->name         = $preusers->name;
-        $this->lastname     = $preusers->lastname;
+        try {
+
+            $this->preuser_id   = $preusers->id;
+            $this->name         = $preusers->name;
+            $this->lastname     = $preusers->lastname;
+            
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function destroy()

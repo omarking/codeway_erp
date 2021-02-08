@@ -110,15 +110,29 @@ class VacantComponent extends Component
     {
         Gate::authorize('haveaccess', 'vacant.show');
 
-        $created            = new Carbon($vacant->created_at);
-        $updated            = new Carbon($vacant->updated_at);
-        $this->vacant_id    = $vacant->id;
-        $this->name         = $vacant->name;
-        $this->description  = $vacant->description;
-        $this->quantity     = $vacant->quantity;
-        $this->status       = $vacant->status;
-        $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
-        $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
+        try {
+
+            $created            = new Carbon($vacant->created_at);
+            $updated            = new Carbon($vacant->updated_at);
+            $this->vacant_id    = $vacant->id;
+            $this->name         = $vacant->name;
+            $this->description  = $vacant->description;
+            $this->quantity     = $vacant->quantity;
+            $this->status       = $vacant->status;
+            $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
+            $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
+
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function close()
@@ -131,12 +145,26 @@ class VacantComponent extends Component
     {
         Gate::authorize('haveaccess', 'vacant.edit');
 
-        $this->vacant_id    = $vacant->id;
-        $this->name         = $vacant->name;
-        $this->description  = $vacant->description;
-        $this->quantity     = $vacant->quantity;
-        $this->status       = $vacant->status;
-        $this->accion       = "update";
+        try {
+
+            $this->vacant_id    = $vacant->id;
+            $this->name         = $vacant->name;
+            $this->description  = $vacant->description;
+            $this->quantity     = $vacant->quantity;
+            $this->status       = $vacant->status;
+            $this->accion       = "update";
+
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function update()
@@ -192,8 +220,22 @@ class VacantComponent extends Component
     {
         Gate::authorize('haveaccess', 'vacant.destroy');
 
-        $this->vacant_id    = $vacant->id;
-        $this->name         = $vacant->name;
+        try {
+
+            $this->vacant_id    = $vacant->id;
+            $this->name         = $vacant->name;
+            
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function destroy()

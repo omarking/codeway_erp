@@ -97,14 +97,28 @@ class PositionComponent extends Component
     {
         Gate::authorize('haveaccess', 'position.show');
 
-        $created            = new Carbon($position->created_at);
-        $updated            = new Carbon($position->updated_at);
-        $this->position_id  = $position->id;
-        $this->description  = $position->description;
-        $this->status       = $position->status;
-        $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
-        $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
-        $this->position     = $position;
+        try {
+
+            $created            = new Carbon($position->created_at);
+            $updated            = new Carbon($position->updated_at);
+            $this->position_id  = $position->id;
+            $this->description  = $position->description;
+            $this->status       = $position->status;
+            $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
+            $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
+            $this->position     = $position;
+
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function close()
@@ -117,10 +131,24 @@ class PositionComponent extends Component
     {
         Gate::authorize('haveaccess', 'position.edit');
 
-        $this->position_id  = $position->id;
-        $this->description  = $position->description;
-        $this->status       = $position->status;
-        $this->accion       = "update";
+        try {
+
+            $this->position_id  = $position->id;
+            $this->description  = $position->description;
+            $this->status       = $position->status;
+            $this->accion       = "update";
+
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function update()
@@ -170,9 +198,23 @@ class PositionComponent extends Component
     {
         Gate::authorize('haveaccess', 'position.destroy');
 
-        $this->position_id  = $position->id;
-        $this->description  = $position->description;
-        $this->status       = $position->status;
+        try {
+
+            $this->position_id  = $position->id;
+            $this->description  = $position->description;
+            $this->status       = $position->status;
+            
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function destroy()

@@ -62,6 +62,94 @@ class PermissionListSeeder extends Seeder
         $permission_all[] = $permission->id;
 
         /*
+    Grupo permiso del modelo Groups
+    Listar todos las áreas o grupos
+    */
+        $permission = Permission::create([
+            'name'          => 'List area',
+            'slug'          => 'area.index',
+            'description'   => 'A user can list area',
+        ]);
+        /* Agregamos a la variable permission el id del permiso creado */
+        $permission_all[] = $permission->id;
+        /* Ver en detalle a un grupo */
+        $permission = Permission::create([
+            'name'          => 'Show area',
+            'slug'          => 'area.show',
+            'description'   => 'A user can see area',
+        ]);
+        /* Agregamos a la variable permission el id del permiso creado */
+        $permission_all[] = $permission->id;
+        /* Permite crear un nuevo grupo */
+        $permission = Permission::create([
+            'name'          => 'Create area',
+            'slug'          => 'area.create',
+            'description'   => 'A user can create area',
+        ]);
+        /* Agregamos a la variable permission el id del permiso creado */
+        $permission_all[] = $permission->id;
+        /* Permite editar un grupo */
+        $permission = Permission::create([
+            'name'          => 'Edit area',
+            'slug'          => 'area.edit',
+            'description'   => 'A user can edit area',
+        ]);
+        /* Agregamos a la variable permission el id del permiso creado */
+        $permission_all[] = $permission->id;
+        /* Permite eliminar un grupo */
+        $permission = Permission::create([
+            'name'          => 'Destroy area',
+            'slug'          => 'area.destroy',
+            'description'   => 'A user can destroy area',
+        ]);
+        /* Agregamos a la variable permission el id del permiso creado */
+        $permission_all[] = $permission->id;
+
+        /*
+    Aspirantes permiso del modelo Preuser
+    Listar todos los preusers o Aspirantes
+    */
+        $permission = Permission::create([
+            'name'          => 'List aspitante',
+            'slug'          => 'preuser.index',
+            'description'   => 'A user can list aspitante',
+        ]);
+        /* Agregamos a la variable permission el id del permiso creado */
+        $permission_all[] = $permission->id;
+        /* Ver en detalle a un Aspirantes */
+        $permission = Permission::create([
+            'name'          => 'Show aspitante',
+            'slug'          => 'preuser.show',
+            'description'   => 'A user can see aspitante',
+        ]);
+        /* Agregamos a la variable permission el id del permiso creado */
+        $permission_all[] = $permission->id;
+        /* Permite crear un nuevo Aspirantes */
+        $permission = Permission::create([
+            'name'          => 'Create aspitante',
+            'slug'          => 'preuser.create',
+            'description'   => 'A user can create aspitante',
+        ]);
+        /* Agregamos a la variable permission el id del permiso creado */
+        $permission_all[] = $permission->id;
+        /* Permite editar un Aspirantes */
+        $permission = Permission::create([
+            'name'          => 'Edit aspitante',
+            'slug'          => 'preuser.edit',
+            'description'   => 'A user can edit aspitante',
+        ]);
+        /* Agregamos a la variable permission el id del permiso creado */
+        $permission_all[] = $permission->id;
+        /* Permite eliminar un Aspirantes */
+        $permission = Permission::create([
+            'name'          => 'Destroy aspitante',
+            'slug'          => 'preuser.destroy',
+            'description'   => 'A user can destroy aspitante',
+        ]);
+        /* Agregamos a la variable permission el id del permiso creado */
+        $permission_all[] = $permission->id;
+
+        /*
     Categoria permiso del modelo Category
     Listar todos los categorys
     */
@@ -282,50 +370,6 @@ class PermissionListSeeder extends Seeder
         $permission_all[] = $permission->id;
 
         /*
-    Grupo permiso del modelo Groups
-    Listar todos los groupss
-    */
-        $permission = Permission::create([
-            'name'          => 'List area',
-            'slug'          => 'area.index',
-            'description'   => 'A user can list area',
-        ]);
-        /* Agregamos a la variable permission el id del permiso creado */
-        $permission_all[] = $permission->id;
-        /* Ver en detalle a un grupo */
-        $permission = Permission::create([
-            'name'          => 'Show area',
-            'slug'          => 'area.show',
-            'description'   => 'A user can see area',
-        ]);
-        /* Agregamos a la variable permission el id del permiso creado */
-        $permission_all[] = $permission->id;
-        /* Permite crear un nuevo grupo */
-        $permission = Permission::create([
-            'name'          => 'Create area',
-            'slug'          => 'area.create',
-            'description'   => 'A user can create area',
-        ]);
-        /* Agregamos a la variable permission el id del permiso creado */
-        $permission_all[] = $permission->id;
-        /* Permite editar un grupo */
-        $permission = Permission::create([
-            'name'          => 'Edit area',
-            'slug'          => 'area.edit',
-            'description'   => 'A user can edit area',
-        ]);
-        /* Agregamos a la variable permission el id del permiso creado */
-        $permission_all[] = $permission->id;
-        /* Permite eliminar un grupo */
-        $permission = Permission::create([
-            'name'          => 'Destroy area',
-            'slug'          => 'area.destroy',
-            'description'   => 'A user can destroy area',
-        ]);
-        /* Agregamos a la variable permission el id del permiso creado */
-        $permission_all[] = $permission->id;
-
-        /*
     Vacaciones permiso del modelo Holiday
     Listar todos los holidays
     */
@@ -502,50 +546,6 @@ class PermissionListSeeder extends Seeder
         $permission_all[] = $permission->id;
 
         /*
-    Aspirantes permiso del modelo Preuser
-    Listar todos los preusers
-    */
-        $permission = Permission::create([
-            'name'          => 'List preuser',
-            'slug'          => 'preuser.index',
-            'description'   => 'A user can list preuser',
-        ]);
-        /* Agregamos a la variable permission el id del permiso creado */
-        $permission_all[] = $permission->id;
-        /* Ver en detalle a un Aspirantes */
-        $permission = Permission::create([
-            'name'          => 'Show preuser',
-            'slug'          => 'preuser.show',
-            'description'   => 'A user can see preuser',
-        ]);
-        /* Agregamos a la variable permission el id del permiso creado */
-        $permission_all[] = $permission->id;
-        /* Permite crear un nuevo Aspirantes */
-        $permission = Permission::create([
-            'name'          => 'Create preuser',
-            'slug'          => 'preuser.create',
-            'description'   => 'A user can create preuser',
-        ]);
-        /* Agregamos a la variable permission el id del permiso creado */
-        $permission_all[] = $permission->id;
-        /* Permite editar un Aspirantes */
-        $permission = Permission::create([
-            'name'          => 'Edit preuser',
-            'slug'          => 'preuser.edit',
-            'description'   => 'A user can edit preuser',
-        ]);
-        /* Agregamos a la variable permission el id del permiso creado */
-        $permission_all[] = $permission->id;
-        /* Permite eliminar un Aspirantes */
-        $permission = Permission::create([
-            'name'          => 'Destroy preuser',
-            'slug'          => 'preuser.destroy',
-            'description'   => 'A user can destroy preuser',
-        ]);
-        /* Agregamos a la variable permission el id del permiso creado */
-        $permission_all[] = $permission->id;
-
-        /*
     Prioridad permiso del modelo Priority
     Listar todos los prioritys
     */
@@ -593,11 +593,11 @@ class PermissionListSeeder extends Seeder
     Perfil permiso del modelo Profile
     Listar todos los profiles
     */
-        $permission = Permission::create([
+        /* $permission = Permission::create([
             'name'          => 'List profile',
             'slug'          => 'profile.index',
             'description'   => 'A user can list profile',
-        ]);
+        ]); */
         /* Agregamos a la variable permission el id del permiso creado */
         $permission_all[] = $permission->id;
         /* Ver en detalle a un Perfil */
@@ -608,19 +608,19 @@ class PermissionListSeeder extends Seeder
         ]);
         /* Agregamos a la variable permission el id del permiso creado */
         $permission_all[] = $permission->id;
-        /* Permite crear un nuevo Perfil */
-        $permission = Permission::create([
-            'name'          => 'Create profile',
-            'slug'          => 'profile.create',
-            'description'   => 'A user can create profile',
-        ]);
-        /* Agregamos a la variable permission el id del permiso creado */
-        $permission_all[] = $permission->id;
         /* Permite editar un Perfil */
         $permission = Permission::create([
             'name'          => 'Edit profile',
             'slug'          => 'profile.edit',
             'description'   => 'A user can edit profile',
+        ]);
+        /* Agregamos a la variable permission el id del permiso creado */
+        $permission_all[] = $permission->id;
+        /* Permite activar/desactivar un Perfil */
+        $permission = Permission::create([
+            'name'          => 'Edit acount',
+            'slug'          => 'profile.update',
+            'description'   => 'A user can create update acount',
         ]);
         /* Agregamos a la variable permission el id del permiso creado */
         $permission_all[] = $permission->id;
@@ -797,6 +797,23 @@ class PermissionListSeeder extends Seeder
             'name'          => 'Edit task',
             'slug'          => 'task.edit',
             'description'   => 'A user can edit task',
+        ]);
+        /* Agregamos a la variable permission el id del permiso creado */
+        $permission_all[] = $permission->id;
+
+        /* Permite crear un nuevo Tarea */
+        $permission = Permission::create([
+            'name'          => 'Create mi task',
+            'slug'          => 'task.my.create',
+            'description'   => 'A user can create my task',
+        ]);
+        /* Agregamos a la variable permission el id del permiso creado */
+        $permission_all[] = $permission->id;
+        /* Permite editar un Tarea */
+        $permission = Permission::create([
+            'name'          => 'Edit my task',
+            'slug'          => 'task.my.edit',
+            'description'   => 'A user can edit my task',
         ]);
         /* Agregamos a la variable permission el id del permiso creado */
         $permission_all[] = $permission->id;

@@ -107,15 +107,29 @@ class PermissionComponent extends Component
     {
         Gate::authorize('haveaccess', 'permission.show');
 
-        $created                = new Carbon($permission->created_at);
-        $updated                = new Carbon($permission->updated_at);
-        $this->permission_id    = $permission->id;
-        $this->name             = $permission->name;
-        $this->slug             = $permission->slug;
-        $this->description      = $permission->description;
-        $this->status           = $permission->status;
-        $this->created_at       = $created->format('l jS \\of F Y h:i:s A');
-        $this->updated_at       = $updated->format('l jS \\of F Y h:i:s A');
+        try {
+
+            $created                = new Carbon($permission->created_at);
+            $updated                = new Carbon($permission->updated_at);
+            $this->permission_id    = $permission->id;
+            $this->name             = $permission->name;
+            $this->slug             = $permission->slug;
+            $this->description      = $permission->description;
+            $this->status           = $permission->status;
+            $this->created_at       = $created->format('l jS \\of F Y h:i:s A');
+            $this->updated_at       = $updated->format('l jS \\of F Y h:i:s A');
+
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function close()
@@ -128,12 +142,26 @@ class PermissionComponent extends Component
     {
         Gate::authorize('haveaccess', 'permission.edit');
 
-        $this->permission_id    = $permission->id;
-        $this->name             = $permission->name;
-        $this->slug             = $permission->slug;
-        $this->description      = $permission->description;
-        $this->status           = $permission->status;
-        $this->accion           = "update";
+        try {
+
+            $this->permission_id    = $permission->id;
+            $this->name             = $permission->name;
+            $this->slug             = $permission->slug;
+            $this->description      = $permission->description;
+            $this->status           = $permission->status;
+            $this->accion           = "update";
+
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function update()
@@ -186,8 +214,22 @@ class PermissionComponent extends Component
     {
         Gate::authorize('haveaccess', 'permission.destroy');
 
-        $this->permission_id    = $permissions->id;
-        $this->name             = $permissions->name;
+        try {
+
+            $this->permission_id    = $permissions->id;
+            $this->name             = $permissions->name;
+            
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function destroy()

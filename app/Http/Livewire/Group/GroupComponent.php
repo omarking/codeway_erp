@@ -110,15 +110,29 @@ class GroupComponent extends Component
     {
         Gate::authorize('haveaccess', 'area.show');
 
-        $created            = new Carbon($group->created_at);
-        $updated            = new Carbon($group->updated_at);
-        $this->group_id     = $group->id;
-        $this->name         = $group->name;
-        $this->description  = $group->description;
-        $this->responsable  = $group->responsable;
-        $this->status       = $group->status;
-        $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
-        $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
+        try {
+
+            $created            = new Carbon($group->created_at);
+            $updated            = new Carbon($group->updated_at);
+            $this->group_id     = $group->id;
+            $this->name         = $group->name;
+            $this->description  = $group->description;
+            $this->responsable  = $group->responsable;
+            $this->status       = $group->status;
+            $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
+            $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
+
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function close()
@@ -131,12 +145,26 @@ class GroupComponent extends Component
     {
         Gate::authorize('haveaccess', 'area.edit');
 
-        $this->group_id     = $group->id;
-        $this->name         = $group->name;
-        $this->description  = $group->description;
-        $this->responsable  = $group->responsable;
-        $this->status       = $group->status;
-        $this->accion       = "update";
+        try {
+
+            $this->group_id     = $group->id;
+            $this->name         = $group->name;
+            $this->description  = $group->description;
+            $this->responsable  = $group->responsable;
+            $this->status       = $group->status;
+            $this->accion       = "update";
+
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function update()
@@ -190,8 +218,22 @@ class GroupComponent extends Component
     {
         Gate::authorize('haveaccess', 'area.destroy');
 
-        $this->group_id     = $group->id;
-        $this->name         = $group->name;
+        try {
+
+            $this->group_id     = $group->id;
+            $this->name         = $group->name;
+            
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function destroy()

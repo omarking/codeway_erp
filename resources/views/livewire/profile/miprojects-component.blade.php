@@ -1,4 +1,5 @@
 <div>
+
     <div class="card">
         <div class="card-body">
             @foreach ($usuario as $user)
@@ -110,7 +111,7 @@
                     <div class="card">
                         <div class="card-header bg-secondary">
                             <label class="text-white text-uppercase" for="nombre">{{ $project->name }}</label>
-                            <a class="btn btn-primary float-right" href="{{ route('project.show', $project) }}">Trabajar en este proyectó</a>
+                            <a class="btn btn-primary float-right" href="{{ route('project.show', $project) }}">Trabajar en este proyecto</a>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -130,7 +131,7 @@
                                                 @isset($project->clas->description)
                                                     <h4>{{ $project->clas->description }}</h4>
                                                 @else
-                                                    <h4>Este proyectó no esta asignado a una clase</h4>
+                                                    <h4>Este proyecto no esta asignado a una clase</h4>
                                                 @endisset
                                             </div>
                                         </div>
@@ -140,7 +141,7 @@
                                                 @isset($project->category->description)
                                                     <h4>{{ $project->category->description }}</h4>
                                                 @else
-                                                    <h4>Este proyectó no esta asignado a una categoría</h4>
+                                                    <h4>Este proyecto no esta asignado a una categoría</h4>
                                                 @endisset
                                             </div>
                                         </div>
@@ -175,11 +176,11 @@
                 @empty
                     <div class="card">
                         <div class="card-header bg-secondary">
-                            <label class="text-white text-uppercase" for="nombre"><h4>Aun no eres asignado a un proyectó</h4></label>
+                            <label class="text-white text-uppercase" for="nombre"><h4>Aun no eres asignado a un proyecto</h4></label>
                         </div>
                         <div class="card-body">
                             <h4>
-                                Parece que no te han asignado un proyectó en el que puedas trabajar, es raro que pase esto por lo que te recomiendo que le informes a tu superior.
+                                Parece que no te han asignado un proyecto en el que puedas trabajar, es raro que pase esto por lo que te recomiendo que le informes a tu superior.
                             </h4>
                             <h4>
                                 Prueba estas opciones:

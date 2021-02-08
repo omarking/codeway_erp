@@ -2,69 +2,77 @@
 
 namespace App\Http\Livewire\Profile;
 
+use App\Models\Comment;
 use App\Models\Departament;
 use App\Models\Group;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Psy\Exception\BreakException;
 
 class MydepartamentComponent extends Component
 {
-    public $departament, $component, $value;
+    public $departament, $usuario, $message;
 
-    public $user, $user_departament;
+    public $depa_id, $departamento, $descripcion, $responsable;
 
-    public $grupos, $group, $departamento, $usuario;
-
-    public $departament_group = [];
-
-
+    public $user, $comentarios, $yo, $otros;
 
     public function mount()
     {
+        /* Obtenemos el usuario logueado */
         $user = Auth::user();
-        $this->component = null;
-        $usuario = User::with('departaments', 'groups')->where('id', '=', $user->id)->get();
-        foreach ($usuario as $user) {
-            $this->usuario = $user;
-            foreach ($user->departaments as $departament) {
-                $this->departament = $departament;
-            }
-            foreach ($user->groups as $group) {
-                $this->group = $group;
+        /* Obtenemos el usuario de User con el departamento que tiene */
+        $usuarios = User::with('departaments')->where('id', '=', $user->id)->get();
+        /* Recorremos en el foreach hasta encontrar al departamento que le correponde */
+        foreach ($usuarios as $usuario) {
+            /* Validamos que el usuario loguado sea igual a un registros de User */
+            if ($usuario->id = $user->id) {
+                /* Validamos que exista una relacion de User y Departament */
+                if (isset($usuario->departaments[0]->id)) {
+                    /* Asignamos a nuestras variables los datos del departamento */
+                    $this->depa_id      = $usuario->departaments[0]->id;
+                    $this->departamento = $usuario->departaments[0]->name;
+                    $this->descripcion  = $usuario->departaments[0]->description;
+                    $this->responsable  = $usuario->departaments[0]->responsable;
+                }
             }
         }
-        $grupos = Departament::with('groups')->where('id', '=', $this->departament->id)->get();
-        foreach ($grupos as $grupo) {
-            $this->grupos = $grupo;
-        }
+        /* Obtenemos el usuario solmanete que sea igual al que esta logueado */
+        $this->usuario = User::with('profile')->where('id', '=', $user->id)->first();
+        /* Obtengo el departamento del usuario logueado */
+        $comments = Departament::orderBy('id', 'Desc')->where('id', '=', $this->depa_id)->first();
+        /* Asigno los comentarios del departamento */
+        $this->comentarios = $comments->comments;
+        /* Obtengo mi usuario con perfil */
+        $this->yo = User::with('profile')->where('id', '=', $user->id)->first();
+        $this->otros = User::with('profile')->get();
     }
 
-    public function send($component)
+    public function send()
     {
-        /* $this->emitTo('comment.comment-component', 'veamos'); */
-        /* $this->emit('postAdded', $component); */
-        /* $this->emitUp('postAdded', $component); */
-        if (isset($component)) {
-            $this->component = $component;
-            $this->value = $component;
-        }else{
-            $this->component = null;
+        try {
+            DB::beginTransaction();
+            if (($this->message != "") && ($this->depa_id)) {
+
+                $departament = Departament::where('id', '=', $this->depa_id)->first();
+
+                $departament->comments()->create([
+                    'body'      => $this->message,
+                    'user_id'   => Auth::user()->id,
+                ]);
+                $this->reset(['message']);
+                $this->mount();
+            }
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
         }
     }
 
     public function render()
     {
-        $departaments = Departament::all();
-        $groupss      = Group::all();
-        $this->component = $this->value;
-        return view(
-            'livewire.profile.mydepartament-component',
-            [
-                'users' => User::latest('id')->get()
-            ],
-            compact('departaments', 'groupss')
-        );
+        return view('livewire.profile.mydepartament-component');
     }
 }

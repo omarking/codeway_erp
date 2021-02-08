@@ -363,20 +363,20 @@ return [
 
     */
     'menu' => [
-        [
-            /* Caja de busqueda en el navbar */
+        /* [
+            //Caja de busqueda en el navbar
             'text' => 'Búscar',
             'search' => true,
             'topnav' => true,
         ],
         [
-            /* Caja de busqueda en el sidebar */
+            //Caja de busqueda en el sidebar
             'search' => true,
             'url' => 'test',                     // the form action
             'method' => 'POST',                  // the form method
             'input_name' => 'menu-search-input', // the input name
             'text' => 'Búscar',                  // the input placeholder
-        ],
+        ], */
         /* Links en el navbar del lado izquierdo */
         /*
         [
@@ -545,16 +545,19 @@ return [
         ],
         /* ['header' => 'USUARIOS'], */
         [
+            /* 'can'  => 'user.index', */
             'text' => 'Usuarios',
             'url'  => 'user',
             'icon' => 'fas fa-fw fa-users',
         ],
         [
+            /* 'can'   => 'event.index', */
             'text'  => 'Eventos',
             'url'   => 'event',
             'icon'  => 'fas fa-fw fa-calendar-check',/* calendar-check */
         ],
         [
+            /* 'can'   => 'position.index', */
             'text'  => 'Posiciones',
             'url'   => 'position',
             'icon'  => 'fas fa-fw fa-address-card',/* user-chart */
@@ -602,21 +605,10 @@ return [
             'url'     => 'mydepartament',
             'icon'    => 'fas fa-fw fa-house-user',
         ],
-        ['header' => 'labels'],
         [
-            'text'       => 'important',
-            'icon_color' => 'red',
-            'url'        => '#',
-        ],
-        [
-            'text'       => 'warning',
-            'icon_color' => 'yellow',
-            'url'        => '#',
-        ],
-        [
-            'text'       => 'information',
-            'icon_color' => 'cyan',
-            'url'        => '#',
+            'text'    => 'Mis Eventos',
+            'url'     => 'myevent',
+            'icon'    => 'fas fa-fw fa-calendar-check',
         ],
     ],
 

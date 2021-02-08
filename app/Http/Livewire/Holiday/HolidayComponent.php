@@ -159,32 +159,45 @@ class HolidayComponent extends Component
     {
         Gate::authorize('haveaccess', 'holiday.show');
 
-        $created              = new Carbon($holiday->created_at);
-        $updated              = new Carbon($holiday->updated_at);
-        $this->holiday_id     = $holiday->id;
-        $this->days           = $holiday->days;
-        $this->beginDate      = $holiday->beginDate;
-        $this->endDate        = $holiday->endDate;
-        $this->inProcess      = $holiday->inProcess;
-        $this->taken          = $holiday->taken;
-        $this->available      = $holiday->available;
-        $this->responsable    = $holiday->responsable;
-        $this->commentable    = $holiday->commentable;
-        $this->absence_id     = $holiday->absence_id;
-        $this->period_id      = $holiday->period_id;
-        $this->created_at     = $created->format('l jS \\of F Y h:i:s A');
-        $this->updated_at     = $updated->format('l jS \\of F Y h:i:s A');
+        try {
+            $created              = new Carbon($holiday->created_at);
+            $updated              = new Carbon($holiday->updated_at);
+            $this->holiday_id     = $holiday->id;
+            $this->days           = $holiday->days;
+            $this->beginDate      = $holiday->beginDate;
+            $this->endDate        = $holiday->endDate;
+            $this->inProcess      = $holiday->inProcess;
+            $this->taken          = $holiday->taken;
+            $this->available      = $holiday->available;
+            $this->responsable    = $holiday->responsable;
+            $this->commentable    = $holiday->commentable;
+            $this->absence_id     = $holiday->absence_id;
+            $this->period_id      = $holiday->period_id;
+            $this->created_at     = $created->format('l jS \\of F Y h:i:s A');
+            $this->updated_at     = $updated->format('l jS \\of F Y h:i:s A');
 
-        if (isset($holiday->absence->description)) {
-            $this->ausencia   = $holiday->absence->description;
-        } else {
-            $this->ausencia   = "Sin ausencia";
-        }
+            if (isset($holiday->absence->description)) {
+                $this->ausencia   = $holiday->absence->description;
+            } else {
+                $this->ausencia   = "Sin ausencia";
+            }
 
-        if (isset($holiday->period->description)) {
-            $this->periodo     = $holiday->period->description;
-        } else {
-            $this->periodo     = "Sin periodo";
+            if (isset($holiday->period->description)) {
+                $this->periodo     = $holiday->period->description;
+            } else {
+                $this->periodo     = "Sin periodo";
+            }
+
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
         }
     }
 
@@ -198,20 +211,34 @@ class HolidayComponent extends Component
     {
         Gate::authorize('haveaccess', 'holiday.edit');
 
-        $this->holiday_id     = $holiday->id;
-        $this->days           = $holiday->days;
-        $this->beginDate      = $holiday->beginDate;
-        $this->endDate        = $holiday->endDate;
-        $this->inProcess      = $holiday->inProcess;
-        $this->taken          = $holiday->taken;
-        $this->available      = $holiday->available;
-        $this->responsable    = $holiday->responsable;
-        $this->commentable    = $holiday->commentable;
-        $this->absence_id     = $holiday->absence_id;
-        $this->period_id      = $holiday->period_id;
-        $this->created_at     = $holiday->created_at;
-        $this->updated_at     = $holiday->updated_at;
-        $this->accion         = "update";
+        try {
+
+            $this->holiday_id     = $holiday->id;
+            $this->days           = $holiday->days;
+            $this->beginDate      = $holiday->beginDate;
+            $this->endDate        = $holiday->endDate;
+            $this->inProcess      = $holiday->inProcess;
+            $this->taken          = $holiday->taken;
+            $this->available      = $holiday->available;
+            $this->responsable    = $holiday->responsable;
+            $this->commentable    = $holiday->commentable;
+            $this->absence_id     = $holiday->absence_id;
+            $this->period_id      = $holiday->period_id;
+            $this->created_at     = $holiday->created_at;
+            $this->updated_at     = $holiday->updated_at;
+            $this->accion         = "update";
+
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function update()
@@ -282,13 +309,27 @@ class HolidayComponent extends Component
     {
         Gate::authorize('haveaccess', 'holiday.destroy');
 
-        $this->holiday_id     = $holiday->id;
-        $this->days           = $holiday->days;
-        $this->beginDate      = $holiday->beginDate;
-        $this->endDate        = $holiday->endDate;
-        $this->inProcess      = $holiday->inProcess;
-        $this->taken          = $holiday->taken;
-        $this->available      = $holiday->available;
+        try {
+
+            $this->holiday_id     = $holiday->id;
+            $this->days           = $holiday->days;
+            $this->beginDate      = $holiday->beginDate;
+            $this->endDate        = $holiday->endDate;
+            $this->inProcess      = $holiday->inProcess;
+            $this->taken          = $holiday->taken;
+            $this->available      = $holiday->available;
+            
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function destroy()

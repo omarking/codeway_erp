@@ -32,9 +32,11 @@
                             <button class="btn btn-dark">Limpiar</button>
                         @endif
                     </div>
-                    <div class="col-lg-2 col-md-3 col-sm-6">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createTask">Agregar Tarea</button>
-                    </div>
+                    @can('haveaccess', 'task.my.create')
+                        <div class="col-lg-2 col-md-3 col-sm-6">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createTask">Agregar Tarea</button>
+                        </div>
+                    @endcan
                 </div>
             </div>
             <table wire:poll.10000ms id="mitasks">
@@ -48,7 +50,7 @@
                                 @foreach ($tasks as $task)
                                     @isset($task->projects[0]->name)
                                         @if (($task->statu->description == $estado->description) && ($proyecto->name == $task->projects[0]->name))
-                                            <div class="border rounded my-3 card-footer">
+                                            <div class="border rounded my-3 card-footer" wire:click.prevent="edit({{ $task->id }})" data-toggle="modal" data-target="#updateTask">
                                                 <div>
                                                     <h6 class="font-weight-normal">{{ $task->name }} </h6>
                                                 </div>
@@ -114,32 +116,7 @@
 
         </div>
     </div>
-
-
-    {{-- <div class="card">
-        @foreach ($tareas as $tarea)
-            <h5>Tareas :</h5>
-            <h4>{{ $tarea->name }}</h4>
-            @foreach ($tarea->tasks as $task)
-                <h4>{{ $task->name }}</h4>
-            @endforeach
-            <h5>Usuarios</h5>
-            <h4>{{ $tarea->name }}</h4>
-            @foreach ($tarea->users as $user)
-                <h4>{{ $user->name }}</h4>
-            @endforeach
-        @endforeach
-    </div>
-
-    <div class="form-group">
-        <label for="dal">Proyecto</label>
-        <h5>{{$proyecto}}</h5>
-    </div>
-    <div class="form-group">
-        <label for="dal">Tareas</label>
-        <h5>{{$tareas}}</h5>
-    </div> --}}
     @include('custom.message')
-    @include('livewire.profile.create')
-    @include('livewire.profile.update')
+    @include('livewire.profile.mytask.create')
+    @include('livewire.profile.mytask.update')
 </div>

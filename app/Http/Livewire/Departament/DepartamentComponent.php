@@ -115,19 +115,33 @@ class DepartamentComponent extends Component
     {
         Gate::authorize('haveaccess', 'departament.show');
 
-        $created                  = new Carbon($departament->created_at);
-        $updated                  = new Carbon($departament->updated_at);
-        $this->departament_id     = $departament->id;
-        $this->name               = $departament->name;
-        $this->description        = $departament->description;
-        $this->responsable        = $departament->responsable;
-        $this->status             = $departament->status;
-        $this->created_at         = $created->format('l jS \\of F Y h:i:s A');
-        $this->updated_at         = $updated->format('l jS \\of F Y h:i:s A');
-        $this->departamento       = $departament;
+        try {
 
-        foreach ($departament->groups as $group) {
-            $this->departament_group[] = $group->id;
+            $created                  = new Carbon($departament->created_at);
+            $updated                  = new Carbon($departament->updated_at);
+            $this->departament_id     = $departament->id;
+            $this->name               = $departament->name;
+            $this->description        = $departament->description;
+            $this->responsable        = $departament->responsable;
+            $this->status             = $departament->status;
+            $this->created_at         = $created->format('l jS \\of F Y h:i:s A');
+            $this->updated_at         = $updated->format('l jS \\of F Y h:i:s A');
+            $this->departamento       = $departament;
+
+            foreach ($departament->groups as $group) {
+                $this->departament_group[] = $group->id;
+            }
+
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
         }
     }
 
@@ -141,15 +155,29 @@ class DepartamentComponent extends Component
     {
         Gate::authorize('haveaccess', 'departament.edit');
 
-        $this->departament_id     = $departament->id;
-        $this->name               = $departament->name;
-        $this->description        = $departament->description;
-        $this->responsable        = $departament->responsable;
-        $this->status             = $departament->status;
-        $this->accion             = "update";
+        try {
 
-        foreach ($departament->groups as $group) {
-            $this->group[] = $group->id;
+            $this->departament_id     = $departament->id;
+            $this->name               = $departament->name;
+            $this->description        = $departament->description;
+            $this->responsable        = $departament->responsable;
+            $this->status             = $departament->status;
+            $this->accion             = "update";
+
+            foreach ($departament->groups as $group) {
+                $this->group[] = $group->id;
+            }
+
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
         }
     }
 
@@ -211,8 +239,22 @@ class DepartamentComponent extends Component
     {
         Gate::authorize('haveaccess', 'departament.destroy');
 
-        $this->departament_id     = $departament->id;
-        $this->name               = $departament->name;
+        try {
+
+            $this->departament_id     = $departament->id;
+            $this->name               = $departament->name;
+            
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function destroy()

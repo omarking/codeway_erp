@@ -36,7 +36,7 @@ class CategoryComponent extends Component
     public function mount()
     {
         $this->total = count(Category::all());
-        
+
         $this->resetErrorBag();
         $this->resetValidation();
     }
@@ -97,14 +97,28 @@ class CategoryComponent extends Component
     {
         Gate::authorize('haveaccess', 'category.show');
 
-        $created            = new Carbon($categories->created_at);
-        $updated            = new Carbon($categories->updated_at);
-        $this->category_id  = $categories->id;
-        $this->description  = $categories->description;
-        $this->status       = $categories->status;
-        $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
-        $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
-        $this->category     = $categories;
+        try {
+
+            $created            = new Carbon($categories->created_at);
+            $updated            = new Carbon($categories->updated_at);
+            $this->category_id  = $categories->id;
+            $this->description  = $categories->description;
+            $this->status       = $categories->status;
+            $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
+            $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
+            $this->category     = $categories;
+
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function close()
@@ -117,10 +131,24 @@ class CategoryComponent extends Component
     {
         Gate::authorize('haveaccess', 'category.edit');
 
-        $this->category_id  = $categories->id;
-        $this->description  = $categories->description;
-        $this->status       = $categories->status;
-        $this->accion       = "update";
+        try {
+
+            $this->category_id  = $categories->id;
+            $this->description  = $categories->description;
+            $this->status       = $categories->status;
+            $this->accion       = "update";
+
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function update()
@@ -170,8 +198,22 @@ class CategoryComponent extends Component
     {
         Gate::authorize('haveaccess', 'category.destroy');
 
-        $this->category_id  = $categories->id;
-        $this->description  = $categories->description;
+        try {
+
+            $this->category_id  = $categories->id;
+            $this->description  = $categories->description;
+            
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function destroy()

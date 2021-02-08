@@ -155,7 +155,9 @@
                     <div wire:loading wire:loading.class="bg-white">Procesando datos...</div>
                 </div>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" wire:click.prevent="clean()">Cancelar</button>
-                <button type="button" class="btn btn-success" wire:click.prevent="update()">Actualizar Tarea</button>
+                @can('haveaccess', 'task.my.create')
+                    <button type="button" class="btn btn-success" wire:click.prevent="update()">Actualizar Tarea</button>
+                @endcan
             </div>
         </div>
     </div>

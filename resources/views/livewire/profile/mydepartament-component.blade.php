@@ -1,105 +1,62 @@
 <div>
-    <div class="row">
-        <div class="col lg-8 .col-md-8 .col-sm-4">
-            <div class="card">
-                <div class="card-header bg-secondary">
-                        <h4 class="text-uppercase">
-                            @isset($departament->id)
-                                <div wire:click="$emitTo('comment.comment-component', 'veamos')">
-                                    Departamento de {{ $departament->name }}
-                                </div>
-                            @else
-                                Aun no eres asignado a un departamento
-                            @endisset
-                        </h4>
+    <div class="card" style="height: 100%;">
+        <div class="card-header bg-secondary">
+            <div class="row">
+                <div class="col-6">
+                    <h4 class="font-weight-normal text-uppercase">{{$departamento}}</h4>
                 </div>
-                <div class="card-body">
-                    @isset($departament->id)
-                        <div wire:click.prevent="send({{ $departament->id }})">
-                            <h5> {{ $departament->description }} </h5>
-                        </div>
-                    @else
-                        <h5>Espera a que se te asigne un departamento, por lo mientras tomate un café</h5>
-                    @endisset
-                </div>
-                <div class="card-footer">
-                    @isset($departament->id)
-                        <h6> {{ $departament->responsable }} </h6>
-                    @else
-                        <h6>- - - - -</h6>
-                    @endisset
+                <div class="col-6">
+                    <h6 class="justify-content-end">{{$descripcion}}</h6>
                 </div>
             </div>
-            <div class="card">
-                <div class="card-header bg-secondary">
-                    <h4 class="text-uppercase">
-                        @isset($group->id)
-                            <div wire:click.prevent="send({{ $group->id }})">
-                                Área de {{ $group->name }}
-                            </div>
-                        @else
-                            Aun no eres asignado a una área
-                        @endisset
-                    </h4>
-                </div>
-                <div class="card-body">
-                    @isset($group->id)
-                        <div wire:click.prevent="send({{ $group->id }})">
-                            <h5> {{ $group->description }} </h5>
-                        </div>
-                    @else
-                        <h5>Espera a que se te asigne una área, por lo mientras tomate un café</h5>
-                    @endisset
-                </div>
-                <div class="card-footer">
-                    @isset($group->id)
-                        <h6> {{ $group->responsable }} </h6>
-                    @else
-                        <h6>- - - - -</h6>
-                    @endisset
-                </div>
-            </div>
-            {{-- <div>
-                @isset($grupos)
-                    @forelse ($grupos->groups as $group)
-                        <div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title text-uppercase">{{ $group->name }}</h4>
-                            </div>
-                            <div class="card-body">
-                                <h5>{{ $group->description }}</h5>
-                            </div>
-                            <div class="card-footer">
-                                <h6>{{ $group->responsable }}</h6>
-                            </div>
-                        </div>
-                        <hr>
-                    @empty
-                        <div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title text-uppercase">No hay grupos en este departamento</h4>
-                            </div>
-                            <div class="card-body">
-                                <h5>Se debe de agregar grupos a este departamento para que se puedan visualizar aqui.</h5>
-                            </div>
-                            <div class="card-footer">
-                                <h6>- - - - - -</h6>
-                            </div>
-                        </div>
-                    @endforelse
-                @else
-                    No hay grupos en este Departamento
-                @endisset
-            </div> --}}
         </div>
-        <div class="col lg-4 .col-md-4 .col-sm-4">
-            <div class="card">
-                <div wire:poll.100ms class="card-body">
-                    Mensajes
-                    {{ $component }}
-                    @isset($component)
-                        @livewire('comment.comment-component', ['component' => $component])
-                    @endisset
+        <div wire:poll.1000ms class="table-responsive px-1" style="height: 25rem;">
+            <div class="card-body">
+                @foreach ($comentarios as $comentario)
+                <div class="row">
+                    @if ($comentario->user_id == $yo->id)
+                        <div class="col-1 text-center">
+                            <img src="{{ asset('storage/users/' . $yo->profile->avatar) }}" width="80%" alt="{{ $yo->profile->avatar }}"><br>
+                        </div>
+                        <div class="col 11 border border-primary rounded-pill my-1 card-footer">
+                            <p class="font-weight-normal text-monospace">
+                                {{ $yo->name }} : {{ $comentario->body }}
+                                <small class="d-flex justify-content-end">{{$comentario->created_at->diffForHumans()}}</small>
+                            </p>
+                        </div>
+                    @else
+                        <div class="col-11 border border-success rounded-pill my-1 card-footer">
+                            @foreach ($otros as $otro)
+                                @if ($comentario->user_id == $otro->id)
+                                    <p class="font-weight-normal text-monospace">
+                                        {{ $otro->name }} : {{ $comentario->body }}
+                                        <small class="d-flex justify-content-end">{{$comentario->created_at->diffForHumans()}}</small>
+                                    </p>
+                                @endif
+                            @endforeach
+                        </div>
+                        <div class="col-1 text-center">
+                            @foreach ($otros as $otro)
+                                @if ($comentario->user_id == $otro->id)
+                                    <img src="{{ asset('storage/users/' . $otro->profile->avatar) }}" width="80%" alt="{{ $otro->profile->avatar }}"><br>
+                                @endif
+                            @endforeach
+                        </div>
+                    @endif
+                </div>
+                @endforeach
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="row">
+                <div class="col-2">
+                    <img src="{{ asset('storage/users/' . $usuario->profile->avatar) }}" width="35%" class="rounded-circle" alt="{{ $usuario->profile->avatar }}">
+                </div>
+                <div class="col-8">
+                    <textarea class="form-control rounded-pill" name="message" wire:model="message" wire:dirty.class="bg-primary" rows="1" autofocus></textarea>
+                </div>
+                <div class="col-2">
+                    <button type="button" wire:click.prevent="send()" class="btn btn-primary float-end btn-block" >Enviar</button>
                 </div>
             </div>
         </div>

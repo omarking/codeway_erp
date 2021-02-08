@@ -36,5 +36,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('mydepartament', [ProfileController::class, 'departament'])->name('mydepartament');
 
+    Route::get('myevent', [ProfileController::class, 'event'])->name('myevent');
+
     Route::get('project/{project}', [ProjectController::class, 'show'])->name('project.show');
 });

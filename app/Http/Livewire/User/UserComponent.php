@@ -8,6 +8,8 @@ use App\Models\Group;
 use App\Models\Profile;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Holiday;
+use App\Models\Period;
 use Carbon\Carbon;
 use Illuminate\Database\Events\TransactionBeginning;
 use Illuminate\Support\Facades\Hash;
@@ -153,6 +155,23 @@ class UserComponent extends Component
                 $user->groups()->sync($this->group);
             }
 
+            $fecha  = Carbon::now();
+            $anio   = Carbon::now()->year();
+            $mes    = Carbon::now()->month();
+            $dia    = Carbon::now()->day();
+            $periodo = Period::where('description', '=', now())->get();
+            $begin      = Carbon::now();
+            $vacacion = Holiday::create([
+                'days'  => '',
+                'beginDate'  => '',
+                'days'  => '',
+                'days'  => '',
+                'days'  => '',
+                'days'  => '',
+                'days'  => '',
+                'days'  => '',
+            ]);
+
             Profile::create([
                 'user_id' => $user->id,
             ]);
@@ -180,87 +199,103 @@ class UserComponent extends Component
 
     public function show(User $user)
     {
-        Gate::authorize('haveaccess', 'user.show');
+        Gate::authorize('view', [$user, ['user.show', 'userown.show']]);
+        /* Gate::authorize('haveaccess', 'user.show');
+        Gate::authorize('haveaccess', 'userown.show');*/
 
-        $created              = new Carbon($user->created_at);
-        $updated              = new Carbon($user->updated_at);
-        $this->user_id        = $user->id;
-        $this->nameUser       = $user->nameUser;
-        $this->firstLastname  = $user->firstLastname;
-        $this->secondLastname = $user->secondLastname;
-        $this->phone          = $user->phone;
-        $this->name           = $user->name;
-        $this->email          = $user->email;
-        $this->corporative    = $user->corporative;
-        $this->status         = $user->status;
-        $this->created_at     = $created->format('l jS \\of F Y h:i:s A');
-        $this->updated_at     = $updated->format('l jS \\of F Y h:i:s A');
-        $this->user           = $user;
+        try {
 
-        if (isset($user->profile->id)) {
-            $this->user_profile   = $user;
-            $this->avatar         = $user->profile->avatar;
-            $this->description    = $user->profile->description;
+            $created              = new Carbon($user->created_at);
+            $updated              = new Carbon($user->updated_at);
+            $this->user_id        = $user->id;
+            $this->nameUser       = $user->nameUser;
+            $this->firstLastname  = $user->firstLastname;
+            $this->secondLastname = $user->secondLastname;
+            $this->phone          = $user->phone;
+            $this->name           = $user->name;
+            $this->email          = $user->email;
+            $this->corporative    = $user->corporative;
+            $this->status         = $user->status;
+            $this->created_at     = $created->format('l jS \\of F Y h:i:s A');
+            $this->updated_at     = $updated->format('l jS \\of F Y h:i:s A');
+            $this->user           = $user;
 
-            if ($user->profile->facebook == "") {
+            if (isset($user->profile->id)) {
+                $this->user_profile   = $user;
+                $this->avatar         = $user->profile->avatar;
+                $this->description    = $user->profile->description;
+
+                if ($user->profile->facebook == "") {
+                    $this->facebook       = null;
+                } else {
+                    $this->facebook       = $user->profile->facebook;
+                }
+
+                if ($user->profile->instagram == "") {
+                    $this->instagram       = null;
+                } else {
+                    $this->instagram       = $user->profile->instagram;
+                }
+
+                if ($user->profile->github == "") {
+                    $this->github       = null;
+                } else {
+                    $this->github       = $user->profile->github;
+                }
+
+                if ($user->profile->website == "") {
+                    $this->website       = null;
+                } else {
+                    $this->website       = $user->profile->website;
+                }
+
+                if ($user->profile->other == "") {
+                    $this->other       = null;
+                } else {
+                    $this->other       = $user->profile->other;
+                }
+
+                $this->position       = $user->profile->position_id;
+            } else {
+                $this->user_profile   = "nothing";
+                $this->avatar         = "nothing";
+                $this->description    = "nothing";
                 $this->facebook       = null;
-            } else {
-                $this->facebook       = $user->profile->facebook;
+                $this->instagram      = null;
+                $this->github         = null;
+                $this->website        = null;
+                $this->other          = null;
+                $this->position       = "nothing";
             }
 
-            if ($user->profile->instagram == "") {
-                $this->instagram       = null;
+            if (isset($user->roles[0]->name)) {
+                $this->role  = $user->roles[0]->name;
             } else {
-                $this->instagram       = $user->profile->instagram;
+                $this->role  = "Aún no se le ha asignado un rol";
             }
 
-            if ($user->profile->github == "") {
-                $this->github       = null;
+            if (isset($user->departaments[0]->name)) {
+                $this->departament  = $user->departaments[0]->name;
             } else {
-                $this->github       = $user->profile->github;
+                $this->departament  = "Aún no se le ha asignado a un departamento";
             }
 
-            if ($user->profile->website == "") {
-                $this->website       = null;
+            if (isset($user->groups[0]->name)) {
+                $this->group  = $user->groups[0]->name;
             } else {
-                $this->website       = $user->profile->website;
+                $this->group  = "Aún no se le ha asignado a un área";
             }
 
-            if ($user->profile->other == "") {
-                $this->other       = null;
-            } else {
-                $this->other       = $user->profile->other;
-            }
+        } catch (\Throwable $th) {
 
-            $this->position       = $user->profile->position_id;
-        } else {
-            $this->user_profile   = "nothing";
-            $this->avatar         = "nothing";
-            $this->description    = "nothing";
-            $this->facebook       = null;
-            $this->instagram      = null;
-            $this->github         = null;
-            $this->website        = null;
-            $this->other          = null;
-            $this->position       = "nothing";
-        }
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
 
-        if (isset($user->roles[0]->name)) {
-            $this->role  = $user->roles[0]->name;
-        } else {
-            $this->role  = "Aún no se le ha asignado un rol";
-        }
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
 
-        if (isset($user->departaments[0]->name)) {
-            $this->departament  = $user->departaments[0]->name;
-        } else {
-            $this->departament  = "Aún no se le ha asignado a un departamento";
-        }
-
-        if (isset($user->groups[0]->name)) {
-            $this->group  = $user->groups[0]->name;
-        } else {
-            $this->group  = "Aún no se le ha asignado a un área";
         }
     }
 
@@ -272,37 +307,53 @@ class UserComponent extends Component
 
     public function edit(User $user)
     {
-        Gate::authorize('haveaccess', 'user.edit');
+        /* Gate::authorize('haveaccess', 'user.edit');
+        Gate::authorize('haveaccess', 'userown.edit'); */
+        Gate::authorize('view', [$user, ['user.edit', 'userown.edit']]);
 
-        $this->user_id        = $user->id;
-        $this->nameUser       = $user->nameUser;
-        $this->firstLastname  = $user->firstLastname;
-        $this->secondLastname = $user->secondLastname;
-        $this->phone          = $user->phone;
-        $this->name           = $user->name;
-        $this->email          = $user->email;
-        $this->corporative    = $user->corporative;
-        $this->status         = $user->status;
-        $this->accion         = "update";
-        $this->user           = $user;
-        $this->user_profile   = $user;
+        try {
 
-        foreach ($user->roles as $role) {
-            $this->role = $role->id;
-        }
+            $this->user_id        = $user->id;
+            $this->nameUser       = $user->nameUser;
+            $this->firstLastname  = $user->firstLastname;
+            $this->secondLastname = $user->secondLastname;
+            $this->phone          = $user->phone;
+            $this->name           = $user->name;
+            $this->email          = $user->email;
+            $this->corporative    = $user->corporative;
+            $this->status         = $user->status;
+            $this->accion         = "update";
+            $this->user           = $user;
+            $this->user_profile   = $user;
 
-        foreach ($user->departaments as $departament) {
-            $this->departament = $departament->id;
-        }
+            foreach ($user->roles as $role) {
+                $this->role = $role->id;
+            }
 
-        foreach ($user->groups as $group) {
-            $this->group = $group->id;
+            foreach ($user->departaments as $departament) {
+                $this->departament = $departament->id;
+            }
+
+            foreach ($user->groups as $group) {
+                $this->group = $group->id;
+            }
+
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
         }
     }
 
     public function update()
     {
-        Gate::authorize('haveaccess', 'user.edit');
+        Gate::authorize('view', [$this->user, ['user.edit', 'userown.edit']]);
 
         $this->validate([
             'nameUser'       => 'required|string|max:100',
@@ -374,10 +425,24 @@ class UserComponent extends Component
     {
         Gate::authorize('haveaccess', 'user.destroy');
 
-        $this->user_id         = $user->id;
-        $this->nameUser        = $user->nameUser;
-        $this->firstLastname   = $user->firstLastname;
-        $this->secondLastname  = $user->secondLastname;
+        try {
+
+            $this->user_id         = $user->id;
+            $this->nameUser        = $user->nameUser;
+            $this->firstLastname   = $user->firstLastname;
+            $this->secondLastname  = $user->secondLastname;
+
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function destroy()

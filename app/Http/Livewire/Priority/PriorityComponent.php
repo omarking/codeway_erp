@@ -97,14 +97,28 @@ class PriorityComponent extends Component
     {
         Gate::authorize('haveaccess', 'priority.show');
 
-        $created            = new Carbon($priority->created_at);
-        $updated            = new Carbon($priority->updated_at);
-        $this->priority_id  = $priority->id;
-        $this->description  = $priority->description;
-        $this->status       = $priority->status;
-        $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
-        $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
-        $this->$priority    = $priority;
+        try {
+
+            $created            = new Carbon($priority->created_at);
+            $updated            = new Carbon($priority->updated_at);
+            $this->priority_id  = $priority->id;
+            $this->description  = $priority->description;
+            $this->status       = $priority->status;
+            $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
+            $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
+            $this->$priority    = $priority;
+
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function close()
@@ -117,10 +131,24 @@ class PriorityComponent extends Component
     {
         Gate::authorize('haveaccess', 'priority.edit');
 
-        $this->priority_id  = $priority->id;
-        $this->description  = $priority->description;
-        $this->status       = $priority->status;
-        $this->accion       = "update";
+        try {
+
+            $this->priority_id  = $priority->id;
+            $this->description  = $priority->description;
+            $this->status       = $priority->status;
+            $this->accion       = "update";
+
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function update()
@@ -170,8 +198,22 @@ class PriorityComponent extends Component
     {
         Gate::authorize('haveaccess', 'priority.destroy');
 
-        $this->priority_id  = $priority->id;
-        $this->description  = $priority->description;
+        try {
+
+            $this->priority_id  = $priority->id;
+            $this->description  = $priority->description;
+            
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function destroy()

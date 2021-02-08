@@ -97,14 +97,28 @@ class PeriodComponent extends Component
     {
         Gate::authorize('haveaccess', 'period.show');
 
-        $created            = new Carbon($period->created_at);
-        $updated            = new Carbon($period->updated_at);
-        $this->period_id    = $period->id;
-        $this->description  = $period->description;
-        $this->status       = $period->status;
-        $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
-        $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
-        $this->period       = $period;
+        try {
+
+            $created            = new Carbon($period->created_at);
+            $updated            = new Carbon($period->updated_at);
+            $this->period_id    = $period->id;
+            $this->description  = $period->description;
+            $this->status       = $period->status;
+            $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
+            $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
+            $this->period       = $period;
+
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function close()
@@ -170,8 +184,22 @@ class PeriodComponent extends Component
     {
         Gate::authorize('haveaccess', 'period.destroy');
 
-        $this->period_id    = $period->id;
-        $this->description  = $period->description;
+        try {
+
+            $this->period_id    = $period->id;
+            $this->description  = $period->description;
+            
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function destroy()

@@ -1,54 +1,44 @@
 <?php
 
-namespace App\Http\Livewire\Event;
+namespace App\Http\Livewire\Profile;
 
 use App\Models\Event;
-use App\Models\User;
 use Carbon\Carbon;
-use Livewire\Component;
-use Livewire\WithPagination;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Gate;
+use Livewire\Component;
+use Illuminate\Support\Str;
 
-class EventComponent extends Component
+class MyeventComponent extends Component
 {
-    use WithPagination;
-
-    protected $paginationTheme = 'bootstrap';
+    public $user_id, $eventos, $usuario;
 
     public $event_id, $title, $description, $start, $end, $color, $textColor, $status, $created_at, $updated_at, $accion = "store";
-
-    public $search = '', $perPage = '10', $page = 1, $total, $user_id;
 
     public $rules = [
         'title'         => 'required|string|max:200|unique:events,title',
         'description'   => 'required|string',
-        'start'         => 'required|date',
-        'end'           => 'required|date',
+        'start'         => 'required|date|after_or_equal:today',
+        'end'           => 'required|date|after_or_equal:start',
         'color'         => 'required|string|max:100',
         'textColor'     => 'required|string|max:100',
         'user_id'       => 'required',
     ];
 
-    protected $queryString = [
-        'search'  => ['except' => ''],
-        'perPage' => ['except' => '10'],
-    ];
-
     protected $validationAttributes = [
         'title'         => 'título',
         'description'   => 'descripción',
-        'start'         => 'fecha inicio',
-        'end'           => 'fecha terminó',
-        'color'         => 'color',
+        'start'         => 'fecha de inicio',
+        'end'           => 'fecha de termino',
+        'color'         => 'color de fondo',
         'textColor'     => 'color de texto',
         'user_id'       => 'usuario',
     ];
 
     public function mount()
     {
-        $this->total = count(Event::all());
+        $user = Auth::user();
+        $this->user_id = $user->id;
 
         $this->resetErrorBag();
         $this->resetValidation();
@@ -60,8 +50,8 @@ class EventComponent extends Component
             $this->validateOnly($propertyName, [
                 'title'         => 'required|string|max:200|unique:events,title',
                 'description'   => 'required|string',
-                'start'         => 'required|date',
-                'end'           => 'required|date',
+                'start'         => 'required|date|after_or_equal:today',
+                'end'           => 'required|date|after_or_equal:start',
                 'color'         => 'required|string|max:100',
                 'textColor'     => 'required|string|max:100',
                 'user_id'       => 'required',
@@ -70,8 +60,8 @@ class EventComponent extends Component
             $this->validateOnly($propertyName, [
                 'title'         => 'required|string|max:200|unique:events,title,' . $this->event_id,
                 'description'   => 'required|string',
-                'start'         => 'required|date',
-                'end'           => 'required|date',
+                'start'         => 'required|date|after_or_equal:today',
+                'end'           => 'required|date|after_or_equal:start',
                 'color'         => 'required|string|max:100',
                 'textColor'     => 'required|string|max:100',
                 'user_id'       => 'required',
@@ -79,15 +69,17 @@ class EventComponent extends Component
         }
     }
 
+    protected $messages = [
+        'start.after_or_equal' => 'El campo fecha de inicio debe ser una fecha posterior o igual a hoy.',
+    ];
+
     public function store()
     {
-        Gate::authorize('haveaccess', 'event.create');
-
         $this->validate([
             'title'         => 'required|string|max:200|unique:events,title',
             'description'   => 'required|string',
-            'start'         => 'required|date',
-            'end'           => 'required|date',
+            'start'         => 'required|date|after_or_equal:today',
+            'end'           => 'required|date|after_or_equal:start',
             'color'         => 'required|string|max:100',
             'textColor'     => 'required|string|max:100',
             'user_id'       => 'required',
@@ -114,7 +106,6 @@ class EventComponent extends Component
                 $evento->users()->sync($this->user_id);
             }
 
-
             DB::commit();
         } catch (\Throwable $th) {
 
@@ -133,46 +124,8 @@ class EventComponent extends Component
         $this->emit('eventCreatedEvent');
     }
 
-    public function show(Event $event)
-    {
-        Gate::authorize('haveaccess', 'event.show');
-
-        try {
-
-            $created            = new Carbon($event->created_at);
-            $updated            = new Carbon($event->updated_at);
-            $this->event_id     = $event->id;
-            $this->title        = $event->title;
-            $this->description  = $event->description;
-            $this->start        = $event->start;
-            $this->end          = $event->end;
-            $this->color        = $event->color;
-            $this->textColor    = $event->textColor;
-            $this->status       = $event->status;
-            $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
-            $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
-        } catch (\Throwable $th) {
-
-            $status = 'error';
-            $content = 'Ocurrio un error en la carga de datos';
-
-            session()->flash('process_result', [
-                'status'    => $status,
-                'content'   => $content,
-            ]);
-        }
-    }
-
-    public function close()
-    {
-        $this->clean();
-        $this->emit('eventShowEvent');
-    }
-
     public function edit(Event $event)
     {
-        Gate::authorize('haveaccess', 'event.edit');
-
         try {
 
             $this->event_id     = $event->id;
@@ -184,10 +137,6 @@ class EventComponent extends Component
             $this->textColor    = $event->textColor;
             $this->status       = $event->status;
             $this->accion       = "update";
-
-            foreach ($event->users as $user) {
-                $this->user_id = $user->id;
-            }
         } catch (\Throwable $th) {
 
             $status = 'error';
@@ -202,13 +151,11 @@ class EventComponent extends Component
 
     public function update()
     {
-        Gate::authorize('haveaccess', 'event.edit');
-
         $this->validate([
             'title'         => 'required|string|max:200|unique:events,title,' . $this->event_id,
             'description'   => 'required|string',
-            'start'         => 'required|date',
-            'end'           => 'required|date',
+            'start'         => 'required|date|after_or_equal:today',
+            'end'           => 'required|date|after_or_equal:start',
             'color'         => 'required|string|max:100',
             'textColor'     => 'required|string|max:100',
             'user_id'       => 'required',
@@ -257,57 +204,6 @@ class EventComponent extends Component
         $this->emit('eventUpdatedEvent');
     }
 
-    public function delete(Event $event)
-    {
-        Gate::authorize('haveaccess', 'event.destroy');
-
-        try {
-
-            $this->event_id     = $event->id;
-            $this->title        = $event->title;
-        } catch (\Throwable $th) {
-
-            $status = 'error';
-            $content = 'Ocurrio un error en la carga de datos';
-
-            session()->flash('process_result', [
-                'status'    => $status,
-                'content'   => $content,
-            ]);
-        }
-    }
-
-    public function destroy()
-    {
-        Gate::authorize('haveaccess', 'event.destroy');
-
-        $status = 'success';
-        $content = 'Se eliminó correctamente el evento';
-
-        try {
-
-            DB::beginTransaction();
-
-            Event::find($this->event_id)->delete();
-
-            DB::commit();
-        } catch (\Throwable $th) {
-
-            DB::rollBack();
-
-            $status = 'error';
-            $content = 'Ocurrió un error al eliminar el evento';
-        }
-
-        session()->flash('process_result', [
-            'status'    => $status,
-            'content'   => $content,
-        ]);
-
-        $this->clean();
-        $this->emit('eventDeletedEvent');
-    }
-
     public function clean()
     {
         $this->reset([
@@ -327,37 +223,16 @@ class EventComponent extends Component
         $this->mount();
     }
 
-    public function clear()
+
+    public function close()
     {
-        $this->reset(['search', 'perPage', 'page']);
+        $this->clean();
+        $this->emit('eventShowEvent');
     }
 
     public function render()
     {
-        $usuarios = User::where('status', '=', 1)->get();
-
-        if ($this->search != '') {
-            $this->page = 1;
-        }
-
-        if (isset(($this->total)) && ($this->perPage > $this->total) && ($this->page != 1)) {
-            $this->reset(['perPage']);
-        }
-
-        return view(
-            'livewire.event.event-component',
-            [
-                'events' => Event::latest('id')
-                    ->with('users')
-                    ->where('title', 'LIKE', "%{$this->search}%")
-                    ->orWhere('description', 'LIKE', "%{$this->search}%")
-                    ->orWhere('start', 'LIKE', "%{$this->search}%")
-                    ->orWhere('end', 'LIKE', "%{$this->search}%")
-                    ->orWhere('color', 'LIKE', "%{$this->search}%")
-                    ->orWhere('textColor', 'LIKE', "%{$this->search}%")
-                    ->paginate($this->perPage)
-            ],
-            compact('usuarios')
-        );
+        $events = Event::with('users')->orderBy('id', 'Desc')->get();
+        return view('livewire.profile.myevent-component', compact('events'));
     }
 }

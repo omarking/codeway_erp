@@ -1,39 +1,45 @@
 <div>
     <div class="card">
         <div class="card-header bg-secondary">
-            <div class="text-xl-left">
-                <h3 class="card-title text-uppercase">Proyectos</h3>
-            </div>
-            <div>
-                <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#createProject">Agregar Proyectó</button>
+            <div class="row">
+                <div class="col-8">
+                    <h4 class="text-uppercase">Lista de Proyectos</h4>
+                </div>
+                <div class="col-4">
+                    @can('haveaccess', 'project.create')
+                        <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#createProject">Agregar Proyecto</button>
+                    @endcan
+                </div>
             </div>
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <div class="form-group d-flex justify-content-between">
-                    <div class="col-md-auto col-lg-9">
-                        <input type="text" class="form-control" placeholder="Buscar" wire:model="search" wire:dirty.class="bg-secondary">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-8">
+                            <input type="text" class="form-control" placeholder="Buscar" wire:model="search" wire:dirty.class="bg-secondary">
+                        </div>
+                        <div class="col-3 justify-content-end">
+                            <select class="form-control" wire:model="perPage">
+                                <option value="10">10 por página</option>
+                                <option value="25">25 por página</option>
+                                <option value="50">50 por página</option>
+                                <option value="100">100 por página</option>
+                            </select>
+                        </div>
+                        @if ($search !== '')
+                            <div wire:click="clear" class="col-1">
+                                <button class="btn btn-light">X</button>
+                            </div>
+                        @endif
                     </div>
-                    <div class="col-md-auto col-lg-2">
-                        <select class="form-control" wire:model="perPage">
-                            <option value="10">10 por página</option>
-                            <option value="25">25 por página</option>
-                            <option value="50">50 por página</option>
-                            <option value="100">100 por página</option>
-                        </select>
-                    </div>
-                    @if ($search !== '')
-                    <div wire:click="clear" class="col col-lg-1">
-                        <button class="btn btn-light">X</button>
-                    </div>
-                    @endif
                 </div>
                 <table wire:poll.10000ms id="projectTable" class="table table-white table-striped table-hover">
                     <thead>
                         <tr>
                             <th scope="col">Imagen</th>
                             <th scope="col">Clave</th>
-                            <th scope="col">Proyectó</th>
+                            <th scope="col">Proyecto</th>
                             <th scope="col">Responsable</th>
                             <th scope="col">Estado</th>
                             <th scope="col">Clase</th>
@@ -45,7 +51,7 @@
                         @foreach($projects as $project)
                             <tr>
                                 <th>
-                                    <img style="height: 4rem" class="rounded-circle" class="rounded-sm" src="{{ asset('storage/projects/' . $project->avatar) }}" alt="{{ $project->avatar }}">
+                                    <img width="100 rem" style="height: 4rem" class="rounded-circle" class="rounded-sm" src="{{ asset('storage/projects/' . $project->avatar) }}" alt="{{ $project->avatar }}">
                                 </th>
                                 <td>{{ $project->key }}</td>
                                 <td><a class="color-bg" href="{{ route('project.show', $project) }}">{{ $project->name }}</a></td>
@@ -73,9 +79,15 @@
                                 </td>
                                 <td>
                                     <div class="btn-group" role="group">
-                                        <button type="button" wire:click.prevent="show({{ $project }})" class="btn btn-info" data-toggle="modal" data-target="#showProject">Mostrar</button>
-                                        <button type="button" wire:click.prevent="edit({{ $project }})" class="btn btn-success" data-toggle="modal" data-target="#updateProject">Editar</button>
-                                        <button type="button" wire:click.prevent="delete({{ $project }})" class="btn btn-danger" data-toggle="modal" data-target="#deleteProject">Borrar</button>
+                                        @can('haveaccess', 'project.show')
+                                            <button type="button" wire:click.prevent="show({{ $project }})" class="btn btn-info" data-toggle="modal" data-target="#showProject">Mostrar</button>
+                                        @endcan
+                                        @can('haveaccess', 'project.edit')
+                                            <button type="button" wire:click.prevent="edit({{ $project }})" class="btn btn-success" data-toggle="modal" data-target="#updateProject">Editar</button>
+                                        @endcan
+                                        @can('haveaccess', 'project.destroy')
+                                            <button type="button" wire:click.prevent="delete({{ $project }})" class="btn btn-danger" data-toggle="modal" data-target="#deleteProject">Borrar</button>
+                                        @endcan
                                     </div>
                                 </td>
                             </tr>

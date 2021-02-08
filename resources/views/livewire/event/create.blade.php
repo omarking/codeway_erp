@@ -51,9 +51,34 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="text-muted" for="user_id">Usuario:</label>
+                        <select wire:model="user_id" class="form-control @error('user_id') is-invalid @enderror" name="user_id" wire:dirty.class="bg-primary" id="user_id">
+                            <option value="">--Seleccione al usuario--</option>
+                            @foreach($usuarios as $usuario)
+                                <option value="{{$usuario->id}}">
+                                    {{ $usuario->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('user_id')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                    <div class="form-group">
                         <label class="text-muted" for="color">Color:</label>
-                        <input type="text" name="color" class="form-control @error('color') is-invalid @enderror"
-                                wire:model="color" wire:dirty.class="bg-primary">
+                        <select wire:model="color" class="form-control @error('color') is-invalid @enderror" name="color" wire:dirty.class="bg-primary" id="color">
+                            <option value="">--Seleccione el color--</option>
+                            <option class="alert-primary" value="alert-primary">Azul</option>
+                            <option class="alert-secondary" value="alert-secondary">Gris</option>
+                            <option class="alert-success" value="alert-success">Verde</option>
+                            <option class="alert-danger" value="alert-danger">Rojo</option>
+                            <option class="alert-warning" value="alert-warning">Amarillo</option>
+                            <option class="alert-info" value="alert-info">Celeste</option>
+                            <option class="alert-light" value="alert-light">Ligero</option>
+                            <option class="alert-dark" value="alert-dark">Negro</option>
+                        </select>
                         @error('color')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -62,8 +87,18 @@
                     </div>
                     <div class="form-group">
                         <label class="text-muted" for="textColor">Color de texto:</label>
-                        <input type="text" name="textColor" class="form-control @error('textColor') is-invalid @enderror"
-                                wire:model="textColor" wire:dirty.class="bg-primary">
+                        <select wire:model="textColor" class="form-control @error('textColor') is-invalid @enderror" name="color" wire:dirty.class="bg-primary" id="textColor">
+                            <option value="">--Seleccione el color--</option>
+                            <option class="text-primary" value="text-primary">Azul</option>
+                            <option class="text-secondary" value="text-secondary">Gris</option>
+                            <option class="text-success" value="text-success">Verde</option>
+                            <option class="text-danger" value="text-danger">Rojo</option>
+                            <option class="text-warning" value="text-warning">Amarillo</option>
+                            <option class="text-info" value="text-info">Celeste</option>
+                            <option class="text-light" value="text-light">Ligero</option>
+                            <option class="text-dark" value="text-dark">Negro</option>
+                            <option class="text-white" value="text-white">Blanco</option>
+                        </select>
                         @error('textColor')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>

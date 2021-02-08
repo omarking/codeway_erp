@@ -97,14 +97,28 @@ class AbsenceComponent extends Component
     {
         Gate::authorize('haveaccess', 'absence.show');
 
-        $created            = new Carbon($absence->created_at);
-        $updated            = new Carbon($absence->updated_at);
-        $this->absence_id   = $absence->id;
-        $this->description  = $absence->description;
-        $this->status       = $absence->status;
-        $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
-        $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
-        $this->absence      = $absence;
+        try {
+
+            $created            = new Carbon($absence->created_at);
+            $updated            = new Carbon($absence->updated_at);
+            $this->absence_id   = $absence->id;
+            $this->description  = $absence->description;
+            $this->status       = $absence->status;
+            $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
+            $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
+            $this->absence      = $absence;
+
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function close()
@@ -117,10 +131,23 @@ class AbsenceComponent extends Component
     {
         Gate::authorize('haveaccess', 'absence.edit');
 
-        $this->absence_id   = $absence->id;
-        $this->description  = $absence->description;
-        $this->status       = $absence->status;
-        $this->accion       = "update";
+        try {
+
+            $this->absence_id   = $absence->id;
+            $this->description  = $absence->description;
+            $this->status       = $absence->status;
+            $this->accion       = "update";
+
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+        }
     }
 
     public function update()
@@ -170,14 +197,28 @@ class AbsenceComponent extends Component
     {
         Gate::authorize('haveaccess', 'absence.destroy');
 
-        $this->absence_id   = $absence->id;
-        $this->description  = $absence->description;
+        try {
+
+            $this->absence_id   = $absence->id;
+            $this->description  = $absence->description;
+
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function destroy()
     {
         Gate::authorize('haveaccess', 'absence.destroy');
-        
+
         $status = 'success';
         $content = 'Se eliminó correctamente la ausencia';
 

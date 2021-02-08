@@ -277,68 +277,72 @@
             </div>
         </div>
     </div>
-    <hr>
-    <div wire:ignore.self class="row">
-        <div class="container col-lg-4 col-md-4">
-            <h4>Desactivar cuenta</h4>
-            <h5>Mantendrá tu cuenta inactiva</h5>
-        </div>
-        <div class="col-lg-8 col-md-8">
-            <div class="container card">
-                <div class="card-body">
-                    <div class="col-lg-11 col-md-10">
-                        <div class="form-group">
-                            <label class="text-muted" for="color">Estado:</label><br>
-                            <div class="custom-control custom-radio custom-control-inline">
-                                <input type="radio" id="statusType1" wire:model="status" name="status" class="custom-control-input" value="1"
-                                    @if ( $status == "1" )
-                                        checked
-                                    @endif
-                                >
-                                <label class="custom-control-label text-muted" for="statusType1">Activo</label>
-                            </div>
-                            <div class="custom-control custom-radio custom-control-inline">
-                                <input type="radio" id="statusType0" wire:model="status" name="status" class="custom-control-input" value="0"
-                                    @if ( $status == "0" )
-                                        checked
-                                    @endif
-                                >
-                                <label class="custom-control-label text-muted" for="statusType0">Inactivo</label>
-                                <hr>
+    @can('haveaccess', 'profile.update')
+        <hr>
+        <div wire:ignore.self class="row">
+            <div class="container col-lg-4 col-md-4">
+                <h4>Desactivar cuenta</h4>
+                <h5>Mantendrá tu cuenta inactiva</h5>
+            </div>
+            <div class="col-lg-8 col-md-8">
+                <div class="container card">
+                    <div class="card-body">
+                        <div class="col-lg-11 col-md-10">
+                            <div class="form-group">
+                                <label class="text-muted" for="color">Estado:</label><br>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="statusType1" wire:model="status" name="status" class="custom-control-input" value="1"
+                                        @if ( $status == "1" )
+                                            checked
+                                        @endif
+                                    >
+                                    <label class="custom-control-label text-muted" for="statusType1">Activo</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="statusType0" wire:model="status" name="status" class="custom-control-input" value="0"
+                                        @if ( $status == "0" )
+                                            checked
+                                        @endif
+                                    >
+                                    <label class="custom-control-label text-muted" for="statusType0">Inactivo</label>
+                                    <hr>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="card-footer">
-                    <div class="col-lg-3 col-md-4 col-sm-4">
-                        <button class="btn btn-info btn-block" wire:click.prevent="saveEstado()">Guardar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-     <hr>
-    <div wire:ignore.self class="row">
-        <div class="container col-lg-4 col-md-4">
-            <h4>Borrar cuenta</h4>
-            <h5>Elimina permanentemente tu cuenta y datos</h5>
-        </div>
-        <div class="col-lg-8 col-md-8">
-            <div class="container card">
-                <div class="card-body">
-                    <div class="col-lg-11 col-md-10">
-                        <div class="form-group">
-                            <label class="text-muted" for="color">Esto eliminara tus datos e información</label>
-                            <label class="text-muted" for="color">No será posible volver a recuperar tu cuenta ni tus datos</label><br>
-                            <h4 class="text-danger">¿Seguro que quieres eliminar tu cuenta?</h4>
-                            <div class="col-lg-3 col-md-4 col-sm-4">
-                                <button class="btn btn-danger btn-block" wire:click.prevent="deleteAcount()">Eliminar</button>
-                            </div>
+                    <div class="card-footer">
+                        <div class="col-lg-3 col-md-4 col-sm-4">
+                            <button class="btn btn-info btn-block" wire:click.prevent="saveEstado()">Guardar</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+        <hr>
+    @endcan
+    @can('haveaccess', 'profile.destroy')
+        <div wire:ignore.self class="row">
+            <div class="container col-lg-4 col-md-4">
+                <h4>Borrar cuenta</h4>
+                <h5>Elimina permanentemente tu cuenta y datos</h5>
+            </div>
+            <div class="col-lg-8 col-md-8">
+                <div class="container card">
+                    <div class="card-body">
+                        <div class="col-lg-11 col-md-10">
+                            <div class="form-group">
+                                <label class="text-muted" for="color">Esto eliminara tus datos e información</label>
+                                <label class="text-muted" for="color">No será posible volver a recuperar tu cuenta ni tus datos</label><br>
+                                <h4 class="text-danger">¿Seguro que quieres eliminar tu cuenta?</h4>
+                                <div class="col-lg-3 col-md-4 col-sm-4">
+                                    <button class="btn btn-danger btn-block" wire:click.prevent="deleteAcount()">Eliminar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endcan
     @include('custom.message')
 </div>

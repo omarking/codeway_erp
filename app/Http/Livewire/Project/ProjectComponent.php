@@ -158,34 +158,48 @@ class ProjectComponent extends Component
     {
         Gate::authorize('haveaccess', 'project.show');
 
-        $created             = new Carbon($project->created_at);
-        $updated             = new Carbon($project->updated_at);
-        $this->project_id    = $project->id;
-        $this->avatar        = $project->avatar;
-        $this->key           = $project->key;
-        $this->name          = $project->name;
-        $this->description   = $project->description;
-        $this->status        = $project->status;
-        $this->responsable   = $project->responsable;
-        $this->clas_id       = $project->clas_id;
-        $this->category_id   = $project->category_id;
-        $this->created_at    = $created->format('l jS \\of F Y h:i:s A');
-        $this->updated_at    = $updated->format('l jS \\of F Y h:i:s A');
+        try {
 
-        if (isset($project->clas->description)) {
-            $this->clase   = $project->clas->description;
-        } else {
-            $this->clase   = "Sin clase";
-        }
+            $created             = new Carbon($project->created_at);
+            $updated             = new Carbon($project->updated_at);
+            $this->project_id    = $project->id;
+            $this->avatar        = $project->avatar;
+            $this->key           = $project->key;
+            $this->name          = $project->name;
+            $this->description   = $project->description;
+            $this->status        = $project->status;
+            $this->responsable   = $project->responsable;
+            $this->clas_id       = $project->clas_id;
+            $this->category_id   = $project->category_id;
+            $this->created_at    = $created->format('l jS \\of F Y h:i:s A');
+            $this->updated_at    = $updated->format('l jS \\of F Y h:i:s A');
 
-        if (isset($project->category->description)) {
-            $this->categoria     = $project->category->description;
-        } else {
-            $this->categoria     = "Sin categoria";
-        }
+            if (isset($project->clas->description)) {
+                $this->clase   = $project->clas->description;
+            } else {
+                $this->clase   = "Sin clase";
+            }
 
-        foreach ($project->users as $user) {
-            $this->projects_users[] = $user->id;
+            if (isset($project->category->description)) {
+                $this->categoria     = $project->category->description;
+            } else {
+                $this->categoria     = "Sin categoria";
+            }
+
+            foreach ($project->users as $user) {
+                $this->projects_users[] = $user->id;
+            }
+
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
         }
     }
 
@@ -199,21 +213,35 @@ class ProjectComponent extends Component
     {
         Gate::authorize('haveaccess', 'project.edit');
 
-        $this->project_id    = $project->id;
-        $this->avatar        = $project->avatar;
-        $this->key           = $project->key;
-        $this->name          = $project->name;
-        $this->description   = $project->description;
-        $this->status        = $project->status;
-        $this->responsable   = $project->responsable;
-        $this->clas_id       = $project->clas_id;
-        $this->category_id   = $project->category_id;
-        $this->created_at    = $project->created_at;
-        $this->updated_at    = $project->updated_at;
-        $this->accion        = "update";
+        try {
 
-        foreach ($project->users as $user) {
-            $this->user[] = $user->id;
+            $this->project_id    = $project->id;
+            $this->avatar        = $project->avatar;
+            $this->key           = $project->key;
+            $this->name          = $project->name;
+            $this->description   = $project->description;
+            $this->status        = $project->status;
+            $this->responsable   = $project->responsable;
+            $this->clas_id       = $project->clas_id;
+            $this->category_id   = $project->category_id;
+            $this->created_at    = $project->created_at;
+            $this->updated_at    = $project->updated_at;
+            $this->accion        = "update";
+
+            foreach ($project->users as $user) {
+                $this->user[] = $user->id;
+            }
+
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
         }
     }
 
@@ -292,10 +320,24 @@ class ProjectComponent extends Component
     {
         Gate::authorize('haveaccess', 'project.destroy');
 
-        $this->project_id   = $project->id;
-        $this->key          = $project->key;
-        $this->name         = $project->name;
-        $this->avatar       = $project->avatar;
+        try {
+
+            $this->project_id   = $project->id;
+            $this->key          = $project->key;
+            $this->name         = $project->name;
+            $this->avatar       = $project->avatar;
+            
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function destroy()

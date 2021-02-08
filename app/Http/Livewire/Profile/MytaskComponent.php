@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class MytaskComponent extends Component
 {
@@ -80,33 +81,6 @@ class MytaskComponent extends Component
         $this->informer = $this->responsable_proyecto;
 
 
-
-        /* Aqui te debuelve lo de una tarea de todas las tareas */
-        /* foreach ($this->tareas as $tarea) {
-            foreach ($tarea->tasks as $task) {
-                $this->name = $task->name;
-                $this->start = $task->start;
-                $this->end = $task->end;
-                $this->informer = $task->informer;
-                $this->responsable = $task->responsable;
-            }
-        } */
-
-        /* @foreach ($tareas as $tarea)
-            @foreach ($tarea->tasks as $task)
-                @if ($estado->id == $task->statu_id)
-                    <div wire:click.prevent="edit({{ $task->id }})" data-toggle="modal" data-target="#updateTask">
-                        <h5 class="font-italic"> {{ $task->name }} </h5>
-                        <h6> {{ $task->start }} </h6>
-                        <h6> {{ $task->end }} </h6>
-                        <h6> {{ $task->informer }} </h6>
-                        <h6> {{ $task->responsable}} </h6>
-                    </div>
-                    <hr>
-                @endif
-            @endforeach
-        @endforeach */
-
         $this->usuario = Auth::user()->name;
         $this->responsable = Auth::user()->name;
         $this->resetErrorBag();
@@ -146,6 +120,8 @@ class MytaskComponent extends Component
 
     public function store()
     {
+        Gate::authorize('haveaccess', 'task.my.create');
+
         $this->validate([
             'name'          => 'required|string|max:200|unique:tasks,name',
             'description'   => 'required|string|',
@@ -192,6 +168,7 @@ class MytaskComponent extends Component
             $task->projects()->sync($this->proyecto->id);
 
             DB::commit();
+
         } catch (\Throwable $th) {
 
             DB::rollback();
@@ -217,26 +194,42 @@ class MytaskComponent extends Component
 
     public function edit(Task $task)
     {
-        $this->task_id       = $task->id;
-        $this->name          = $task->name;
-        $this->description   = $task->description;
-        $this->file          = $task->file;
-        /* $this->start         = $task->start; */
-        $start               = new Carbon($task->start);
-        $this->start         = $start->toFormattedDateString();
-        $this->end           = $task->end;
-        $this->informer      = $task->informer;
-        $this->responsable   = $task->responsable;
-        $this->statu_id      = $task->statu_id;
-        $this->priority_id   = $task->priority_id;
-        $this->type_id       = $task->type_id;
-        $this->created_at    = $task->created_at;
-        $this->updated_at    = $task->updated_at;
-        $this->accion        = "update";
+        try {
+
+            $this->task_id       = $task->id;
+            $this->name          = $task->name;
+            $this->description   = $task->description;
+            $this->file          = $task->file;
+            /* $this->start         = $task->start; */
+            $start               = new Carbon($task->start);
+            $this->start         = $start->toFormattedDateString();
+            $this->end           = $task->end;
+            $this->informer      = $task->informer;
+            $this->responsable   = $task->responsable;
+            $this->statu_id      = $task->statu_id;
+            $this->priority_id   = $task->priority_id;
+            $this->type_id       = $task->type_id;
+            $this->created_at    = $task->created_at;
+            $this->updated_at    = $task->updated_at;
+            $this->accion        = "update";
+
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function update()
     {
+        Gate::authorize('haveaccess', 'task.my.edit');
+
         $this->validate([
             'name'          => 'required|string|max:200|unique:tasks,name,' . $this->task_id,
             'description'   => 'required|string',
@@ -283,6 +276,7 @@ class MytaskComponent extends Component
             }
 
             DB::commit();
+
         } catch (\Throwable $th) {
 
             DB::rollback();
@@ -302,8 +296,22 @@ class MytaskComponent extends Component
 
     public function delete(Task $task)
     {
-        $this->task_id      = $task->id;
-        $this->name         = $task->name;
+        try {
+
+            $this->task_id      = $task->id;
+            $this->name         = $task->name;
+
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function destroy()
@@ -318,6 +326,7 @@ class MytaskComponent extends Component
             Task::find($this->task_id)->delete();
 
             DB::commit();
+
         } catch (\Throwable $th) {
 
             DB::rollback();
@@ -362,7 +371,6 @@ class MytaskComponent extends Component
         $this->responsable = Auth::user()->name;
         $this->resetErrorBag();
         $this->resetValidation();
-        /* $this->render(); */
     }
 
     public function clear()

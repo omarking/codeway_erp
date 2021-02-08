@@ -17,6 +17,8 @@
 @section('content')
 
     <div>
+        @livewire('user.events-component')
+
         @livewire('profile.miprojects-component')
     </div>
 

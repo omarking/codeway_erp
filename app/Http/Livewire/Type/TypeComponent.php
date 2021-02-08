@@ -97,14 +97,28 @@ class TypeComponent extends Component
     {
         Gate::authorize('haveaccess', 'type.show');
 
-        $created            = new Carbon($type->created_at);
-        $updated            = new Carbon($type->updated_at);
-        $this->type_id      = $type->id;
-        $this->description  = $type->description;
-        $this->status       = $type->status;
-        $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
-        $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
-        $this->$type        = $type;
+        try {
+
+            $created            = new Carbon($type->created_at);
+            $updated            = new Carbon($type->updated_at);
+            $this->type_id      = $type->id;
+            $this->description  = $type->description;
+            $this->status       = $type->status;
+            $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
+            $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
+            $this->$type        = $type;
+
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function close()
@@ -117,10 +131,24 @@ class TypeComponent extends Component
     {
         Gate::authorize('haveaccess', 'type.edit');
 
-        $this->type_id      = $type->id;
-        $this->description  = $type->description;
-        $this->status       = $type->status;
-        $this->accion       = "update";
+        try {
+
+            $this->type_id      = $type->id;
+            $this->description  = $type->description;
+            $this->status       = $type->status;
+            $this->accion       = "update";
+
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function update()
@@ -169,9 +197,23 @@ class TypeComponent extends Component
     {
         Gate::authorize('haveaccess', 'type.destroy');
 
-        $this->type_id      = $type->id;
-        $this->description  = $type->description;
-        $this->status       = $type->status;
+        try {
+
+            $this->type_id      = $type->id;
+            $this->description  = $type->description;
+            $this->status       = $type->status;
+            
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function destroy()

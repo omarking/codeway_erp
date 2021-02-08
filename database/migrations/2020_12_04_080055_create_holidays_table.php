@@ -16,16 +16,16 @@ class CreateHolidaysTable extends Migration
         Schema::create('holidays', function (Blueprint $table) {
             $table->id();
 
-            $table->string('slug')->unique();
-            $table->integer('days');
-            $table->date('beginDate');
-            $table->date('endDate');
-            $table->integer('inProcess');
-            $table->integer('taken');
-            $table->double('available');
-            $table->string('responsable', 100);
-            $table->text('commentable');
-            $table->foreignId('absence_id')->references('id')->on('absences')->onDelete('cascade')->onUpdate('cascade');
+            $table->string('slug')->unique()->nullable();
+            $table->integer('days')->nullable();
+            $table->date('beginDate')->nullable();
+            $table->date('endDate')->nullable();
+            $table->integer('inProcess')->nullable();
+            $table->integer('taken')->nullable();
+            $table->double('available')->nullable();
+            $table->string('responsable', 100)->nullable();
+            $table->text('commentable')->nullable();
+            $table->foreignId('absence_id')->nullable()->references('id')->on('absences')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('period_id')->references('id')->on('periods')->onDelete('cascade')->onUpdate('cascade');
 
             $table->softDeletes();

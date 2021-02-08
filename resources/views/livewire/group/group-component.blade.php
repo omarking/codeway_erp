@@ -1,32 +1,38 @@
 <div>
     <div class="card">
         <div class="card-header bg-secondary">
-            <div class="text-xl-left">
-                <h3 class="card-title text-uppercase">Áreas</h3>
-            </div>
-            <div>
-                <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#createGroup">Agregar Área</button>
+            <div class="row">
+                <div class="col-8">
+                    <h4 class="text-uppercase">Lista de Áreas</h4>
+                </div>
+                <div class="col-4">
+                    @can('haveaccess', 'area.create')
+                        <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#createGroup">Agregar Área</button>
+                    @endcan
+                </div>
             </div>
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <div class="form-group d-flex justify-content-between">
-                    <div class="col-md-auto col-lg-9">
-                        <input type="text" class="form-control" placeholder="Buscar" wire:model="search" wire:dirty.class="bg-secondary">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-8">
+                            <input type="text" class="form-control" placeholder="Buscar" wire:model="search" wire:dirty.class="bg-secondary">
+                        </div>
+                        <div class="col-3 justify-content-end">
+                            <select class="form-control" wire:model="perPage">
+                                <option value="10">10 por página</option>
+                                <option value="25">25 por página</option>
+                                <option value="50">50 por página</option>
+                                <option value="100">100 por página</option>
+                            </select>
+                        </div>
+                        @if ($search !== '')
+                            <div wire:click="clear" class="col-1">
+                                <button class="btn btn-light">X</button>
+                            </div>
+                        @endif
                     </div>
-                    <div class="col-md-auto col-lg-2">
-                        <select class="form-control" wire:model="perPage">
-                            <option value="10">10 por página</option>
-                            <option value="25">25 por página</option>
-                            <option value="50">50 por página</option>
-                            <option value="100">100 por página</option>
-                        </select>
-                    </div>
-                    @if ($search !== '')
-                    <div wire:click="clear" class="col col-lg-1">
-                        <button class="btn btn-light">X</button>
-                    </div>
-                    @endif
                 </div>
                 <table wire:poll.10000ms id="groupTable" class="table table-white table-striped table-hover">
                     <thead>
@@ -57,9 +63,15 @@
                                 <td>{{ $group->updated_at->diffForHumans() }}</td>
                                 <td>
                                     <div class="btn-group" role="group">
-                                        <button type="button" wire:click.prevent="show({{ $group->id }})" class="btn btn-info" data-toggle="modal" data-target="#showGroup">Mostrar</button>
-                                        <button type="button" wire:click.prevent="edit({{ $group->id }})" class="btn btn-success" data-toggle="modal" data-target="#updateGroup">Editar</button>
-                                        <button type="button" wire:click.prevent="delete({{ $group->id }})" class="btn btn-danger" data-toggle="modal" data-target="#deleteGroup">Borrar</button>
+                                        @can('haveaccess', 'area.show')
+                                            <button type="button" wire:click.prevent="show({{ $group->id }})" class="btn btn-info" data-toggle="modal" data-target="#showGroup">Mostrar</button>
+                                        @endcan
+                                        @can('haveaccess', 'area.edit')
+                                            <button type="button" wire:click.prevent="edit({{ $group->id }})" class="btn btn-success" data-toggle="modal" data-target="#updateGroup">Editar</button>
+                                        @endcan
+                                        @can('haveaccess', 'area.destroy')
+                                            <button type="button" wire:click.prevent="delete({{ $group->id }})" class="btn btn-danger" data-toggle="modal" data-target="#deleteGroup">Borrar</button>
+                                        @endcan
                                     </div>
                                 </td>
                             </tr>

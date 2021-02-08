@@ -24,7 +24,6 @@ class ClaseComponent extends Component
         'description'  => 'required|string|max:200|unique:class,description',
     ];
 
-
     protected $queryString = [
         'search'  => ['except' => ''],
         'perPage' => ['except' => '10'],
@@ -98,14 +97,28 @@ class ClaseComponent extends Component
     {
         Gate::authorize('haveaccess', 'class.show');
 
-        $created            = new Carbon($clase->created_at);
-        $updated            = new Carbon($clase->updated_at);
-        $this->class_id     = $clase->id;
-        $this->description  = $clase->description;
-        $this->status       = $clase->status;
-        $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
-        $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
-        $this->clase        = $clase;
+        try {
+
+            $created            = new Carbon($clase->created_at);
+            $updated            = new Carbon($clase->updated_at);
+            $this->class_id     = $clase->id;
+            $this->description  = $clase->description;
+            $this->status       = $clase->status;
+            $this->created_at   = $created->format('l jS \\of F Y h:i:s A');
+            $this->updated_at   = $updated->format('l jS \\of F Y h:i:s A');
+            $this->clase        = $clase;
+
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function close()
@@ -118,10 +131,24 @@ class ClaseComponent extends Component
     {
         Gate::authorize('haveaccess', 'class.edit');
 
-        $this->class_id     = $clase->id;
-        $this->description  = $clase->description;
-        $this->status       = $clase->status;
-        $this->accion       = "update";
+        try {
+
+            $this->class_id     = $clase->id;
+            $this->description  = $clase->description;
+            $this->status       = $clase->status;
+            $this->accion       = "update";
+
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function update()
@@ -171,8 +198,22 @@ class ClaseComponent extends Component
     {
         Gate::authorize('haveaccess', 'class.destroy');
 
-        $this->class_id     = $clase->id;
-        $this->description  = $clase->description;
+        try {
+
+            $this->class_id     = $clase->id;
+            $this->description  = $clase->description;
+            
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function destroy()

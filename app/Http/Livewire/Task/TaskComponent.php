@@ -30,7 +30,7 @@ class TaskComponent extends Component
     public $search = '', $perPage = '10', $page = 1, $total, $temporary;
 
     public $rules = [
-        'name'          => 'required|string|max:200|unique:tasks,name',
+        'name'          => 'required|string|max:200',
         'description'   => 'required|string',
         'temporary'     => 'file|max:10000|mimes:jpeg,png|nullable|mimetypes:video/mp4',
         'file'          => 'file|max:10000|mimes:jpeg,png|nullable|mimetypes:video/mp4',
@@ -75,7 +75,7 @@ class TaskComponent extends Component
     {
         if ($this->accion == "store") {
             $this->validateOnly($propertyName, [
-                'name'          => 'required|string|max:200|unique:tasks,name',
+                'name'          => 'required|string|max:200',
                 'description'   => 'required|string',
                 'temporary'     => 'file|max:10000|nullable',
                 'start'         => 'required|date',
@@ -88,7 +88,7 @@ class TaskComponent extends Component
             ]);
         } else {
             $this->validateOnly($propertyName, [
-                'name'          => 'required|string|max:200|unique:tasks,name,' . $this->task_id,
+                'name'          => 'required|string|max:200',
                 'description'   => 'required|string',
                 'file'          => 'file|max:10000|nullable',
                 'start'         => 'required|date',
@@ -107,7 +107,7 @@ class TaskComponent extends Component
         Gate::authorize('haveaccess', 'task.create');
 
         $this->validate([
-            'name'          => 'required|string|max:200|unique:tasks,name',
+            'name'          => 'required|string|max:200',
             'description'   => 'required|string|',
             'temporary'     => 'file|max:10000|nullable',
             'start'         => 'required|date',
@@ -173,38 +173,52 @@ class TaskComponent extends Component
     {
         Gate::authorize('haveaccess', 'task.show');
 
-        $created             = new Carbon($task->created_at);
-        $updated             = new Carbon($task->updated_at);
-        $this->task_id       = $task->id;
-        $this->name          = $task->name;
-        $this->description   = $task->description;
-        $this->file          = $task->file;
-        $this->start         = $task->start;
-        $this->end           = $task->end;
-        $this->informer      = $task->informer;
-        $this->responsable   = $task->responsable;
-        $this->statu_id      = $task->statu_id;
-        $this->priority_id   = $task->priority_id;
-        $this->type_id       = $task->type_id;
-        $this->created_at    = $created->format('l jS \\of F Y h:i:s A');
-        $this->updated_at    = $updated->format('l jS \\of F Y h:i:s A');
+        try {
 
-        if (isset($task->statu->description)) {
-            $this->estado   = $task->statu->description;
-        } else {
-            $this->estado   = "Sin estado";
-        }
+            $created             = new Carbon($task->created_at);
+            $updated             = new Carbon($task->updated_at);
+            $this->task_id       = $task->id;
+            $this->name          = $task->name;
+            $this->description   = $task->description;
+            $this->file          = $task->file;
+            $this->start         = $task->start;
+            $this->end           = $task->end;
+            $this->informer      = $task->informer;
+            $this->responsable   = $task->responsable;
+            $this->statu_id      = $task->statu_id;
+            $this->priority_id   = $task->priority_id;
+            $this->type_id       = $task->type_id;
+            $this->created_at    = $created->format('l jS \\of F Y h:i:s A');
+            $this->updated_at    = $updated->format('l jS \\of F Y h:i:s A');
 
-        if (isset($task->type->description)) {
-            $this->tipo     = $task->type->description;
-        } else {
-            $this->tipo     = "Sin tipo";
-        }
+            if (isset($task->statu->description)) {
+                $this->estado   = $task->statu->description;
+            } else {
+                $this->estado   = "Sin estado";
+            }
 
-        if (isset($task->priority->description)) {
-            $this->prioridad = $task->priority->description;
-        } else {
-            $this->prioridad = "Sin prioridad";
+            if (isset($task->type->description)) {
+                $this->tipo     = $task->type->description;
+            } else {
+                $this->tipo     = "Sin tipo";
+            }
+
+            if (isset($task->priority->description)) {
+                $this->prioridad = $task->priority->description;
+            } else {
+                $this->prioridad = "Sin prioridad";
+            }
+
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
         }
     }
 
@@ -218,19 +232,33 @@ class TaskComponent extends Component
     {
         Gate::authorize('haveaccess', 'task.edit');
 
-        $this->task_id       = $task->id;
-        $this->name          = $task->name;
-        $this->description   = $task->description;
-        $this->file          = $task->file;
-        $this->start         = $task->start;
-        $this->end           = $task->end;
-        $this->informer      = $task->informer;
-        $this->statu_id      = $task->statu_id;
-        $this->priority_id   = $task->priority_id;
-        $this->type_id       = $task->type_id;
-        $this->created_at    = $task->created_at;
-        $this->updated_at    = $task->updated_at;
-        $this->accion        = "update";
+        try {
+
+            $this->task_id       = $task->id;
+            $this->name          = $task->name;
+            $this->description   = $task->description;
+            $this->file          = $task->file;
+            $this->start         = $task->start;
+            $this->end           = $task->end;
+            $this->informer      = $task->informer;
+            $this->statu_id      = $task->statu_id;
+            $this->priority_id   = $task->priority_id;
+            $this->type_id       = $task->type_id;
+            $this->created_at    = $task->created_at;
+            $this->updated_at    = $task->updated_at;
+            $this->accion        = "update";
+
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function update()
@@ -238,7 +266,7 @@ class TaskComponent extends Component
         Gate::authorize('haveaccess', 'task.edit');
 
         $this->validate([
-            'name'          => 'required|string|max:200|unique:tasks,name,' . $this->task_id,
+            'name'          => 'required|string|max:200',
             'description'   => 'required|string',
             'temporary'     => 'file|max:10000|nullable',
             'start'         => 'required|date',
@@ -306,8 +334,22 @@ class TaskComponent extends Component
     {
         Gate::authorize('haveaccess', 'task.destroy');
 
-        $this->task_id      = $task->id;
-        $this->name         = $task->name;
+        try {
+
+            $this->task_id      = $task->id;
+            $this->name         = $task->name;
+            
+        } catch (\Throwable $th) {
+
+            $status = 'error';
+            $content = 'Ocurrio un error en la carga de datos';
+
+            session()->flash('process_result', [
+                'status'    => $status,
+                'content'   => $content,
+            ]);
+
+        }
     }
 
     public function destroy()

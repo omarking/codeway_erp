@@ -32,8 +32,4 @@ class HomeController extends Controller
     {
         return view('home');
     }
-
-    public function dale(){
-        return view('type.index');
-    }
 }
